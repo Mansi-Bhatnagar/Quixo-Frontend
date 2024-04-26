@@ -1,12 +1,19 @@
 .container {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  animation-name: Morph;
+  animation-duration: 1.5s;
 }
-.section1 {
-  width: 50vw;
+@keyframes Morph {
+  0% {
+    transform: translateX(-60%);
+  }
+  100% {
+    transform: translateX(0%);
+  }
 }
-.section1 img {
+.logo {
   width: 75px;
   height: 118px;
   margin-top: 15px;
@@ -14,8 +21,10 @@
 }
 .loginForm {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   flex-direction: column;
+  justify-content: space-evenly;
+  margin-left: calc((50vw - 336px) / 2);
 }
 .loginForm h2 {
   font-size: 33px;
@@ -38,9 +47,11 @@
   color: #03045eff;
 }
 .inputContainer {
+  margin-top: 7px;
+  margin-bottom: 21px;
   display: flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: space-between;
   width: 335px;
   border-radius: 24px;
   border-width: 2px;
@@ -50,6 +61,11 @@
 .inputContainer input {
   border: none;
   padding: 12px 0;
+  margin-left: 22px;
+  width: calc(100% - 75px);
+}
+.inputContainer input:focus-visible {
+  outline: none;
 }
 .inputContainer input::placeholder {
   font-family: "Roboto Slab", serif;
@@ -61,20 +77,127 @@
 .inputContainer img {
   width: 24px;
   height: 24px;
-  margin: 0;
+  margin-right: 22px;
 }
-.section2 {
-  /* height: 100vh; */
-  /* width: 50vw; */
+.options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 335px;
+}
+.checkbox {
+  border: 2px solid #03045eff;
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+}
+.remember {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 5px;
+}
+.remember div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.options span {
+  font-size: 16px;
+  line-height: 26px;
+  font-weight: 400;
+  color: #bcc1caff;
+}
+.options span:hover {
+  text-decoration: underline;
+  cursor: pointer;
+}
+.loginBtn {
+  font-family: "Roboto Slab", serif;
+  margin: 16px 0 48px 0;
+  width: 335px;
+  padding: 10px 0;
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 400;
+  color: #ffffffff;
+  background: #03045eff;
+  border: none;
+  border-radius: 26px;
+  transition: all ease-in-out 0.4s;
+}
+.loginBtn:hover {
+  background: #0508baff;
+  cursor: pointer;
+  transform: scale(0.95);
+  transition: all ease-in-out 0.4s;
+}
+.loginBtn:hover:active {
+  background: #1519f8ff;
+}
+.loginBtn:disabled {
+  opacity: 0.4;
+}
+.signUp {
+  font-size: 16px;
+  line-height: 26px;
+  font-weight: 400;
+  color: #bcc1caff;
+}
+.signUp span:hover {
+  text-decoration: underline;
+  cursor: pointer;
 }
 .section2 img {
-  /* width: 30vw;
-  height: 90vh;
-  margin: 4vh 5vw 4vh 0;
-  border-radius: 10px; */
-  /* width: auto;
-  max-height: 100vh; */
-  /* height: inherit; */
-  /* width: inherit; */
-  height: 99vh;
+  width: 45vw;
+  margin: 10px;
+  height: calc(100vh - 24px);
+  border-radius: 10px;
+  object-fit: fill;
+  position: relative;
+}
+.overlay {
+  position: absolute;
+  width: 45vw;
+  height: calc(100vh - 24px);
+  background: #171a1f66;
+  border-radius: 10px;
+  top: 10px;
+  right: 10px;
+  text-align: center;
+}
+.overlay h1 {
+  font-size: 64px;
+  line-height: 84px;
+  font-weight: 700;
+  color: #ffffffff;
+}
+.overlay h2 {
+  font-size: 40px;
+  line-height: 56px;
+  font-weight: 400;
+  color: #ffffffff;
+  padding: 0 130px;
+}
+.signUpBtn {
+  width: 335px;
+  height: 47px;
+  border-radius: 24px;
+  border-width: 4px;
+  border-color: #ffffffff;
+  border-style: solid;
+  background: #ffffff00;
+  font-family: Roboto Slab;
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 400;
+  color: #ffffffff;
+  margin-top: 40px;
+  cursor: pointer;
+  transition: all ease-in-out 0.4s;
+}
+.signUpBtn:hover {
+  cursor: pointer;
+  transform: scale(0.95);
+  transition: all ease-in-out 0.4s;
 }
