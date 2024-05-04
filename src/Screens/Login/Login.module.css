@@ -48,7 +48,6 @@
 }
 .inputContainer {
   margin-top: 7px;
-  margin-bottom: 21px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -84,6 +83,7 @@
   align-items: center;
   justify-content: space-between;
   width: 335px;
+  margin-top: 21px;
 }
 .checkbox {
   border: 2px solid #03045eff;
@@ -137,6 +137,7 @@
 }
 .loginBtn:disabled {
   opacity: 0.4;
+  cursor: not-allowed;
 }
 .signUp {
   font-size: 16px;
@@ -200,4 +201,14 @@
   cursor: pointer;
   transform: scale(0.95);
   transition: all ease-in-out 0.4s;
+}
+.field {
+  margin-top: 21px;
+}
+.error {
+  color: #d00000;
+  font-size: 14px;
+  font-weight: 400;
+  width: 338px;
+  display: block;
 }

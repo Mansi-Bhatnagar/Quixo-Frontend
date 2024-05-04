@@ -72,9 +72,11 @@
   font-weight: 400;
   color: #03045eff;
 }
+.field {
+  margin-top: 21px;
+}
 .inputContainer {
   margin-top: 7px;
-  margin-bottom: 21px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -107,7 +109,7 @@
 }
 .nextBtn {
   font-family: "Roboto Slab", serif;
-  margin: 16px 0 10px 0;
+  margin: 44px 0 10px 0;
   width: 335px;
   padding: 10px 0;
   font-size: 18px;
@@ -130,6 +132,7 @@
 }
 .nextBtn:disabled {
   opacity: 0.4;
+  cursor: not-allowed;
 }
 .login {
   font-size: 16px;
@@ -140,4 +143,51 @@
 .login span:hover {
   text-decoration: underline;
   cursor: pointer;
+}
+.otpInfo {
+  font-size: 16px;
+  line-height: 26px;
+  font-weight: 400;
+  color: #bcc1caff;
+}
+.btnContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 30px;
+}
+.btn {
+  width: 120px;
+  height: 44px;
+  font-family: "Roboto Slab", sans-serif;
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 400;
+  color: #ffffffff;
+  background: #03045eff;
+  opacity: 1;
+  border: none;
+  border-radius: 22px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background: #0508baff;
+  cursor: pointer;
+}
+.button:hover:active {
+  color: #ffffffff;
+  background: #1519f8ff;
+}
+.button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.error {
+  color: #d00000;
+  font-size: 14px;
+  font-weight: 400;
+  width: 338px;
+  display: block;
 }
