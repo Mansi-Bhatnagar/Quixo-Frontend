@@ -128,7 +128,12 @@ const Signup = () => {
           email: email,
           otp: otp,
         },
-        { headers: { "X-Requested-With": "XMLHttpRequest" } }
+        {
+          headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            withCredentials: true,
+          },
+        }
       )
       .then((response) => {
         console.log(response);

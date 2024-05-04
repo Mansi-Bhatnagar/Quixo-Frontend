@@ -8,6 +8,7 @@ import check from "../../Assets/Images/material-check.svg";
 import loginBackground from "../../Assets/Images/loginBackground.jpg";
 
 import classes from "./Login.module.css";
+import axios from "axios";
 
 const Login = () => {
   //Email Regex
@@ -75,6 +76,21 @@ const Login = () => {
     checkPassword(e.target.value);
   };
   const loginHandler = () => {
+    axios
+      .post(
+        "http://localhost:5000/login",
+        {
+          email: email,
+          password: password,
+        },
+        { headers: { "X-Requested-With": "XMLHttpRequest" } }
+      )
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     navigate("/boards");
   };
 
