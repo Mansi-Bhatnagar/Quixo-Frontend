@@ -1,0 +1,308 @@
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 30px;
+}
+.nav img {
+  width: 50px;
+  height: 80px;
+}
+.loginBtn {
+  font-family: "Roboto Slab", serif;
+  width: 130px;
+  padding: 10px 0;
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 400;
+  color: #ffffffff;
+  background: #03045eff;
+  border: none;
+  border-radius: 26px;
+  transition: all ease-in-out 0.4s;
+  margin-right: 20px;
+}
+.loginBtn:hover {
+  background: #ffffffff;
+  color: #03045eff;
+  cursor: pointer;
+  transform: scale(0.95);
+  transition: all ease-in-out 0.4s;
+  border-width: 2px;
+  border-color: #03045eff;
+  border-style: solid;
+}
+.loginBtn:hover:active {
+  background: #ffffffff;
+}
+.loginBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.signUpBtn {
+  width: 130px;
+  padding: 8px 0;
+  border-radius: 24px;
+  border-width: 2px;
+  border-color: #03045eff;
+  border-style: solid;
+  font-family: "Roboto Slab", sans-serif;
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 600;
+  color: #03045eff;
+  cursor: pointer;
+  transition: all ease-in-out 0.4s;
+  background: #ffffffff;
+}
+.signUpBtn:hover {
+  cursor: pointer;
+  transform: scale(0.95);
+  transition: all ease-in-out 0.4s;
+  background-color: #03045eff;
+  color: #ffffffff;
+}
+.heroSection {
+  width: 100vw;
+  padding-top: 125px;
+  padding-bottom: 125px;
+  position: relative;
+  background: rgb(3, 83, 164);
+  background: linear-gradient(
+    270deg,
+    rgba(3, 83, 164, 1) 0%,
+    rgba(2, 62, 125, 1) 26%,
+    rgba(0, 24, 69, 1) 85%,
+    rgba(0, 18, 51, 1) 100%
+  );
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.shapeDivider {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+  transform: rotate(180deg);
+}
+
+.shapeDivider svg {
+  position: relative;
+  display: block;
+  width: calc(106% + 1.3px);
+  height: 210px;
+}
+
+.shapeDivider .shapeFill {
+  fill: #ffffff;
+}
+.heroSection h1 {
+  font-size: 50px;
+  margin: 0;
+  color: #ffffff;
+  letter-spacing: 1px;
+}
+.heroSection h4 {
+  font-size: 20px;
+  margin: 15px 0 0 0;
+  color: #ffffff;
+  font-weight: 400;
+  letter-spacing: 1px;
+}
+.quickSignUpBtn {
+  width: fit-content;
+  padding: 10px 30px;
+  border-radius: 24px;
+  background: #ffffff;
+  font-family: "Roboto Slab", sans-serif;
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 700;
+  color: #03045eff;
+  cursor: pointer;
+  transition: all ease-in-out 0.4s;
+  margin-top: 30px;
+  position: relative;
+  z-index: 1;
+}
+.quickSignUpBtn:hover {
+  cursor: pointer;
+  transform: scale(0.95);
+  transition: all ease-in-out 0.4s;
+  background: transparent;
+  color: #ffffff;
+  border: 2px solid #ffffff;
+}
+.illustration {
+  width: 30vw;
+  margin-right: 100px;
+}
+.info {
+  margin-left: 100px;
+  width: 600px;
+  text-align: center;
+}
+.features {
+  margin-top: 80px;
+  padding-bottom: 80px;
+  text-align: center;
+}
+.featureHeading {
+  font-size: 50px;
+  color: #001233;
+  letter-spacing: 1px;
+  font-weight: 600;
+  margin-bottom: 15px;
+}
+.featurePara {
+  margin: 0 auto;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  width: 400px;
+}
+.sliderContainer {
+  position: relative;
+  overflow: hidden;
+  width: 1000px;
+  height: 600px;
+  margin: 0 auto;
+  margin-top: 50px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  -webkit-box-shadow: -5px 5px 8px -3px rgba(0, 0, 0, 0.16);
+  -moz-box-shadow: -5px 5px 8px -3px rgba(0, 0, 0, 0.16);
+  border-radius: 20px;
+  box-shadow: -5px 5px 8px -3px rgba(0, 0, 0, 0.16);
+}
+
+.leftSlide {
+  top: 0;
+  position: absolute;
+  left: 0;
+  height: 100%;
+  width: 35%;
+  transition: transform 0.5s ease-in-out;
+  background: #ffffff;
+}
+
+.leftSlide > div {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.leftSlide h1 {
+  color: #001233;
+  letter-spacing: 1px;
+  font-weight: 600;
+  margin-bottom: 0;
+  font-size: 40px;
+}
+.leftSlide p {
+  color: #5c677d;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 2px;
+  line-height: 35px;
+  margin-right: 54px;
+  margin-left: 54px;
+}
+.rightSlide {
+  height: 100%;
+  width: 65%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transition: transform 0.5s ease-in-out;
+}
+
+.rightSlide img {
+  height: 100%;
+  width: 100%;
+  object-fit: fill;
+}
+
+.actionButtons button {
+  position: absolute;
+  top: 50%;
+  left: 35%;
+  padding: 15px;
+  border: none;
+  background-color: #ffffff;
+  -webkit-box-shadow: -5px 5px 8px -3px rgba(0, 0, 0, 0.16);
+  -moz-box-shadow: -5px 5px 8px -3px rgba(0, 0, 0, 0.16);
+  box-shadow: -5px 5px 8px -3px rgba(0, 0, 0, 0.16);
+}
+.actionButtons button:hover {
+  cursor: pointer;
+}
+.actionButtons button:focus {
+  outline: none;
+}
+.actionButtons .downButton {
+  transform: translateX(-100%);
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+.actionButtons .upButton {
+  transform: translateY(-100%);
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+.footer {
+  background: rgb(3, 83, 164);
+  background: linear-gradient(
+    180deg,
+    rgba(3, 83, 164, 1) 0%,
+    rgba(2, 62, 125, 1) 26%,
+    rgba(0, 24, 69, 1) 85%,
+    rgba(0, 18, 51, 1) 100%
+  );
+  text-align: center;
+}
+.footer h1 {
+  font-size: 40px;
+  margin: 0;
+  padding-top: 30px;
+  color: #ffffff;
+  letter-spacing: 1px;
+}
+.imageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px;
+  padding-bottom: 30px;
+}
+.imageContainer a {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  margin: 8px;
+  cursor: pointer;
+}
+.imageContainer img {
+  margin: 8px;
+  width: 20px;
+  height: 20px;
+  filter: invert(1);
+}
+.imageContainer a:hover {
+  transform: scale(1.09);
+  transition: 0.2s all ease-in-out;
+}
+.imageContainer p {
+  font-size: 20px;
+  margin-right: 10px;
+  color: #ffffff;
+}
