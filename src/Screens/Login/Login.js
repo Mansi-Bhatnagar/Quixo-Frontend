@@ -9,6 +9,7 @@ import loginBackground from "../../Assets/Images/loginBackground.jpg";
 
 import classes from "./Login.module.css";
 import axios from "axios";
+import { NotificationManager } from "../../Components/NotificationManager/NotificationManager";
 
 const Login = () => {
   //Email Regex
@@ -75,7 +76,8 @@ const Login = () => {
     setPassword(e.target.value);
     checkPassword(e.target.value);
   };
-  const loginHandler = () => {
+  const loginHandler = (e) => {
+    e.preventDefault();
     axios
       .post(
         "http://localhost:5000/login",
@@ -86,12 +88,14 @@ const Login = () => {
         { headers: { "X-Requested-With": "XMLHttpRequest" } }
       )
       .then((response) => {
-        console.log(response);
+        navigate("/boards");
       })
       .catch((error) => {
-        console.log(error);
+        NotificationManager(
+          error?.response?.data?.error || "Error, Try again",
+          "top-left"
+        );
       });
-    navigate("/boards");
   };
 
   //Effects

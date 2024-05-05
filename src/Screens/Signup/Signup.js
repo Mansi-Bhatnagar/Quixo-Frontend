@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { NotificationManager } from "../../Components/NotificationManager/NotificationManager";
 import loginBackground from "../../Assets/Images/loginBackground.jpg";
 import userIcon from "../../Assets/Images/material-perm-identity.svg";
 import loginPageLogo from "../../Assets/Images/loginPageLogo.png";
@@ -74,8 +75,8 @@ const Signup = () => {
     navigate("/login");
   };
 
-  const otpScreenHandler = () => {
-    setOtpScreen(true);
+  const otpScreenHandler = (e) => {
+    e.preventDefault();
     axios
       .post(
         "http://localhost:5000/signup",
@@ -87,10 +88,12 @@ const Signup = () => {
         { headers: { "X-Requested-With": "XMLHttpRequest" } }
       )
       .then((response) => {
-        console.log(response);
+        setOtpScreen(true);
       })
       .catch((error) => {
-        console.log(error);
+        return NotificationManager(
+          error?.response?.data?.error || "Error. Try Again"
+        );
       });
   };
 
@@ -126,7 +129,7 @@ const Signup = () => {
         "http://localhost:5000/signup_verification",
         {
           email: email,
-          otp: otp,
+          otp: Number(otp),
         },
         {
           headers: {
@@ -136,10 +139,10 @@ const Signup = () => {
         }
       )
       .then((response) => {
-        console.log(response);
+        navigate("/boards");
       })
       .catch((error) => {
-        console.log(error);
+        NotificationManager(error?.response?.data?.error || "Error, Try again");
       });
   };
   //Effects
