@@ -1,5 +1,9 @@
+import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { authenticationActions } from "../../Redux/AuthenticationSlice";
+import { NotificationManager } from "../../Components/NotificationManager/NotificationManager";
 import loginPageLogo from "../../Assets/Images/loginPageLogo.png";
 import emailIcon from "../../Assets/Images/material-email.svg";
 import hide from "../../Assets/Images/material-visibility-off.svg";
@@ -8,8 +12,6 @@ import check from "../../Assets/Images/material-check.svg";
 import loginBackground from "../../Assets/Images/loginBackground.jpg";
 
 import classes from "./Login.module.css";
-import axios from "axios";
-import { NotificationManager } from "../../Components/NotificationManager/NotificationManager";
 
 const Login = () => {
   //Email Regex
@@ -21,6 +23,7 @@ const Login = () => {
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&^])[A-Za-z\d@.#$!%*?&]{8,15}$/;
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   //States
   const [checked, setChecked] = useState(
@@ -96,13 +99,16 @@ const Login = () => {
         { headers: { "X-Requested-With": "XMLHttpRequest" } }
       )
       .then((response) => {
+        navigate("/boards");
+        console.log(response);
         if (checked) {
           localStorage.setItem(
             "Quixo",
             JSON.stringify({ email: email, password: password, checked: true })
           );
         }
-        navigate("/boards");
+        localStorage.setItem("jwt", response?.data?.token || "");
+        dispatch(authenticationActions.updateJWT(response?.data?.token || ""));
       })
       .catch((error) => {
         NotificationManager(

@@ -1,7 +1,9 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useDispatch } from "react-redux";
 import { NotificationManager } from "../../Components/NotificationManager/NotificationManager";
+import { authenticationActions } from "../../Redux/AuthenticationSlice";
 import loginBackground from "../../Assets/Images/loginBackground.jpg";
 import userIcon from "../../Assets/Images/material-perm-identity.svg";
 import loginPageLogo from "../../Assets/Images/loginPageLogo.png";
@@ -20,6 +22,7 @@ const Signup = () => {
     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@.#$!%*?&^])[A-Za-z\d@.#$!%*?&]{8,15}$/;
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   //States
   const [otpScreen, setOtpScreen] = useState(false);
@@ -88,7 +91,10 @@ const Signup = () => {
         { headers: { "X-Requested-With": "XMLHttpRequest" } }
       )
       .then((response) => {
+        console.log(response);
         setOtpScreen(true);
+        localStorage.setItem("jwt", response?.data?.token || "");
+        dispatch(authenticationActions.updateJWT(response?.data?.token || ""));
       })
       .catch((error) => {
         return NotificationManager(

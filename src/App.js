@@ -5,6 +5,7 @@ import Home from "./Screens/Home/Home";
 import Login from "./Screens/Login/Login";
 import Signup from "./Screens/Signup/Signup";
 import Board from "./Screens/Boards/Board";
+import AuthProtected from "./Helpers/AuthProtected/AuthProtected";
 import "react-toastify/dist/ReactToastify.css";
 
 const router = createBrowserRouter([
@@ -15,7 +16,14 @@ const router = createBrowserRouter([
       { path: "", element: <Home /> },
       { path: "/login", element: <Login /> },
       { path: "/signup", element: <Signup /> },
-      { path: "/boards", element: <Board /> },
+      {
+        path: "/boards",
+        element: (
+          <AuthProtected>
+            <Board />
+          </AuthProtected>
+        ),
+      },
     ],
   },
 ]);
