@@ -145,7 +145,7 @@ const Signup = () => {
         }
       )
       .then((response) => {
-        navigate("/boards");
+        navigate("/dashboard");
       })
       .catch((error) => {
         NotificationManager(error?.response?.data?.error || "Error, Try again");

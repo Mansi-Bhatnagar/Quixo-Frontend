@@ -99,7 +99,7 @@ const Login = () => {
         { headers: { "X-Requested-With": "XMLHttpRequest" } }
       )
       .then((response) => {
-        navigate("/boards");
+        navigate("/dashboard");
         console.log(response);
         if (checked) {
           localStorage.setItem(
