@@ -82,7 +82,7 @@ const Signup = () => {
     e.preventDefault();
     axios
       .post(
-        "http://localhost:5000/signup",
+        "http://localhost:5000/auth/signup",
         {
           username: username,
           email: email,
@@ -132,7 +132,7 @@ const Signup = () => {
     e.preventDefault();
     axios
       .post(
-        "http://localhost:5000/signup_verification",
+        "http://localhost:5000/auth/signup_verification",
         {
           email: email,
           otp: Number(otp),

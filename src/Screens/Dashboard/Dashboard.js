@@ -1,23 +1,13 @@
-import { useState } from "react";
-import CreateWorkspace from "../../Components/Modal/CreateWorkspace/CreateWorkspace";
+import Navbar from "../../Components/Navbar/Navbar";
+import Sidebar from "../../Components/Sidebar/Sidebar";
 import classes from "./Dashboard.module.css";
 const Dashboard = () => {
-  //States
-  const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] =
-    useState(false);
-
-  //Handlers
-  const createWorkspaceHandler = () => {
-    setShowCreateWorkspaceModal(true);
-  };
-
   return (
     <div className={classes.dashboardContainer}>
-      <CreateWorkspace
-        show={showCreateWorkspaceModal}
-        onHide={() => setShowCreateWorkspaceModal(false)}
-      />
-      <button onClick={createWorkspaceHandler}>Create a workspace</button>
+      <Navbar />
+      <div className={classes.content}>
+        <Sidebar />
+      </div>
     </div>
   );
 };

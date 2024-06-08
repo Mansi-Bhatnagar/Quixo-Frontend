@@ -1,0 +1,8 @@
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dashboardContainer {
+  background-color: #1d2125;
+}

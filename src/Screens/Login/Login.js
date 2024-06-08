@@ -91,7 +91,7 @@ const Login = () => {
     e.preventDefault();
     axios
       .post(
-        "http://localhost:5000/login",
+        "http://localhost:5000/auth/login",
         {
           email: email,
           password: password,
@@ -109,6 +109,7 @@ const Login = () => {
         }
         localStorage.setItem("jwt", response?.data?.token || "");
         dispatch(authenticationActions.updateJWT(response?.data?.token || ""));
+        localStorage.setItem("username", response?.data?.username);
       })
       .catch((error) => {
         NotificationManager(
@@ -121,7 +122,7 @@ const Login = () => {
   const forgetPasswordHandler = () => {
     axios
       .post(
-        "http://localhost:5000/pw_forget",
+        "http://localhost:5000/auth/pw_forget",
         { email: email },
         { headers: { "X-Requested-With": "XMLHttpRequest" } }
       )
@@ -138,7 +139,7 @@ const Login = () => {
   const createNewPasswordHandler = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:5000/pw_reset", {
+      .post("http://localhost:5000/auth/pw_reset", {
         email: email,
         new_password: password,
         otp: Number(otp),
