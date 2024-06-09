@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import Modal from "react-bootstrap/Modal";
 import link from "../../../Assets/Images/link.svg";
 import classes from "./CreateWorkspace.module.css";
@@ -23,6 +24,27 @@ const CreateWorkspace = (props) => {
   const continueCreationHandler = () => {
     setInitialScreen(false);
     //API of create workspace
+    axios
+      .post(
+        "http://localhost:5000/workspace/create_workspace",
+        {
+          email: localStorage.getItem("email"),
+          name: workspaceName,
+          description: workspaceDescription,
+        },
+        {
+          headers: {
+            "X-Requested-With": "XMLHttpRequest",
+            Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+          },
+        }
+      )
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   const wsEmailsHandler = (e) => {
     setEmails(e.target.value);
