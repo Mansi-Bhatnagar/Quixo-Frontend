@@ -1,0 +1,30 @@
+.modalBody h3 {
+  font-size: 15px;
+  letter-spacing: 0.8px;
+}
+.btnContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.btnContainer button:first-of-type,
+.btnContainer button:last-of-type:hover {
+  color: #fff;
+  border-radius: 10px;
+  background-color: #001845;
+  border: none;
+  padding: 6px 20px;
+  border: 2px solid transparent;
+  transition: all ease-in-out 0.5s;
+}
+.btnContainer button:last-of-type,
+.btnContainer button:first-of-type:hover {
+  background-color: transparent;
+  border: 2px solid #001845;
+  color: #001845;
+  font-weight: 500;
+  border-radius: 10px;
+  padding: 6px 20px;
+  transition: all ease-in-out 0.5s;
+}

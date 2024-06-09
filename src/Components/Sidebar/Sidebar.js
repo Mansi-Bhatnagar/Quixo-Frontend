@@ -5,6 +5,7 @@ import board from "../../Assets/Images/board.svg";
 import member from "../../Assets/Images/member.svg";
 import dustbin from "../../Assets/Images/material-delete.svg";
 import classes from "./Sidebar.module.css";
+import DeleteWorkspace from "../Modal/DeleteWorkspace/DeleteWorkspace";
 
 const Sidebar = (props) => {
   const { workspaces } = props;
@@ -14,8 +15,12 @@ const Sidebar = (props) => {
   //States
   const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] =
     useState(false);
-  const [wsTabOpen, setWsTabOpen] = useState(workspaces[0]?.id);
-  const [activeWsIndex, setActiveWsIndex] = useState(workspaces[0]?.id);
+  const [wsTabOpen, setWsTabOpen] = useState(workspaces && workspaces[0]?.id);
+  const [activeWsIndex, setActiveWsIndex] = useState(
+    workspaces && workspaces[0]?.id
+  );
+  const [showDeleteWorkspaceModal, setShowDeleteWorkspaceModal] =
+    useState(false);
 
   //Handlers
   const createWorkspaceHandler = () => {
@@ -24,6 +29,9 @@ const Sidebar = (props) => {
   const wsTabHandler = (id) => {
     setWsTabOpen((prev) => (prev === id ? false : id));
     setActiveWsIndex(id);
+  };
+  const deleteWorkspaceHandler = () => {
+    setShowDeleteWorkspaceModal(true);
   };
 
   return (
@@ -61,7 +69,7 @@ const Sidebar = (props) => {
                       <img src={member} alt="member" />
                       <span>Members</span>
                     </li>
-                    <li>
+                    <li onClick={deleteWorkspaceHandler}>
                       <img src={dustbin} alt="delete" />
                       <span>Delete Workspace</span>
                     </li>
@@ -74,6 +82,10 @@ const Sidebar = (props) => {
       <CreateWorkspace
         show={showCreateWorkspaceModal}
         onHide={() => setShowCreateWorkspaceModal(false)}
+      />
+      <DeleteWorkspace
+        show={showDeleteWorkspaceModal}
+        onHide={() => setShowDeleteWorkspaceModal(false)}
       />
     </>
   );
