@@ -172,15 +172,15 @@
   cursor: pointer;
 }
 
-.button:hover {
+.btn:hover {
   background: #0508baff;
   cursor: pointer;
 }
-.button:hover:active {
+.btn:hover:active {
   color: #ffffffff;
   background: #1519f8ff;
 }
-.button:disabled {
+.btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }

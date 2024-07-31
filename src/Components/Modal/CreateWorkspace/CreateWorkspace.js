@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Modal from "react-bootstrap/Modal";
 import link from "../../../Assets/Images/link.svg";
 import classes from "./CreateWorkspace.module.css";
+import { createWorkspace } from "../../../Services/Workspace";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const CreateWorkspace = (props) => {
+  const queryClient = useQueryClient();
+
   //States
   const [initialScreen, setInitialScreen] = useState(true);
   const [workspaceName, setWorkspaceName] = useState("");
@@ -23,28 +26,7 @@ const CreateWorkspace = (props) => {
   };
   const continueCreationHandler = () => {
     setInitialScreen(false);
-    //API of create workspace
-    axios
-      .post(
-        "http://localhost:5000/workspace/create_workspace",
-        {
-          email: localStorage.getItem("email"),
-          name: workspaceName,
-          description: workspaceDescription,
-        },
-        {
-          headers: {
-            "X-Requested-With": "XMLHttpRequest",
-            Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    createWorkspaceMutation.mutate();
   };
   const wsEmailsHandler = (e) => {
     setEmails(e.target.value);
@@ -57,6 +39,17 @@ const CreateWorkspace = (props) => {
     //API for invite link
     props.onHide();
   };
+
+  // APIs
+  const createWorkspaceMutation = useMutation({
+    mutationFn: () => createWorkspace(workspaceName, workspaceDescription),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["all-workspaces"] });
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
 
   //Effects
   useEffect(() => {

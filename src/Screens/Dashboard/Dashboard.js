@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import Navbar from "../../Components/Navbar/Navbar";
 import Sidebar from "../../Components/Sidebar/Sidebar";
 import CreateWorkspace from "../../Components/Modal/CreateWorkspace/CreateWorkspace";
 import team from "../../Assets/Images/team.svg";
 import classes from "./Dashboard.module.css";
+import { getAllWorkspaces } from "../../Services/Workspace";
+import { useQuery } from "@tanstack/react-query";
+
 const Dashboard = () => {
   //States
   const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] =
@@ -15,27 +17,26 @@ const Dashboard = () => {
   const createWorkspaceHandler = () => {
     setShowCreateWorkspaceModal(true);
   };
-  const getAllWorkspacesHandler = () => {
-    axios
-      .get("http://localhost:5000/workspace/get_workspaces", {
-        headers: {
-          "X-Requested-With": "XMLHttpRequest",
-          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-        },
-      })
-      .then((response) => {
-        console.log(response);
-        setWorkspaces(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
+
+  //APIs
+
+  const {
+    data: workspaceData,
+    error: workspaceError,
+    isLoading: workspaceLoading,
+  } = useQuery({
+    queryFn: getAllWorkspaces,
+    queryKey: ["all-workspaces"],
+  });
 
   //Effects
   useEffect(() => {
-    getAllWorkspacesHandler();
-  }, []);
+    if (!workspaceLoading && workspaceData) {
+      setWorkspaces(workspaceData?.data);
+    } else if (workspaceError) {
+      console.error(workspaceError);
+    }
+  }, [workspaceLoading, workspaceData, workspaceError]);
 
   return (
     <div className={classes.dashboardContainer}>

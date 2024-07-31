@@ -1,17 +1,17 @@
-import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { authenticationActions } from "../../Redux/AuthenticationSlice";
-import { NotificationManager } from "../../Components/NotificationManager/NotificationManager";
+import { createNewPassword, forgetPassword, login } from "../../Services/Auth";
 import loginPageLogo from "../../Assets/Images/loginPageLogo.png";
 import emailIcon from "../../Assets/Images/material-email.svg";
 import hide from "../../Assets/Images/material-visibility-off.svg";
 import show from "../../Assets/Images/material-remove-red-eye.svg";
 import check from "../../Assets/Images/material-check.svg";
 import loginBackground from "../../Assets/Images/loginBackground.jpg";
-
 import classes from "./Login.module.css";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 const Login = () => {
   //Email Regex
@@ -76,83 +76,82 @@ const Login = () => {
   const signUpHandler = () => {
     navigate("/signup");
   };
+
   const emailHandler = (e) => {
     setEmail(e.target.value);
     checkEmail(e.target.value);
   };
+
   const passwordHandler = (e) => {
     setPassword(e.target.value);
     checkPassword(e.target.value);
   };
+
   const otpHandler = (e) => {
     setOtp(e.target.value);
   };
+
   const loginHandler = (e) => {
     e.preventDefault();
-    axios
-      .post(
-        "http://localhost:5000/auth/login",
-        {
-          email: email,
-          password: password,
-        },
-        { headers: { "X-Requested-With": "XMLHttpRequest" } }
-      )
-      .then((response) => {
-        navigate("/dashboard");
-        console.log(response);
-        if (checked) {
-          localStorage.setItem(
-            "Quixo",
-            JSON.stringify({ email: email, password: password, checked: true })
-          );
-        }
-        localStorage.setItem("jwt", response?.data?.token || "");
-        dispatch(authenticationActions.updateJWT(response?.data?.token || ""));
-        localStorage.setItem("username", response?.data?.username);
-        localStorage.setItem("email", response?.data?.email);
-      })
-      .catch((error) => {
-        NotificationManager(
-          error?.response?.data?.error || "Error, Try again",
-          "top-left"
-        );
-      });
+    loginMutation.mutate();
   };
 
   const forgetPasswordHandler = () => {
-    axios
-      .post(
-        "http://localhost:5000/auth/pw_forget",
-        { email: email },
-        { headers: { "X-Requested-With": "XMLHttpRequest" } }
-      )
-      .then((response) => {
-        setForgetPwdScreen(true);
-      })
-      .catch((error) => {
-        NotificationManager(
-          error?.response?.data?.error || "Error, Try again",
-          "top-left"
-        );
-      });
+    forgetPasswordMutaion.mutate();
   };
+
   const createNewPasswordHandler = (e) => {
     e.preventDefault();
-    axios
-      .post("http://localhost:5000/auth/pw_reset", {
-        email: email,
-        new_password: password,
-        otp: Number(otp),
-      })
-      .then((response) => setForgetPwdScreen(false))
-      .catch((error) => {
-        NotificationManager(
-          error?.response?.data?.error || "Error, Try again",
-          "top-left"
-        );
-      });
+    createNewPasswordMutation.mutate();
   };
+
+  // APIs
+  const loginMutation = useMutation({
+    mutationFn: () => login(email, password),
+    onSuccess: (response) => {
+      navigate("/dashboard");
+      console.log(response);
+      if (checked) {
+        localStorage.setItem(
+          "Quixo",
+          JSON.stringify({ email: email, password: password, checked: true })
+        );
+      }
+      localStorage.setItem("jwt", response?.data?.token || "");
+      dispatch(authenticationActions.updateJWT(response?.data?.token || ""));
+      localStorage.setItem("username", response?.data?.username);
+      localStorage.setItem("email", response?.data?.email);
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error(error?.response?.data?.error || "Error. Try Again");
+    },
+  });
+
+  const forgetPasswordMutaion = useMutation({
+    mutationFn: () => forgetPassword(email),
+    onSuccess: (response) => {
+      setForgetPwdScreen(true);
+      setPassword("");
+      setOtp("");
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error(error?.response?.data?.error || "Error. Try Again");
+    },
+  });
+
+  const createNewPasswordMutation = useMutation({
+    mutationFn: () => createNewPassword(email, password, otp),
+    onSuccess: (response) => {
+      setForgetPwdScreen(false);
+      toast.success("Password reset successfully");
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error(error?.response?.data?.error || "Error. Try Again");
+    },
+  });
 
   //Effects
   useEffect(() => {
@@ -301,7 +300,9 @@ const Login = () => {
                 disabled={loginBtnDisable}
                 onClick={loginHandler}
               >
-                Login
+                {loginMutation.isPending || forgetPasswordMutaion.isPending
+                  ? "Processing..."
+                  : "Login"}
               </button>
               <span className={classes.signUp}>
                 Don't have an account?{" "}

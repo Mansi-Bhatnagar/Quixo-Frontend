@@ -1,5 +1,6 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, Bounce } from "react-toastify";
 import RootLayout from "./Screens/Root";
 import Home from "./Screens/Home/Home";
 import Login from "./Screens/Login/Login";
@@ -28,12 +29,34 @@ const router = createBrowserRouter([
     ],
   },
 ]);
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
+
 function App() {
   return (
-    <>
-      <ToastContainer />
+    <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-    </>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
+    </QueryClientProvider>
   );
 }
 

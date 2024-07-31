@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CreateWorkspace from "../Modal/CreateWorkspace/CreateWorkspace";
 import add from "../../Assets/Images/material-add.svg";
 import board from "../../Assets/Images/board.svg";
@@ -26,13 +26,19 @@ const Sidebar = (props) => {
   const createWorkspaceHandler = () => {
     setShowCreateWorkspaceModal(true);
   };
+
   const wsTabHandler = (id) => {
     setWsTabOpen((prev) => (prev === id ? false : id));
     setActiveWsIndex(id);
   };
+
   const deleteWorkspaceHandler = () => {
     setShowDeleteWorkspaceModal(true);
   };
+
+  useEffect(() => {
+    console.log(activeWsIndex);
+  }, [activeWsIndex]);
 
   return (
     <>
@@ -86,6 +92,7 @@ const Sidebar = (props) => {
       <DeleteWorkspace
         show={showDeleteWorkspaceModal}
         onHide={() => setShowDeleteWorkspaceModal(false)}
+        id={activeWsIndex}
       />
     </>
   );

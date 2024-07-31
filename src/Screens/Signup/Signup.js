@@ -1,8 +1,6 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { NotificationManager } from "../../Components/NotificationManager/NotificationManager";
 import { authenticationActions } from "../../Redux/AuthenticationSlice";
 import loginBackground from "../../Assets/Images/loginBackground.jpg";
 import userIcon from "../../Assets/Images/material-perm-identity.svg";
@@ -11,6 +9,9 @@ import emailIcon from "../../Assets/Images/material-email.svg";
 import hide from "../../Assets/Images/material-visibility-off.svg";
 import show from "../../Assets/Images/material-remove-red-eye.svg";
 import classes from "./Signup.module.css";
+import { createUser, verifyOTP } from "../../Services/Auth";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 const Signup = () => {
   //Email Regex
@@ -80,30 +81,13 @@ const Signup = () => {
 
   const otpScreenHandler = (e) => {
     e.preventDefault();
-    axios
-      .post(
-        "http://localhost:5000/auth/signup",
-        {
-          username: username,
-          email: email,
-          password: password,
-        },
-        { headers: { "X-Requested-With": "XMLHttpRequest" } }
-      )
-      .then((response) => {
-        console.log(response);
-        setOtpScreen(true);
-        localStorage.setItem("jwt", response?.data?.token || "");
-        dispatch(authenticationActions.updateJWT(response?.data?.token || ""));
-      })
-      .catch((error) => {
-        return NotificationManager(
-          error?.response?.data?.error || "Error. Try Again"
-        );
-      });
+    mutation.mutate();
   };
 
-  const signUpScreenHandler = () => {
+  const cancelSignUpHandler = () => {
+    if (otpMutation.isPending) {
+      return;
+    }
     setUsername("");
     setEmail("");
     setPassword("");
@@ -113,46 +97,58 @@ const Signup = () => {
     setNextBtnDisable(true);
     setOtpScreen(false);
   };
+
   const usernameHandler = (e) => {
     setUsername(e.target.value);
     checkUsername(e.target.value);
   };
+
   const emailHandler = (e) => {
     setEmail(e.target.value);
     checkEmail(e.target.value);
   };
+
   const passwordHandler = (e) => {
     setPassword(e.target.value);
     checkPassword(e.target.value);
   };
+
   const otpHandler = (e) => {
     setOtp(e.target.value);
   };
+
   const signUpVerifyHandler = (e) => {
     e.preventDefault();
-    axios
-      .post(
-        "http://localhost:5000/auth/signup_verification",
-        {
-          email: email,
-          otp: Number(otp),
-        },
-        {
-          headers: {
-            "X-Requested-With": "XMLHttpRequest",
-            withCredentials: true,
-          },
-        }
-      )
-      .then((response) => {
-        navigate("/dashboard");
-      })
-      .catch((error) => {
-        NotificationManager(error?.response?.data?.error || "Error, Try again");
-      });
+    otpMutation.mutate();
   };
-  //Effects
 
+  // APIs
+  const mutation = useMutation({
+    mutationFn: () => createUser(username, email, password),
+    onSuccess: (response) => {
+      console.log(response);
+      setOtpScreen(true);
+      localStorage.setItem("jwt", response?.data?.token || "");
+      dispatch(authenticationActions.updateJWT(response?.data?.token || ""));
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error(error?.response?.data?.error || "Error. Try Again");
+    },
+  });
+
+  const otpMutation = useMutation({
+    mutationFn: () => verifyOTP(email, otp),
+    onSuccess: (response) => {
+      console.log(response);
+      navigate("/dashboard");
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error(error?.response?.data?.error || "Error. Try Again");
+    },
+  });
+  //Effects
   useEffect(() => {
     if (
       !usernameError &&
@@ -200,9 +196,13 @@ const Signup = () => {
               </span>
               <div className={classes.btnContainer}>
                 <button className={classes.btn} onClick={signUpVerifyHandler}>
-                  Verify
+                  {otpMutation.isPending ? "Verifying..." : "Verify"}
                 </button>
-                <button className={classes.btn} onClick={signUpScreenHandler}>
+                <button
+                  className={classes.btn}
+                  onClick={cancelSignUpHandler}
+                  disabled={otpMutation.isPending}
+                >
                   Cancel
                 </button>
               </div>
@@ -283,7 +283,7 @@ const Signup = () => {
                 onClick={otpScreenHandler}
                 disabled={nextBtnDisable}
               >
-                Next
+                {mutation.isPending ? "Processing..." : "Next"}
               </button>
               <span className={classes.login}>
                 Already have an account?{" "}
