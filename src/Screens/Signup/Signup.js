@@ -128,8 +128,6 @@ const Signup = () => {
     onSuccess: (response) => {
       console.log(response);
       setOtpScreen(true);
-      localStorage.setItem("jwt", response?.data?.token || "");
-      dispatch(authenticationActions.updateJWT(response?.data?.token || ""));
     },
     onError: (error) => {
       console.log(error);
@@ -141,6 +139,8 @@ const Signup = () => {
     mutationFn: () => verifyOTP(email, otp),
     onSuccess: (response) => {
       console.log(response);
+      localStorage.setItem("jwt", response?.data?.token || "");
+      dispatch(authenticationActions.updateJWT(response?.data?.token || ""));
       navigate("/dashboard");
     },
     onError: (error) => {

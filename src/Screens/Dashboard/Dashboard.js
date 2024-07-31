@@ -11,7 +11,7 @@ const Dashboard = () => {
   //States
   const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] =
     useState(false);
-  const [workspaces, setWorkspaces] = useState();
+  const [workspaces, setWorkspaces] = useState([]);
 
   //Handlers
   const createWorkspaceHandler = () => {
@@ -44,7 +44,7 @@ const Dashboard = () => {
       <div className={classes.content}>
         <Sidebar workspaces={workspaces} />
         <div className={classes.workspaces}>
-          {!workspaces ? (
+          {workspaces.length === 0 ? (
             <>
               <h4>Your workspaces</h4>
               <div className={classes.noWsContainer}>
