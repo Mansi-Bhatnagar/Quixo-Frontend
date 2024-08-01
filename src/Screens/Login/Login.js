@@ -125,6 +125,12 @@ const Login = () => {
     onError: (error) => {
       console.log(error);
       toast.error(error?.response?.data?.error || "Error. Try Again");
+      if (
+        error?.response?.data?.error ===
+        "User does not exist, please sign up first"
+      ) {
+        navigate("/signup");
+      }
     },
   });
 
@@ -138,6 +144,12 @@ const Login = () => {
     onError: (error) => {
       console.log(error);
       toast.error(error?.response?.data?.error || "Error. Try Again");
+      if (
+        error?.response?.data?.error ===
+        "User does not exist, please sign up first"
+      ) {
+        navigate("/signup");
+      }
     },
   });
 

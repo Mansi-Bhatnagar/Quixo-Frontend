@@ -6,6 +6,7 @@ const config = {
     withCredentials: true,
   },
   baseURL: "http://localhost:5000/auth",
+  withCredentials: true,
 };
 
 export async function createUser(username, email, password) {
