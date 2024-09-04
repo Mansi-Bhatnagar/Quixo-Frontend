@@ -4,7 +4,6 @@ import add from "../../Assets/Images/material-add.svg";
 import board from "../../Assets/Images/board.svg";
 import member from "../../Assets/Images/member.svg";
 import dustbin from "../../Assets/Images/material-delete.svg";
-import classes from "./Sidebar.module.css";
 import DeleteWorkspace from "../Modal/DeleteWorkspace/DeleteWorkspace";
 
 const Sidebar = (props) => {
@@ -42,31 +41,37 @@ const Sidebar = (props) => {
 
   return (
     <>
-      <div className={classes.container}>
-        <button className={classes.wsBtn} onClick={createWorkspaceHandler}>
+      <div className="ml-[150px] sticky top-10 w-[256px] border-r border-r-[#33415c] h-[80vh]">
+        <button
+          className="flex items-center justify-start gap-[10px] border-none bg-transparent p-[5px] rounded-md w-[250px] mb-6 hover:cursor-pointer hover:bg-[#5c677d] "
+          onClick={createWorkspaceHandler}
+        >
           <img src={add} alt="add" />
-          <span>Create New Workspace</span>
+          <span className="text-white">Create New Workspace</span>
         </button>
         {workspaces &&
           workspaces.map((workspace) => {
             return (
-              <div key={workspace.id} className={classes.wsTabContainer}>
+              <div key={workspace.id}>
                 <div
-                  className={classes.wsTab}
+                  className="flex items-center justify-start gap-[10px] w-[250px] p-[5px] rounded-md hover:cursor-pointer hover:bg-[#5c677d]"
                   onClick={() => wsTabHandler(workspace.id)}
                 >
                   <div
-                    className={classes.wsIcon}
+                    className="w-[30px] h-[30px] text-white rounded-md flex items-center justify-center my-[5px] mx-0"
                     style={{ backgroundColor: `${tabColors[index++ % 5]}` }}
                   >
                     {workspace.workspace_name
                       ? workspace.workspace_name[0].toUpperCase()
                       : ""}
                   </div>
-                  <span>{workspace.workspace_name || ""}</span>
+                  <span className="text-white">
+                    {workspace.workspace_name || ""}
+                  </span>
                 </div>
+
                 {wsTabOpen === workspace.id && (
-                  <ul className={classes.options}>
+                  <ul className="[&_li]:flex [&_li]:items-center [&_li]:justify-start [&_li]:gap-2 [&_li]:py-[6px] [&_li]:px-2 [&_li]:cursor-pointer [&_li]:w-[200] [&_li]:rounded-lg hover:[&_li]:cursor-pointer [&_span]:bg-[#33415c]">
                     <li>
                       <img src={board} alt="board" />
                       <span>Boards</span>
@@ -86,12 +91,12 @@ const Sidebar = (props) => {
           })}
       </div>
       <CreateWorkspace
-        show={showCreateWorkspaceModal}
-        onHide={() => setShowCreateWorkspaceModal(false)}
+        open={showCreateWorkspaceModal}
+        setShowCreateWorkspaceModal={setShowCreateWorkspaceModal}
       />
       <DeleteWorkspace
-        show={showDeleteWorkspaceModal}
-        onHide={() => setShowDeleteWorkspaceModal(false)}
+        open={showDeleteWorkspaceModal}
+        onClose={() => setShowDeleteWorkspaceModal(false)}
         id={activeWsIndex}
       />
     </>

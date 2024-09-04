@@ -45,3 +45,17 @@ export async function deleteWorkspace(id) {
     throw error;
   }
 }
+
+export async function addWorkspaceMember(workspaceId, emails) {
+  try {
+    const response = await axios.post(
+      `/add_member/${workspaceId}`,
+      { email: emails },
+      config
+    );
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

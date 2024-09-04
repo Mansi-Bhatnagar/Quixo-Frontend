@@ -3,7 +3,6 @@ import Navbar from "../../Components/Navbar/Navbar";
 import Sidebar from "../../Components/Sidebar/Sidebar";
 import CreateWorkspace from "../../Components/Modal/CreateWorkspace/CreateWorkspace";
 import team from "../../Assets/Images/team.svg";
-import classes from "./Dashboard.module.css";
 import { getAllWorkspaces } from "../../Services/Workspace";
 import { useQuery } from "@tanstack/react-query";
 
@@ -39,18 +38,29 @@ const Dashboard = () => {
   }, [workspaceLoading, workspaceData, workspaceError]);
 
   return (
-    <div className={classes.dashboardContainer}>
+    <div className="bg-[#1d2125] h-screen">
       <Navbar />
-      <div className={classes.content}>
+      <div className="flex items-start gap-[30px] mt-10">
         <Sidebar workspaces={workspaces} />
-        <div className={classes.workspaces}>
+        <div className="text-[#97a4b2]">
           {workspaces.length === 0 ? (
             <>
               <h4>Your workspaces</h4>
-              <div className={classes.noWsContainer}>
-                <p>Seems like you aren't a member of any workspaces yet. </p>
-                <span onClick={createWorkspaceHandler}>Click to create</span>
-                <img src={team} alt="team" />
+              <div>
+                <p className="text-white inline-block tracking-[1px]">
+                  Seems like you aren't a member of any workspaces yet.{" "}
+                </p>
+                <span
+                  className="ml-[5px] text-[#97a4b2] tracking-[1px] font-semibold text-lg cursor-pointer hover:underline"
+                  onClick={createWorkspaceHandler}
+                >
+                  Click to create
+                </span>
+                <img
+                  className="w-[400px] block mb-0 mt-[100px] mx-auto"
+                  src={team}
+                  alt="team"
+                />
               </div>
             </>
           ) : (
@@ -59,8 +69,8 @@ const Dashboard = () => {
         </div>
       </div>
       <CreateWorkspace
-        show={showCreateWorkspaceModal}
-        onHide={() => setShowCreateWorkspaceModal(false)}
+        open={showCreateWorkspaceModal}
+        setShowCreateWorkspaceModal={setShowCreateWorkspaceModal}
       />
     </div>
   );

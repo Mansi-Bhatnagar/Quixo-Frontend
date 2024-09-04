@@ -8,7 +8,6 @@ import Signup from "./Screens/Signup/Signup";
 import Dashboard from "./Screens/Dashboard/Dashboard";
 import AuthProtected from "./Helpers/AuthProtected/AuthProtected";
 import "react-toastify/dist/ReactToastify.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 const router = createBrowserRouter([
   {
