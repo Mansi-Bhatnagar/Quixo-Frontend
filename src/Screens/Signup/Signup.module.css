@@ -45,8 +45,8 @@
   padding: 0 130px;
 }
 .logo {
-  width: 75px;
-  height: 118px;
+  width: auto;
+  height: 50px;
   margin-top: 15px;
   margin-right: 15px;
   float: right;

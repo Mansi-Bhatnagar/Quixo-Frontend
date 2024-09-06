@@ -5,8 +5,8 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
-import link from "../../../Assets/Images/link.svg";
-import { createWorkspace } from "../../../Services/Workspace";
+import link from "../../Assets/Images/link.svg";
+import { createWorkspace } from "../../Services/Workspace";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const CreateWorkspace = ({ open, setShowCreateWorkspaceModal }) => {

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import CreateWorkspace from "../Modal/CreateWorkspace/CreateWorkspace";
-import add from "../../Assets/Images/material-add.svg";
-import board from "../../Assets/Images/board.svg";
-import member from "../../Assets/Images/member.svg";
-import dustbin from "../../Assets/Images/material-delete.svg";
-import DeleteWorkspace from "../Modal/DeleteWorkspace/DeleteWorkspace";
+import CreateWorkspace from "./Modal/CreateWorkspace";
+import add from "../Assets/Images/material-add.svg";
+import board from "../Assets/Images/board.svg";
+import member from "../Assets/Images/member.svg";
+import dustbin from "../Assets/Images/material-delete.svg";
+import DeleteWorkspace from "./Modal/DeleteWorkspace";
+import { ChevronDownIcon } from '@heroicons/react/20/solid'
 
 const Sidebar = (props) => {
   const { workspaces } = props;
@@ -14,9 +15,9 @@ const Sidebar = (props) => {
   //States
   const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] =
     useState(false);
-  const [wsTabOpen, setWsTabOpen] = useState(workspaces && workspaces[0]?.id);
+  const [wsTabOpen, setWsTabOpen] = useState(workspaces && workspaces[0]?.id || 1);
   const [activeWsIndex, setActiveWsIndex] = useState(
-    workspaces && workspaces[0]?.id
+    workspaces?.length>0 && workspaces[0]?.id || 1
   );
   const [showDeleteWorkspaceModal, setShowDeleteWorkspaceModal] =
     useState(false);
@@ -65,13 +66,16 @@ const Sidebar = (props) => {
                       ? workspace.workspace_name[0].toUpperCase()
                       : ""}
                   </div>
-                  <span className="text-white">
-                    {workspace.workspace_name || ""}
-                  </span>
+                  <div className="flex items-center justify-between w-full">
+                      <span className="text-white">
+                          {workspace.workspace_name || ""}
+                      </span>
+                      <ChevronDownIcon className="w-5 text-white"/>
+                  </div>
                 </div>
 
                 {wsTabOpen === workspace.id && (
-                  <ul className="[&_li]:flex [&_li]:items-center [&_li]:justify-start [&_li]:gap-2 [&_li]:py-[6px] [&_li]:px-2 [&_li]:cursor-pointer [&_li]:w-[200] [&_li]:rounded-lg hover:[&_li]:cursor-pointer [&_span]:bg-[#33415c]">
+                  <ul className="[&_li]:flex [&_li]:items-center [&_li]:justify-start [&_li]:gap-2 [&_li]:py-[6px] [&_li]:px-2 [&_li]:cursor-pointer [&_li]:w-[200] [&_li]:rounded-lg hover:[&_li]:cursor-pointer [&_span]:text-[#97a4b2]">
                     <li>
                       <img src={board} alt="board" />
                       <span>Boards</span>

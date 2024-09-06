@@ -5,7 +5,7 @@ import RootLayout from "./Screens/Root";
 import Home from "./Screens/Home/Home";
 import Login from "./Screens/Login/Login";
 import Signup from "./Screens/Signup/Signup";
-import Dashboard from "./Screens/Dashboard/Dashboard";
+import Dashboard from "./Screens/Dashboard";
 import AuthProtected from "./Helpers/AuthProtected/AuthProtected";
 import "react-toastify/dist/ReactToastify.css";
 

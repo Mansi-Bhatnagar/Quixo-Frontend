@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
-import Navbar from "../../Components/Navbar/Navbar";
-import Sidebar from "../../Components/Sidebar/Sidebar";
-import CreateWorkspace from "../../Components/Modal/CreateWorkspace/CreateWorkspace";
-import team from "../../Assets/Images/team.svg";
-import { getAllWorkspaces } from "../../Services/Workspace";
+import Navbar from "../Components/Navbar";
+import Sidebar from "../Components/Sidebar";
+import CreateWorkspace from "../Components/Modal/CreateWorkspace";
+import team from "../Assets/Images/team.svg";
+import { getAllWorkspaces } from "../Services/Workspace";
 import { useQuery } from "@tanstack/react-query";
+import { useSelector } from "react-redux";
 
 const Dashboard = () => {
+  const jwt = useSelector((state) => state.authentication.jwt);
+
   //States
   const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] =
     useState(false);
@@ -26,12 +29,14 @@ const Dashboard = () => {
   } = useQuery({
     queryFn: getAllWorkspaces,
     queryKey: ["all-workspaces"],
+    enabled: jwt !== ''
   });
 
   //Effects
   useEffect(() => {
     if (!workspaceLoading && workspaceData) {
       setWorkspaces(workspaceData?.data);
+      console.log(workspaceData)
     } else if (workspaceError) {
       console.error(workspaceError);
     }

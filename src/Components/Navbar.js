@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { authenticationActions } from "../../Redux/AuthenticationSlice";
-import user from "../../Assets/Images/material-account-circle.svg";
+import { authenticationActions } from "../Redux/AuthenticationSlice";
+import user from "../Assets/Images/material-account-circle.svg";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const Navbar = () => {
   const logoutHandler = () => {
     localStorage.removeItem("jwt");
     dispatch(authenticationActions.updateJWT(""));
-    navigate("/login");
+    navigate("/");
   };
 
   //Effects
