@@ -9,11 +9,15 @@ import link from "../../Assets/Images/link.svg";
 import { createWorkspace } from "../../Services/Workspace";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-const CreateWorkspace = ({ open, setShowCreateWorkspaceModal }) => {
+const CreateWorkspace = ({
+  open,
+  setShowCreateWorkspaceModal,
+  showInitialScreen,
+}) => {
   const queryClient = useQueryClient();
 
   //States
-  const [initialScreen, setInitialScreen] = useState(true);
+  const [initialScreen, setInitialScreen] = useState(showInitialScreen);
   const [workspaceName, setWorkspaceName] = useState("");
   const [workspaceDescription, setWorkspaceDescription] = useState("");
   const [continueDisabled, setContinueDisabled] = useState(true);
@@ -86,6 +90,10 @@ const CreateWorkspace = ({ open, setShowCreateWorkspaceModal }) => {
       setInviteDisabled(true);
     }
   }, [emails]);
+
+  useEffect(() => {
+    console.log(showInitialScreen);
+  }, [showInitialScreen]);
 
   return (
     <Dialog open={open} onClose={() => {}} className="relative z-50">

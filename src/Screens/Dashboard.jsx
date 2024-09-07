@@ -6,6 +6,7 @@ import team from "../Assets/Images/team.svg";
 import { getAllWorkspaces } from "../Services/Workspace";
 import { useQuery } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
+import { Outlet } from "react-router-dom";
 
 const Dashboard = () => {
   const jwt = useSelector((state) => state.authentication.jwt);
@@ -29,23 +30,23 @@ const Dashboard = () => {
   } = useQuery({
     queryFn: getAllWorkspaces,
     queryKey: ["all-workspaces"],
-    enabled: jwt !== ''
+    enabled: jwt !== "",
   });
 
   //Effects
   useEffect(() => {
     if (!workspaceLoading && workspaceData) {
       setWorkspaces(workspaceData?.data);
-      console.log(workspaceData)
+      console.log(workspaceData);
     } else if (workspaceError) {
       console.error(workspaceError);
     }
   }, [workspaceLoading, workspaceData, workspaceError]);
 
   return (
-    <div className="bg-[#1d2125] h-screen">
+    <div className="bg-[#1d2125] h-screen ">
       <Navbar />
-      <div className="flex items-start gap-[30px] mt-10">
+      <div className="flex items-start gap-[30px] mt-10 px-[150px]">
         <Sidebar workspaces={workspaces} />
         <div className="text-[#97a4b2]">
           {workspaces.length === 0 ? (
@@ -69,14 +70,17 @@ const Dashboard = () => {
               </div>
             </>
           ) : (
-            ""
+            <Outlet />
           )}
         </div>
       </div>
-      <CreateWorkspace
-        open={showCreateWorkspaceModal}
-        setShowCreateWorkspaceModal={setShowCreateWorkspaceModal}
-      />
+      {showCreateWorkspaceModal && (
+        <CreateWorkspace
+          open={showCreateWorkspaceModal}
+          setShowCreateWorkspaceModal={setShowCreateWorkspaceModal}
+          showInitialScreen={true}
+        />
+      )}
     </div>
   );
 };
