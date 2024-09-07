@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 const Sidebar = (props) => {
   const { workspaces } = props;
   const tabColors = ["#007f5f", "#023e7d", "#d00000", "#9d4edd", "#ffba08"];
+  let idx = 0;
   const navigate = useNavigate();
 
   //States
@@ -28,8 +29,8 @@ const Sidebar = (props) => {
     setShowCreateWorkspaceModal(true);
   };
 
-  const wsTabHandler = (idx, workspaceId) => {
-    setWsTabOpen((prev) => (prev === idx ? false : idx));
+  const wsTabHandler = (workspaceId) => {
+    setWsTabOpen((prev) => (prev === workspaceId ? false : workspaceId));
     setActiveWsIndex(workspaceId);
   };
 
@@ -38,8 +39,7 @@ const Sidebar = (props) => {
   };
 
   const membersHandler = (name, idx, description) => {
-    console.log(idx, activeWsIndex);
-    navigate(`${name}/members`, {
+    navigate(`${name.split(" ").join("")}/members`, {
       state: { color: `${tabColors[idx % 5]}`, description: description },
     });
   };
@@ -61,16 +61,16 @@ const Sidebar = (props) => {
           <span className="text-white">Create New Workspace</span>
         </button>
         {workspaces &&
-          workspaces.map((workspace, idx) => {
+          workspaces.map((workspace) => {
             return (
               <div key={workspace.id}>
                 <div
                   className="flex items-center justify-start gap-[10px] w-[250px] p-[5px] rounded-md hover:cursor-pointer hover:bg-[#5c677d]"
-                  onClick={() => wsTabHandler(idx, workspace.id)}
+                  onClick={() => wsTabHandler(workspace.id)}
                 >
                   <div
                     className="w-[30px] h-[30px] text-white rounded-md flex items-center justify-center my-[5px] mx-0"
-                    style={{ backgroundColor: `${tabColors[idx % 5]}` }}
+                    style={{ backgroundColor: `${tabColors[idx++ % 5]}` }}
                   >
                     {workspace.workspace_name
                       ? workspace.workspace_name[0].toUpperCase()
@@ -84,7 +84,7 @@ const Sidebar = (props) => {
                   </div>
                 </div>
 
-                {wsTabOpen === idx && (
+                {wsTabOpen === workspace.id && (
                   <ul className="[&_li]:flex [&_li]:items-center [&_li]:justify-start [&_li]:gap-2 [&_li]:py-[6px] [&_li]:px-2 [&_li]:cursor-pointer [&_li]:w-[200] [&_li]:rounded-lg hover:[&_li]:cursor-pointer [&_span]:text-[#97a4b2]">
                     <li>
                       <img src={board} alt="board" />

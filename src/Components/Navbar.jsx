@@ -19,6 +19,9 @@ const Navbar = () => {
     mutationFn: () => logout(localStorage.getItem("email")),
     onSuccess: (response) => {
       console.log(response);
+      localStorage.removeItem("jwt");
+      dispatch(authenticationActions.updateJWT(""));
+      navigate("/");
     },
     onError: (error) => {
       console.error(error);
@@ -32,9 +35,6 @@ const Navbar = () => {
 
   const logoutHandler = () => {
     logoutMutation.mutate();
-    localStorage.removeItem("jwt");
-    dispatch(authenticationActions.updateJWT(""));
-    navigate("/");
   };
 
   //Effects

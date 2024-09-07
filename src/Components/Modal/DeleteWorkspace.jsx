@@ -6,9 +6,11 @@ import {
 } from "@headlessui/react";
 import { deleteWorkspace } from "../../Services/Workspace";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSelector } from "react-redux";
 
 const DeleteWorkspace = (props) => {
   const queryClient = useQueryClient();
+  const jwt = useSelector((state) => state.authentication.jwt);
 
   //Handlers
   const deleteWorkspaceHandler = () => {
@@ -18,7 +20,7 @@ const DeleteWorkspace = (props) => {
 
   // APIs
   const deleteWorkspaceMutaion = useMutation({
-    mutationFn: () => deleteWorkspace(props.id),
+    mutationFn: () => deleteWorkspace(props.id, jwt),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["all-workspaces"] });
     },

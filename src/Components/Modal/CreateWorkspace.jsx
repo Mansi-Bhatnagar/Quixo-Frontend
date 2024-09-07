@@ -8,6 +8,7 @@ import {
 import link from "../../Assets/Images/link.svg";
 import { createWorkspace } from "../../Services/Workspace";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useSelector } from "react-redux";
 
 const CreateWorkspace = ({
   open,
@@ -15,6 +16,7 @@ const CreateWorkspace = ({
   showInitialScreen,
 }) => {
   const queryClient = useQueryClient();
+  const jwt = useSelector((state) => state.authentication.jwt);
 
   //States
   const [initialScreen, setInitialScreen] = useState(showInitialScreen);
@@ -64,7 +66,7 @@ const CreateWorkspace = ({
 
   // APIs
   const createWorkspaceMutation = useMutation({
-    mutationFn: () => createWorkspace(workspaceName, workspaceDescription),
+    mutationFn: () => createWorkspace(workspaceName, workspaceDescription, jwt),
     onSuccess: (response) => {
       console.log(response);
       queryClient.invalidateQueries({ queryKey: ["all-workspaces"] });

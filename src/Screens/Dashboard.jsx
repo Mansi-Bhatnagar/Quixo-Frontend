@@ -28,15 +28,15 @@ const Dashboard = () => {
     error: workspaceError,
     isLoading: workspaceLoading,
   } = useQuery({
-    queryFn: getAllWorkspaces,
-    queryKey: ["all-workspaces"],
+    queryFn: () => getAllWorkspaces(jwt),
+    queryKey: ["all-workspaces", jwt],
     enabled: jwt !== "",
   });
 
   //Effects
   useEffect(() => {
     if (!workspaceLoading && workspaceData) {
-      setWorkspaces(workspaceData?.data);
+      setWorkspaces([...workspaceData?.data]);
       console.log(workspaceData);
     } else if (workspaceError) {
       console.error(workspaceError);
