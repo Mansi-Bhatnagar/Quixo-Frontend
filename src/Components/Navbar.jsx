@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { authenticationActions } from "../Redux/AuthenticationSlice";
 import user from "../Assets/Images/material-account-circle.svg";
+import { logout } from "../Services/Auth";
+import { useMutation } from "@tanstack/react-query";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -12,12 +14,24 @@ const Navbar = () => {
   const [username, setUsername] = useState();
   const [showDropdown, setShowDropdown] = useState(false);
 
+  //APIs
+  const logoutMutation = useMutation({
+    mutationFn: () => logout(localStorage.getItem("email")),
+    onSuccess: (response) => {
+      console.log(response);
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
   //Handlers
   const showDropdownHandler = () => {
     setShowDropdown((prev) => !prev);
   };
 
   const logoutHandler = () => {
+    logoutMutation.mutate();
     localStorage.removeItem("jwt");
     dispatch(authenticationActions.updateJWT(""));
     navigate("/");
