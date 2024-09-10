@@ -7,8 +7,9 @@ import Login from "./Screens/Login/Login";
 import Signup from "./Screens/Signup/Signup";
 import Dashboard from "./Screens/Dashboard";
 import AuthProtected from "./Helpers/AuthProtected/AuthProtected";
-import Members from './Screens/Members'
+import Members from "./Screens/Members";
 import "react-toastify/dist/ReactToastify.css";
+import Boards from "./Screens/Boards";
 
 const router = createBrowserRouter([
   {
@@ -25,9 +26,10 @@ const router = createBrowserRouter([
             <Dashboard />
           </AuthProtected>
         ),
-        children:[
-          {path:"/dashboard/:workspaceName/members", element:<Members/>}
-        ]
+        children: [
+          { path: "/dashboard/:workspaceName/members", element: <Members /> },
+          { path: "/dashboard/:workspaceName/boards", element: <Boards /> },
+        ],
       },
     ],
   },

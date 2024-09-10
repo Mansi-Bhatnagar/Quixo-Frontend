@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { PencilSquareIcon, XMarkIcon } from "@heroicons/react/20/solid";
 import {
   Combobox,
@@ -10,10 +10,13 @@ import {
 import RemoveUser from "../Components/Modal/RemoveUser";
 import LeaveWorkspace from "../Components/Modal/LeaveWorkspace";
 import CreateWorkspace from "../Components/Modal/CreateWorkspace";
+import WorkspaceDetails from "../Components/Modal/WorkspaceDetails";
 
 const Members = () => {
-  const { workspaceName } = useParams();
   const location = useLocation();
+  const name = location?.state?.name;
+  const description = location?.state?.description;
+  const color = location?.state?.color;
   const tabColors = ["#007f5f", "#023e7d", "#d00000", "#9d4edd", "#ffba08"];
   const users = [
     {
@@ -45,6 +48,8 @@ const Members = () => {
   const [showLeaveWorkspaceModal, setShowLeaveWorkspaceModal] = useState(false);
   const [leavingUser, setLeavingUser] = useState({});
   const [showInviteMembersModal, setShowInviteMembersModal] = useState(false);
+  const [showEditWorkspaceDetailsModal, setShowEditWorkspaceDetailsModal] =
+    useState(false);
 
   const filteredUsers =
     query === ""
@@ -69,32 +74,36 @@ const Members = () => {
 
   return (
     <>
-      <div className="mb-9 flex items-center justify-between w-[calc(100vw_-_586px)] border-b border-b-[#33415c] pb-5">
-        <div className="flex items-start justify-start gap-3">
+      <div className="mb-9 flex items-start justify-between w-[calc(100vw_-_586px)] border-b border-b-[#33415c] pb-5">
+        <div className="flex basis-[75%] items-start justify-start gap-3">
           <div
             className="w-12 h-12 flex items-center justify-center rounded-lg text-white"
-            style={{ backgroundColor: location?.state?.color }}
+            style={{ backgroundColor: color }}
           >
-            <span>{workspaceName[0].toUpperCase()}</span>
+            <span>{name?.[0].toUpperCase()}</span>
           </div>
-          <div className="flex items-start flex-col gap-1">
+          <div className="w-full">
             <div className="flex items-center gap-2">
-              <span className="text-white">{workspaceName} </span>
-              <PencilSquareIcon className="w-5 cursor-pointer text-white" />
+              <span className="text-white">{name} </span>
+              <PencilSquareIcon
+                className="w-5 cursor-pointer text-white"
+                onClick={() => {
+                  setShowEditWorkspaceDetailsModal(true);
+                }}
+              />
             </div>
-            {location?.state?.description ? (
-              <p className="text-sm max-w-[70%]">
-                {location?.state?.description}
-              </p>
+            {description ? (
+              <p className="text-sm w-[80%]">{description}</p>
             ) : (
               ""
             )}
           </div>
         </div>
+
         <button
           onClick={inviteMembersHandler}
-          style={{ backgroundColor: location?.state?.color }}
-          className="text-white rounded-lg py-3 px-4"
+          style={{ backgroundColor: color }}
+          className="text-white rounded-lg py-3 px-4 basis-[20%]"
         >
           Invite Members
         </button>
@@ -210,6 +219,14 @@ const Members = () => {
           showInitialScreen={false}
           open={showInviteMembersModal}
           setShowCreateWorkspaceModal={setShowInviteMembersModal}
+        />
+      )}
+      {showEditWorkspaceDetailsModal && (
+        <WorkspaceDetails
+          open={showEditWorkspaceDetailsModal}
+          setShowEditWorkspaceDetailsModal={setShowEditWorkspaceDetailsModal}
+          name={name}
+          description={description}
         />
       )}
     </>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CreateWorkspace from "./Modal/CreateWorkspace";
 import add from "../Assets/Images/material-add.svg";
 import board from "../Assets/Images/board.svg";
@@ -11,7 +11,6 @@ import { useNavigate } from "react-router-dom";
 const Sidebar = (props) => {
   const { workspaces } = props;
   const tabColors = ["#007f5f", "#023e7d", "#d00000", "#9d4edd", "#ffba08"];
-  let idx = 0;
   const navigate = useNavigate();
 
   //States
@@ -23,27 +22,34 @@ const Sidebar = (props) => {
   );
   const [showDeleteWorkspaceModal, setShowDeleteWorkspaceModal] =
     useState(false);
+  const [activeWsColor, setActiveWsColor] = useState();
 
   //Handlers
   const createWorkspaceHandler = () => {
     setShowCreateWorkspaceModal(true);
   };
 
-  const wsTabHandler = (workspaceId) => {
+  const wsTabHandler = (workspaceId, color) => {
     setWsTabOpen((prev) => (prev === workspaceId ? false : workspaceId));
     setActiveWsIndex(workspaceId);
+    setActiveWsColor(color);
   };
 
   const deleteWorkspaceHandler = () => {
     setShowDeleteWorkspaceModal(true);
   };
 
-  const membersHandler = (name, idx, description) => {
+  const membersHandler = (name, description) => {
     navigate(`${name.split(" ").join("")}/members`, {
-      state: { color: `${tabColors[idx % 5]}`, description: description },
+      state: { color: activeWsColor, name: name, description: description },
     });
   };
 
+  const boardsHandler = (name, description) => {
+    navigate(`/dashboard/${name.split(" ").join("")}/boards`, {
+      state: { color: activeWsColor, name: name, description: description },
+    });
+  };
   //Effects
 
   // useEffect(() => {
@@ -61,16 +67,16 @@ const Sidebar = (props) => {
           <span className="text-white">Create New Workspace</span>
         </button>
         {workspaces &&
-          workspaces.map((workspace) => {
+          workspaces.map((workspace, idx) => {
             return (
               <div key={workspace.id}>
                 <div
                   className="flex items-center justify-start gap-[10px] w-[250px] p-[5px] rounded-md hover:cursor-pointer hover:bg-[#5c677d]"
-                  onClick={() => wsTabHandler(workspace.id)}
+                  onClick={() => wsTabHandler(workspace.id, tabColors[idx])}
                 >
                   <div
                     className="w-[30px] h-[30px] text-white rounded-md flex items-center justify-center my-[5px] mx-0"
-                    style={{ backgroundColor: `${tabColors[idx++ % 5]}` }}
+                    style={{ backgroundColor: `${tabColors[idx % 5]}` }}
                   >
                     {workspace.workspace_name
                       ? workspace.workspace_name[0].toUpperCase()
@@ -86,7 +92,14 @@ const Sidebar = (props) => {
 
                 {wsTabOpen === workspace.id && (
                   <ul className="[&_li]:flex [&_li]:items-center [&_li]:justify-start [&_li]:gap-2 [&_li]:py-[6px] [&_li]:px-2 [&_li]:cursor-pointer [&_li]:w-[200] [&_li]:rounded-lg hover:[&_li]:cursor-pointer [&_span]:text-[#97a4b2]">
-                    <li>
+                    <li
+                      onClick={() =>
+                        boardsHandler(
+                          workspace.workspace_name,
+                          workspace.description
+                        )
+                      }
+                    >
                       <img src={board} alt="board" />
                       <span>Boards</span>
                     </li>
@@ -94,7 +107,6 @@ const Sidebar = (props) => {
                       onClick={() =>
                         membersHandler(
                           workspace.workspace_name,
-                          idx,
                           workspace.description
                         )
                       }
