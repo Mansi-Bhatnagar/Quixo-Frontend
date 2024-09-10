@@ -66,11 +66,15 @@ const Sidebar = (props) => {
           <img src={add} alt="add" />
           <span className="text-white">Create New Workspace</span>
         </button>
+        <h3 className="text-[#97a4b2] text-sm my-4">Your workspaces</h3>
         {workspaces &&
           workspaces.map((workspace, idx) => {
             return (
               <div key={workspace.id}>
                 <div
+                  style={{
+                    background: wsTabOpen === workspace.id ? "#5c677d" : "",
+                  }}
                   className="flex items-center justify-start gap-[10px] w-[250px] p-[5px] rounded-md hover:cursor-pointer hover:bg-[#5c677d]"
                   onClick={() => wsTabHandler(workspace.id, tabColors[idx])}
                 >
@@ -123,6 +127,9 @@ const Sidebar = (props) => {
               </div>
             );
           })}
+        <h3 className="text-[#97a4b2] text-sm my-4">
+          Workspaces shared with you
+        </h3>
       </div>
       {showCreateWorkspaceModal && (
         <CreateWorkspace

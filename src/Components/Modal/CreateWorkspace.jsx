@@ -114,7 +114,9 @@ const CreateWorkspace = ({
                 </h5>
                 <form>
                   <div className="flex items-start justify-evenly flex-col my-5 [&_label]:text-[15px] [&_label]:font-medium [&_label]:text-[#001233]">
-                    <label htmlFor="workspace-name">Workspace Name</label>
+                    <label htmlFor="workspace-name">
+                      Workspace Name <span className="text-[#d00000]">*</span>
+                    </label>
                     <input
                       type="text"
                       id="workspace-name"
