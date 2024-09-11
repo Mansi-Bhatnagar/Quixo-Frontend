@@ -39,14 +39,14 @@ const Sidebar = (props) => {
     setShowDeleteWorkspaceModal(true);
   };
 
-  const membersHandler = (name, description) => {
-    navigate(`${name.split(" ").join("")}/members`, {
+  const membersHandler = (workspaceId, name, description) => {
+    navigate(`${workspaceId}/${name.split(" ").join("")}/members`, {
       state: { color: activeWsColor, name: name, description: description },
     });
   };
 
-  const boardsHandler = (name, description) => {
-    navigate(`/dashboard/${name.split(" ").join("")}/boards`, {
+  const boardsHandler = (workspaceId, name, description) => {
+    navigate(`${workspaceId}/${name.split(" ").join("")}/boards`, {
       state: { color: activeWsColor, name: name, description: description },
     });
   };
@@ -58,7 +58,7 @@ const Sidebar = (props) => {
 
   return (
     <>
-      <div className="sticky top-10 w-[256px] border-r border-r-[#33415c] h-[80vh]">
+      <div className="sticky no-scrollbar scroll-smooth top-10 w-[265px] border-r border-r-[#33415c] overflow-y-scroll overflow-x-hidden max-h-[calc(100vh_-_93px)]">
         <button
           className="flex items-center justify-start gap-[10px] border-none bg-transparent p-[5px] rounded-md w-[250px] mb-6 hover:cursor-pointer hover:bg-[#5c677d] "
           onClick={createWorkspaceHandler}
@@ -99,6 +99,7 @@ const Sidebar = (props) => {
                     <li
                       onClick={() =>
                         boardsHandler(
+                          workspace.id,
                           workspace.workspace_name,
                           workspace.description
                         )
@@ -110,6 +111,7 @@ const Sidebar = (props) => {
                     <li
                       onClick={() =>
                         membersHandler(
+                          workspace.id,
                           workspace.workspace_name,
                           workspace.description
                         )

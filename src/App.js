@@ -27,8 +27,11 @@ const router = createBrowserRouter([
           </AuthProtected>
         ),
         children: [
-          { path: "/dashboard/:workspaceName/members", element: <Members /> },
-          { path: "/dashboard/:workspaceName/boards", element: <Boards /> },
+          {
+            path: "/dashboard/:id/:workspaceName/members",
+            element: <Members />,
+          },
+          { path: "/dashboard/:id/:workspaceName/boards", element: <Boards /> },
         ],
       },
     ],
