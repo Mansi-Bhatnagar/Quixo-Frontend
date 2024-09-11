@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import logo from "../../Assets/Images/loginPageLogo.png";
+import logo from "../../Assets/Images/QuixoLogo.png";
 import illustration from "../../Assets/Images/illustration.png";
 import boardImg from "../../Assets/Images/Board.webp";
 import cardImg from "../../Assets/Images/Card.webp";
@@ -52,6 +52,7 @@ const Home = () => {
     setSlideRightStyle(-activeSlideIndex * sliderHeight);
     setSlideLeftStyle(-activeSlideIndex * sliderHeight);
   }, [activeSlideIndex]);
+
   return (
     <div className={classes.container}>
       <nav className={classes.nav}>

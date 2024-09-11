@@ -61,6 +61,27 @@ export async function login(email, password) {
   }
 }
 
+export async function logout(email) {
+  try {
+    const response = await axios.post(
+      "/logout",
+      { email: email },
+      {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          Authorization: `Bearer ${localStorage.getItem("jwt")}`,
+        },
+        baseURL: "http://localhost:5000/auth",
+        withCredentials: true,
+      }
+    );
+    console.log(response);
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 export async function forgetPassword(email) {
   try {
     const response = await axios.post("/pw_forget", { email: email }, config);

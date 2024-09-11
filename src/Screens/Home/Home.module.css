@@ -5,13 +5,13 @@
   padding: 0px 30px;
 }
 .nav img {
-  width: 50px;
-  height: 80px;
+  width: auto;
+  height: 50px;
 }
 .loginBtn {
   font-family: "Roboto Slab", serif;
   width: 130px;
-  padding: 10px 0;
+  padding: 5px 0;
   font-size: 18px;
   line-height: 28px;
   font-weight: 400;
@@ -38,10 +38,11 @@
 .loginBtn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
+  transition: none;
 }
 .signUpBtn {
   width: 130px;
-  padding: 8px 0;
+  padding: 3px 0;
   border-radius: 24px;
   border-width: 2px;
   border-color: #03045eff;

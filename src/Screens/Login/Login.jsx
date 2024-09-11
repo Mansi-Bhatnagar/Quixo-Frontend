@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { authenticationActions } from "../../Redux/AuthenticationSlice";
 import { createNewPassword, forgetPassword, login } from "../../Services/Auth";
-import loginPageLogo from "../../Assets/Images/loginPageLogo.png";
+import loginPageLogo from "../../Assets/Images/QuixoLogo.png";
 import emailIcon from "../../Assets/Images/material-email.svg";
 import hide from "../../Assets/Images/material-visibility-off.svg";
 import show from "../../Assets/Images/material-remove-red-eye.svg";
