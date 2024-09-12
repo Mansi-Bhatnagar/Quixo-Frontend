@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { PencilSquareIcon, PlusIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import WorkspaceDetails from "../Components/Modal/WorkspaceDetails";
@@ -6,6 +6,7 @@ import CreateBoard from "../Components/Modal/CreateBoard";
 
 const Boards = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const name = location?.state?.name;
   const description = location?.state?.description;
   const color = location?.state?.color;
@@ -103,6 +104,11 @@ const Boards = () => {
   const visibleBoards = showAllBoards ? boards : boards.slice(0, 2);
   const extraBoards = boards.length > 3 ? boards.length - 3 : 0;
 
+  //Handlers
+  const boardDetailHandler = (board) => {
+    navigate(`/board/${board.id}`);
+  };
+
   //API call for getting boards
 
   return (
@@ -143,6 +149,7 @@ const Boards = () => {
           return (
             <div
               key={board.id}
+              onClick={() => boardDetailHandler(board)}
               className={`cursor-pointer flex items-center justify-center ${board.color} hover:shadow-[0_3px_10px_rgb(151,164,178,0.4)] hover:scale-[1.02] transition-all ease-in-out rounded-md w-[200px] h-[100px]`}
             >
               <span className=" text-white text-base font-medium">
@@ -168,6 +175,7 @@ const Boards = () => {
           )
         ) : boards.length >= 3 ? (
           <div
+            onClick={boardDetailHandler}
             className={`cursor-pointer flex items-center justify-center ${boards[2].color} hover:shadow-[0_3px_10px_rgb(151,164,178,0.4)] hover:scale-[1.02] transition-all ease-in-out rounded-md w-[200px] h-[100px]`}
           >
             <span className=" text-white text-base font-medium">

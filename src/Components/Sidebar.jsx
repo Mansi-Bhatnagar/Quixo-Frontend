@@ -58,7 +58,7 @@ const Sidebar = (props) => {
 
   return (
     <>
-      <div className="sticky no-scrollbar scroll-smooth top-10 w-[265px] border-r border-r-[#33415c] overflow-y-scroll overflow-x-hidden max-h-[calc(100vh_-_93px)]">
+      <div className="sticky no-scrollbar scroll-smooth top-10 w-[265px] border-r border-r-[#33415c] overflow-y-scroll overflow-x-hidden min-h-[calc(100vh_-_93px)] max-h-[calc(100vh_-_93px)]">
         <button
           className="flex items-center justify-start gap-[10px] border-none bg-transparent p-[5px] rounded-md w-[250px] mb-6 hover:cursor-pointer hover:bg-[#5c677d] "
           onClick={createWorkspaceHandler}
@@ -133,6 +133,7 @@ const Sidebar = (props) => {
           Workspaces shared with you
         </h3>
       </div>
+
       {showCreateWorkspaceModal && (
         <CreateWorkspace
           open={showCreateWorkspaceModal}
