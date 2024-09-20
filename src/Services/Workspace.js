@@ -1,13 +1,5 @@
 import axios from "axios";
 
-// const config = {
-//   headers: {
-//     "X-Requested-With": "XMLHttpRequest",
-//     Authorization: `Bearer ${localStorage.getItem("jwt")}`,
-//   },
-//   baseURL: "http://localhost:5000/workspace",
-// };
-
 export async function createWorkspace(name, description, jwt) {
   try {
     const response = await axios.post(
@@ -22,7 +14,7 @@ export async function createWorkspace(name, description, jwt) {
           "X-Requested-With": "XMLHttpRequest",
           Authorization: `Bearer ${jwt}`,
         },
-        baseURL: "http://localhost:5000/workspace",
+        baseURL: process.env.REACT_APP_WORKSPACE_BASE_URL,
       }
     );
     return response;
@@ -32,15 +24,17 @@ export async function createWorkspace(name, description, jwt) {
   }
 }
 
-export async function getAllWorkspaces(jwt) {
+export async function getAllWorkspaces(jwt, userId) {
   try {
-    const response = await axios.get("/get_workspaces", {
+    console.log(process.env.REACT_APP_WORKSPACE_BASE_URL);
+    const response = await axios.get(`/get_user_workspaces/${userId}`, {
       headers: {
         "X-Requested-With": "XMLHttpRequest",
         Authorization: `Bearer ${jwt}`,
       },
-      baseURL: "http://localhost:5000/workspace",
+      baseURL: process.env.REACT_APP_WORKSPACE_BASE_URL,
     });
+    console.log(response);
     return response;
   } catch (error) {
     console.error(error);
@@ -55,7 +49,7 @@ export async function deleteWorkspace(id, jwt) {
         "X-Requested-With": "XMLHttpRequest",
         Authorization: `Bearer ${jwt}`,
       },
-      baseURL: "http://localhost:5000/workspace",
+      baseURL: process.env.REACT_APP_WORKSPACE_BASE_URL,
     });
     return response;
   } catch (error) {
@@ -74,7 +68,7 @@ export async function addWorkspaceMember(workspaceId, emails, jwt) {
           "X-Requested-With": "XMLHttpRequest",
           Authorization: `Bearer ${jwt}`,
         },
-        baseURL: "http://localhost:5000/workspace",
+        baseURL: process.env.REACT_APP_WORKSPACE_BASE_URL,
       }
     );
     return response;

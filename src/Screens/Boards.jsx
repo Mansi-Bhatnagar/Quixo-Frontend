@@ -10,6 +10,7 @@ const Boards = () => {
   const name = location?.state?.name;
   const description = location?.state?.description;
   const color = location?.state?.color;
+  console.log("color=", color);
 
   //dummy data which needs to be removed
   const boards = [

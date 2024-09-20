@@ -17,6 +17,8 @@ const Members = () => {
   const name = location?.state?.name;
   const description = location?.state?.description;
   const color = location?.state?.color;
+  console.log("color from members=", color);
+
   const tabColors = ["#007f5f", "#023e7d", "#d00000", "#9d4edd", "#ffba08"];
   const users = [
     {
