@@ -102,16 +102,16 @@ const CreateBoard = ({ open, setShowCreateBoardModal }) => {
   return (
     <Dialog open={open} onClose={() => {}} className="relative z-50">
       <DialogBackdrop className="fixed inset-0 bg-black/30" />
-      <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-        <DialogPanel className="bg-white p-7 rounded-2xl max-w-[506px]">
-          <DialogTitle className="text-[#001845] mb-4 text-xl font-semibold">
+      <div className="fixed inset-0 flex w-screen items-center justify-center p-4 max-sm:p-2">
+        <DialogPanel className="max-w-[506px] rounded-2xl bg-white p-7 max-sm:w-[calc(100vw_-_40px)]">
+          <DialogTitle className="mb-4 text-xl font-semibold text-[#001845] max-sm:text-base">
             Add new board
           </DialogTitle>
 
           <form>
-            <div className="flex items-start justify-evenly flex-col my-5 [&_label]:text-[15px] [&_label]:font-medium [&_label]:text-[#001233]">
+            <div className="my-5 flex flex-col items-start justify-evenly [&_label]:mb-1 [&_label]:text-[15px] [&_label]:font-medium [&_label]:text-[#001233] max-sm:[&_label]:text-sm">
               <label htmlFor="board-background">Choose Background</label>
-              <div className="flex flex-wrap mb-5 items-end gap-2">
+              <div className="mb-5 flex flex-wrap items-end gap-2">
                 {backgrounds.slice(0, endIndex).map((background, index) => {
                   return (
                     <div
@@ -132,7 +132,7 @@ const CreateBoard = ({ open, setShowCreateBoardModal }) => {
                   onClick={() =>
                     setEndIndex((prev) => (prev === 6 ? backgrounds.length : 6))
                   }
-                  className="text-sm font-medium text-[#001845]"
+                  className="text-sm font-medium text-[#001845] max-sm:text-xs"
                 >
                   {endIndex === 6 ? "View more" : "View less"}
                 </button>
@@ -146,10 +146,8 @@ const CreateBoard = ({ open, setShowCreateBoardModal }) => {
                 placeholder="e.g., Marketing Plan"
                 onChange={boardNameHandler}
                 value={boardName}
-                className="w-[450px] p-[10px] border border-[#001233] rounded-lg focus:outline focus:outline-[#001233] focus:outline-1 placeholder:text-[15px] "
+                className="mb-5 w-[450px] rounded-lg border border-[#001233] p-[10px] placeholder:text-[15px] focus:outline focus:outline-1 focus:outline-[#001233] max-sm:w-full max-sm:placeholder:text-xs"
               />
-            </div>
-            <div className="flex items-start justify-evenly flex-col my-5 [&_label]:text-[15px] [&_label]:font-medium [&_label]:text-[#001233]">
               <label htmlFor="board-description">
                 Board Description <span className="text-xs">(optional)</span>
               </label>
@@ -159,11 +157,12 @@ const CreateBoard = ({ open, setShowCreateBoardModal }) => {
                 rows={2}
                 onChange={boardDescriptionHandler}
                 value={boardDescription}
-                className="w-[450px] resize-none p-[10px] border border-[#001233] rounded-lg focus:outline focus:outline-[#001233] focus:outline-1 placeholder:text-[15px]"
+                className="w-[450px] resize-none rounded-lg border border-[#001233] p-[10px] placeholder:text-[15px] focus:outline focus:outline-1 focus:outline-[#001233] max-sm:w-full max-sm:placeholder:text-xs"
               />
             </div>
+
             <button
-              className="float-right m-[10px] bg-white border-2 border-[#001845] text-[#001845] font-medium py-2 px-5 text-[15px] outline-none rounded-[10px] transition-all duration-500 ease-in-out hover:bg-[#001845] hover:text-white hover:border-transparent hover:scale-90"
+              className="float-right m-[10px] rounded-[10px] border-2 border-[#001845] bg-white px-5 py-2 text-[15px] font-medium text-[#001845] outline-none transition-all duration-500 ease-in-out hover:scale-90 hover:border-transparent hover:bg-[#001845] hover:text-white max-sm:py-1 max-sm:text-sm"
               onClick={closeModalHandler}
             >
               Cancel
@@ -171,7 +170,7 @@ const CreateBoard = ({ open, setShowCreateBoardModal }) => {
             <button
               onClick={createBoardHandler}
               disabled={saveDisabled}
-              className="float-right m-[10px] bg-[#001845] py-2 px-5 text-white rounded-[10px] border-[2px] border-transparent text-[15px] outline-none transition-all ease-in-out duration-500 hover:bg-white hover:border-[#001845] hover:text-[#001845] hover:font-medium hover:scale-90 disabled:scale-100 disabled:opacity-40 disabled:cursor-not-allowed disabled:transition-none disabled:bg-[#001845] disabled:text-white"
+              className="float-right m-[10px] rounded-[10px] border-[2px] border-transparent bg-[#001845] px-5 py-2 text-[15px] text-white outline-none transition-all duration-500 ease-in-out hover:scale-90 hover:border-[#001845] hover:bg-white hover:font-medium hover:text-[#001845] disabled:scale-100 disabled:cursor-not-allowed disabled:bg-[#001845] disabled:text-white disabled:opacity-40 disabled:transition-none max-sm:py-1 max-sm:text-sm"
             >
               Add
             </button>

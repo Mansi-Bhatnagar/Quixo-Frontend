@@ -5,8 +5,9 @@ import { authenticationActions } from "../Redux/AuthenticationSlice";
 import user from "../Assets/Images/material-account-circle.svg";
 import { logout } from "../Services/Auth";
 import { useMutation } from "@tanstack/react-query";
+import { Bars4Icon } from "@heroicons/react/20/solid";
 
-const Navbar = () => {
+const Navbar = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -37,23 +38,36 @@ const Navbar = () => {
     logoutMutation.mutate();
   };
 
+  const sidebarVisibleHandler = () => {
+    props.isSidebarVisible(!props.sidebarVisible);
+  };
+
   //Effects
   useEffect(() => {
     setUsername(localStorage.getItem("username"));
   }, []);
 
   return (
-    <div className="top-0 left-0 flex items-center justify-between bg-[#1d2125] border-b border-b-[#33415c] py-[10px] px-[150px] relative">
-      <h3 className="text-[#97a4b2] m-0 text-2xl">
-        Welcome,{" "}
-        <span className="text-white">
-          {username
-            ? username[0].toUpperCase() + username.slice(1).toLowerCase()
-            : ""}
-        </span>
-      </h3>
+    <div className="relative left-0 top-0 flex items-center justify-between border-b border-b-[#33415c] bg-[#1d2125] px-[150px] py-[10px] max-xl:px-[3%] max-sm:px-[5%]">
+      <div className="flex w-full items-center justify-start gap-2">
+        <div className="hidden h-8 w-8 items-center justify-center rounded-full hover:cursor-pointer hover:bg-[#5c677d] max-md:flex max-sm:h-6 max-sm:w-6">
+          <Bars4Icon
+            className="hidden h-5 w-5 text-white max-md:block"
+            onClick={sidebarVisibleHandler}
+          />
+        </div>
+
+        <h3 className="m-0 text-2xl text-[#97a4b2]">
+          Welcome,{" "}
+          <span className="text-white">
+            {username
+              ? username[0].toUpperCase() + username.slice(1).toLowerCase()
+              : ""}
+          </span>
+        </h3>
+      </div>
       <div
-        className="bg-[#d00000] w-[30px] h-[30px] rounded-full flex items-center hover:border-white justify-center cursor-pointer border border-transparent transition-all ease-in-out duration-200"
+        className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-full border border-transparent bg-[#d00000] transition-all duration-200 ease-in-out hover:border-white"
         onClick={showDropdownHandler}
       >
         <span className="text-white">
@@ -61,10 +75,10 @@ const Navbar = () => {
         </span>
       </div>
       {showDropdown ? (
-        <div className="absolute top-11 right-[82.5px] bg-[#33415c] w-[150px] rounded-md p-[5px]">
+        <div className="absolute right-[82.5px] top-11 w-[150px] rounded-md bg-[#33415c] p-[5px] max-xl:right-[3%]">
           <button
             onClick={logoutHandler}
-            className="bg-transparent border-none text-white flex items-center justify-start gap-[15px] w-[140px] rounded-md p-[5px] hover:bg-[#5c677d]"
+            className="flex w-[140px] items-center justify-start gap-[15px] rounded-md border-none bg-transparent p-[5px] text-white hover:bg-[#5c677d]"
           >
             <img src={user} alt="user-icon" />
             <span>Logout</span>

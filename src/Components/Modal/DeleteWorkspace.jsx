@@ -32,23 +32,25 @@ const DeleteWorkspace = (props) => {
   return (
     <Dialog {...props} className="relative z-50">
       <DialogBackdrop className="fixed inset-0 bg-black/30" />
-      <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-        <DialogPanel className="max-w-lg space-y-4 bg-white p-8 rounded-2xl">
-          <DialogTitle className="font-semibold">Delete Workspace</DialogTitle>
+      <div className="fixed inset-0 flex w-screen items-center justify-center p-4 max-sm:p-2">
+        <DialogPanel className="max-w-lg space-y-4 rounded-2xl bg-white p-7 max-sm:w-[calc(100vw_-_40px)]">
+          <DialogTitle className="text-xl font-semibold max-sm:text-base">
+            Delete Workspace
+          </DialogTitle>
 
-          <p className="text-[15px] tracking-[0.8px]">
+          <p className="text-[15px] tracking-[0.8px] max-sm:text-sm">
             Are you sure you want to delete the workspace? (All boards within it
             will be deleted)
           </p>
           <div className="flex items-center justify-end gap-[10px]">
             <button
-              className="text-white rounded-[10px] bg-[#001845] hover:border py-[6px] px-5 border border-transparent transition-all ease-in-out duration-500 hover:bg-transparent hover:border-[#001845] hover:text-[#001845] hover:font-medium hover:rounded-[10px] hover:py-[6px] hover:px-5 hover:transition-all hover:ease-in-out hover:duration-500"
+              className="rounded-[10px] border border-transparent bg-[#001845] px-5 py-2 text-white transition-all duration-500 ease-in-out hover:rounded-[10px] hover:border hover:border-[#001845] hover:bg-transparent hover:px-5 hover:py-2 hover:font-medium hover:text-[#001845] hover:transition-all hover:duration-500 hover:ease-in-out max-sm:py-1 max-sm:text-sm"
               onClick={deleteWorkspaceHandler}
             >
               Delete
             </button>
             <button
-              className="hover:text-white hover:rounded-[10px] hover:bg-[#001845] hover:border hover:py-[6px] hover:px-5 border hover:border-transparent hover:transition-all hover:ease-in-out hover:duration-500 bg-transparent border-[#001845] text-[#001845] font-medium rounded-[10px] py-[6px] px-5 transition-all ease-in-out duration-500"
+              className="rounded-[10px] border border-[#001845] bg-transparent px-5 py-2 font-medium text-[#001845] transition-all duration-500 ease-in-out hover:rounded-[10px] hover:border hover:border-transparent hover:bg-[#001845] hover:px-5 hover:py-2 hover:text-white hover:transition-all hover:duration-500 hover:ease-in-out max-sm:py-1 max-sm:text-sm"
               onClick={props.onClose}
             >
               Cancel

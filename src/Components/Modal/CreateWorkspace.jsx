@@ -100,12 +100,12 @@ const CreateWorkspace = ({
   return (
     <Dialog open={open} onClose={() => {}} className="relative z-50">
       <DialogBackdrop className="fixed inset-0 bg-black/30" />
-      <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-        <DialogPanel className="bg-white p-7 rounded-2xl max-w-[506px]">
-          <DialogTitle className="text-[#001845] mb-4">
+      <div className="fixed inset-0 flex w-screen items-center justify-center p-4 max-sm:p-2">
+        <DialogPanel className="max-w-[506px] rounded-2xl bg-white p-7 max-sm:w-[calc(100vw_-_40px)]">
+          <DialogTitle className="mb-4 text-[#001845] max-sm:text-sm">
             {initialScreen ? "Let's Build A Workspace" : "Invite Your Team"}
           </DialogTitle>
-          <div className="[&_h5]:text-xl [&_h5]:font-semibold [&_h5]:text-[#001845] ">
+          <div className="[&_h5]:text-xl [&_h5]:font-semibold [&_h5]:text-[#001845] max-sm:[&_h5]:text-base">
             {initialScreen ? (
               <>
                 <h5>
@@ -113,7 +113,7 @@ const CreateWorkspace = ({
                   everyone.
                 </h5>
                 <form>
-                  <div className="flex items-start justify-evenly flex-col my-5 [&_label]:text-[15px] [&_label]:font-medium [&_label]:text-[#001233]">
+                  <div className="my-5 flex flex-col items-start justify-evenly [&_label]:mb-1 [&_label]:text-[15px] [&_label]:font-medium [&_label]:text-[#001233] max-sm:[&_label]:text-sm">
                     <label htmlFor="workspace-name">
                       Workspace Name <span className="text-[#d00000]">*</span>
                     </label>
@@ -123,10 +123,10 @@ const CreateWorkspace = ({
                       placeholder="This is the name of your company, team or organization."
                       onChange={wsNameHandler}
                       value={workspaceName}
-                      className="w-[450px] p-[10px] border border-[#001233] rounded-lg focus:outline focus:outline-[#001233] focus:outline-1 placeholder:text-[15px] "
+                      className="w-[450px] rounded-lg border border-[#001233] p-[10px] placeholder:text-[15px] focus:outline focus:outline-1 focus:outline-[#001233] max-sm:w-full max-sm:text-xs max-sm:placeholder:text-xs"
                     />
                   </div>
-                  <div className="flex items-start justify-evenly flex-col my-5 [&_label]:text-[15px] [&_label]:font-medium [&_label]:text-[#001233]">
+                  <div className="my-5 flex flex-col items-start justify-evenly [&_label]:mb-1 [&_label]:text-[15px] [&_label]:font-medium [&_label]:text-[#001233] max-sm:[&_label]:text-sm">
                     <label htmlFor="workspace-description">
                       Workspace Description{" "}
                       <span className="text-xs">(optional)</span>
@@ -137,17 +137,17 @@ const CreateWorkspace = ({
                       rows={5}
                       onChange={wsDescriptionHandler}
                       value={workspaceDescription}
-                      className="w-[450px] resize-none p-[10px] border border-[#001233] rounded-lg focus:outline focus:outline-[#001233] focus:outline-1 placeholder:text-[15px]"
+                      className="w-[450px] resize-none rounded-lg border border-[#001233] p-[10px] placeholder:text-[15px] focus:outline focus:outline-1 focus:outline-[#001233] max-sm:w-full max-sm:text-xs max-sm:placeholder:text-xs"
                     />
                   </div>
                   <button
-                    className="float-right m-[10px] bg-white border-2 border-[#001845] text-[#001845] font-medium py-2 px-5 text-[15px] outline-none rounded-[10px] transition-all duration-500 ease-in-out hover:bg-[#001845] hover:text-white hover:border-transparent hover:scale-90"
+                    className="float-right m-[10px] rounded-[10px] border-2 border-[#001845] bg-white px-5 py-2 text-[15px] font-medium text-[#001845] outline-none transition-all duration-500 ease-in-out hover:scale-90 hover:border-transparent hover:bg-[#001845] hover:text-white max-sm:py-1 max-sm:text-sm"
                     onClick={closeModalHandler}
                   >
                     Cancel
                   </button>
                   <button
-                    className="float-right m-[10px] bg-[#001845] py-2 px-5 text-white rounded-[10px] border-[2px] border-transparent text-[15px] outline-none transition-all ease-in-out duration-500 hover:bg-white hover:border-[#001845] hover:text-[#001845] hover:font-medium hover:scale-90 disabled:scale-100 disabled:opacity-40 disabled:cursor-not-allowed disabled:transition-none disabled:bg-[#001845] disabled:text-white"
+                    className="float-right m-[10px] rounded-[10px] border-[2px] border-transparent bg-[#001845] px-5 py-2 text-[15px] text-white outline-none transition-all duration-500 ease-in-out hover:scale-90 hover:border-[#001845] hover:bg-white hover:font-medium hover:text-[#001845] disabled:scale-100 disabled:cursor-not-allowed disabled:bg-[#001845] disabled:text-white disabled:opacity-40 disabled:transition-none max-sm:py-1 max-sm:text-sm"
                     onClick={continueCreationHandler}
                     disabled={continueDisabled}
                   >
@@ -160,15 +160,19 @@ const CreateWorkspace = ({
                 <h5>
                   Invite workspace members using a link or by entering email.
                 </h5>
-                <div className="flex items-start justify-evenly flex-col my-5 [&_label]:text-[15px] [&_label]:font-medium [&_label]:text-[#001233]">
-                  <div className="flex items-center justify-between w-[450px] mb-[5px]">
+                <div className="my-5 flex flex-col items-start justify-evenly [&_label]:text-[15px] [&_label]:font-medium [&_label]:text-[#001233] max-sm:[&_label]:text-sm">
+                  <div className="mb-[5px] flex w-[450px] items-center justify-between max-sm:w-full">
                     <label>Workspace Members</label>
                     <div
                       className="flex items-center justify-between"
                       onClick={inviteWithLinkHandler}
                     >
-                      <img className="w-5 mr-[5px]" src={link} alt="link" />
-                      <span className="text-[#0466c8] text-[15px] cursor-pointer hover:underline">
+                      <img
+                        className="mr-[5px] w-5 max-sm:mr-0 max-sm:w-4"
+                        src={link}
+                        alt="link"
+                      />
+                      <span className="cursor-pointer text-[15px] text-[#0466c8] hover:underline max-sm:text-sm">
                         Invite with link
                       </span>
                     </div>
@@ -178,18 +182,18 @@ const CreateWorkspace = ({
                     placeholder="Separate emails with , eg. a@gmail.com, b@gmail.com"
                     onChange={wsEmailsHandler}
                     value={emails}
-                    className="w-[450px] p-[10px] border border-[#001233] rounded-lg focus:outline focus:outline-[#001233] focus:outline-1 placeholder:text-[15px]"
+                    className="w-[450px] rounded-lg border border-[#001233] p-[10px] placeholder:text-[15px] focus:outline focus:outline-1 focus:outline-[#001233] max-sm:w-full max-sm:text-xs max-sm:placeholder:text-xs"
                   />
                 </div>
-                <div className="flex items-center justify-center gap-32">
+                <div className="flex items-center justify-between max-sm:flex-col-reverse max-sm:items-start max-sm:gap-y-2">
                   <h6
-                    className="text-[15px] text-[#0466c8] cursor-pointer underline hover:no-underline"
+                    className="cursor-pointer text-[15px] text-[#0466c8] underline hover:no-underline max-sm:text-sm"
                     onClick={closeModalHandler}
                   >
                     I'll do this later
                   </h6>
                   <button
-                    className="float-left m-[10px] bg-[#001845] py-2 px-5 text-white rounded-[10px] border-[2px] border-transparent text-[15px] outline-none transition-all ease-in-out duration-500 hover:bg-white hover:border-[#001845] hover:text-[#001845] hover:font-medium hover:scale-90 disabled:scale-100 disabled:opacity-40 disabled:cursor-not-allowed disabled:bg-[#001845] disabled:text-white"
+                    className="float-left rounded-[10px] border-[2px] border-transparent bg-[#001845] px-5 py-2 text-[15px] text-white outline-none transition-all duration-500 ease-in-out hover:scale-90 hover:border-[#001845] hover:bg-white hover:font-medium hover:text-[#001845] disabled:scale-100 disabled:cursor-not-allowed disabled:bg-[#001845] disabled:text-white disabled:opacity-40 max-sm:py-1 max-sm:text-sm"
                     disabled={inviteDisabled}
                     onClick={inviteHandler}
                   >
