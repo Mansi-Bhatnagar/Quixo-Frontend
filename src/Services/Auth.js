@@ -5,7 +5,7 @@ const config = {
     "X-Requested-With": "XMLHttpRequest",
     withCredentials: true,
   },
-  baseURL: "http://localhost:5000/auth",
+  baseURL: process.env.REACT_APP_AUTH_BASE_URL,
   withCredentials: true,
 };
 
@@ -46,6 +46,8 @@ export async function verifyOTP(email, otp) {
 
 export async function login(email, password) {
   try {
+    console.log(process.env.REACT_APP_WORKSPACE_BASE_URL);
+
     const response = await axios.post(
       "/login",
       {
@@ -71,7 +73,7 @@ export async function logout(email) {
           "X-Requested-With": "XMLHttpRequest",
           Authorization: `Bearer ${localStorage.getItem("jwt")}`,
         },
-        baseURL: "http://localhost:5000/auth",
+        baseURL: process.env.REACT_APP_AUTH_BASE_URL,
         withCredentials: true,
       }
     );

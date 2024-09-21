@@ -10,6 +10,7 @@ import AuthProtected from "./Helpers/AuthProtected/AuthProtected";
 import Members from "./Screens/Members";
 import "react-toastify/dist/ReactToastify.css";
 import Boards from "./Screens/Boards";
+import BoardDetail from "./Screens/BoardDetail";
 
 const router = createBrowserRouter([
   {
@@ -27,9 +28,20 @@ const router = createBrowserRouter([
           </AuthProtected>
         ),
         children: [
-          { path: "/dashboard/:workspaceName/members", element: <Members /> },
-          { path: "/dashboard/:workspaceName/boards", element: <Boards /> },
+          {
+            path: "/dashboard/:id/:workspaceName/members",
+            element: <Members />,
+          },
+          { path: "/dashboard/:id/:workspaceName/boards", element: <Boards /> },
         ],
+      },
+      {
+        path: "/board/:boardsId",
+        element: (
+          <AuthProtected>
+            <BoardDetail />
+          </AuthProtected>
+        ),
       },
     ],
   },

@@ -10,6 +10,7 @@ import { Outlet } from "react-router-dom";
 
 const Dashboard = () => {
   const jwt = useSelector((state) => state.authentication.jwt);
+  const userId = localStorage.getItem("userId");
 
   //States
   const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] =
@@ -28,15 +29,15 @@ const Dashboard = () => {
     error: workspaceError,
     isLoading: workspaceLoading,
   } = useQuery({
-    queryFn: () => getAllWorkspaces(jwt),
-    queryKey: ["all-workspaces", jwt],
+    queryFn: () => getAllWorkspaces(jwt, userId),
+    queryKey: ["all-workspaces", jwt, userId],
     enabled: jwt !== "",
   });
 
   //Effects
   useEffect(() => {
     if (!workspaceLoading && workspaceData) {
-      setWorkspaces([...workspaceData?.data]);
+      setWorkspaces({ ...workspaceData?.data });
       console.log(workspaceData);
     } else if (workspaceError) {
       console.error(workspaceError);
@@ -44,12 +45,13 @@ const Dashboard = () => {
   }, [workspaceLoading, workspaceData, workspaceError]);
 
   return (
-    <div className="bg-[#1d2125] h-screen ">
+    <div className="bg-[#1d2125] min-h-screen">
       <Navbar />
-      <div className="flex items-start gap-[30px] mt-10 px-[150px]">
+      <div className="flex items-start gap-[30px] mt-10 pl-[150px]">
         <Sidebar workspaces={workspaces} />
-        <div className="text-[#97a4b2]">
-          {workspaces.length === 0 ? (
+        <div className="text-[#97a4b2] ">
+          {workspaces?.created_workspaces?.length === 0 &&
+          workspaces?.invited_workspaces?.length === 0 ? (
             <>
               <h4>Your workspaces</h4>
               <div>
