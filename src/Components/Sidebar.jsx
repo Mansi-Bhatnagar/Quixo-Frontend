@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import CreateWorkspace from "./Modal/CreateWorkspace";
 import add from "../Assets/Images/material-add.svg";
 import board from "../Assets/Images/board.svg";
@@ -10,8 +10,8 @@ import { useNavigate } from "react-router-dom";
 
 const Sidebar = (props) => {
   const { workspaces } = props;
-  console.log("workspaces=", workspaces);
   const tabColors = ["#007f5f", "#023e7d", "#d00000", "#9d4edd", "#ffba08"];
+  const isSmallScreen = window.innerWidth < 768;
   const navigate = useNavigate();
 
   //States
@@ -26,6 +26,9 @@ const Sidebar = (props) => {
   //Handlers
   const createWorkspaceHandler = () => {
     setShowCreateWorkspaceModal(true);
+    if (isSmallScreen) {
+      props.isSidebarVisible(false);
+    }
   };
 
   const wsTabHandler = (workspaceId, color) => {
@@ -36,170 +39,176 @@ const Sidebar = (props) => {
 
   const deleteWorkspaceHandler = () => {
     setShowDeleteWorkspaceModal(true);
+    if (isSmallScreen) {
+      props.isSidebarVisible(false);
+    }
   };
 
   const membersHandler = (workspaceId, name, description) => {
     navigate(`${workspaceId}/${name.split(" ").join("")}/members`, {
       state: { color: activeWsColor, name: name, description: description },
     });
+    if (isSmallScreen) {
+      props.isSidebarVisible(false);
+    }
   };
 
   const boardsHandler = (workspaceId, name, description) => {
     navigate(`${workspaceId}/${name.split(" ").join("")}/boards`, {
       state: { color: activeWsColor, name: name, description: description },
     });
+    if (isSmallScreen) {
+      props.isSidebarVisible(false);
+    }
   };
-  //Effects
-
-  useEffect(() => {
-    console.log(activeWsColor);
-  }, [activeWsColor]);
 
   return (
     <>
-      <div className="sticky no-scrollbar scroll-smooth top-10 w-[265px] border-r border-r-[#33415c] overflow-y-scroll overflow-x-hidden min-h-[calc(100vh_-_93px)] max-h-[calc(100vh_-_93px)]">
-        <button
-          className="flex items-center justify-start gap-[10px] border-none bg-transparent p-[5px] rounded-md w-[250px] mb-6 hover:cursor-pointer hover:bg-[#5c677d] "
-          onClick={createWorkspaceHandler}
-        >
-          <img src={add} alt="add" />
-          <span className="text-white">Create New Workspace</span>
-        </button>
-        <h3 className="text-[#97a4b2] text-sm my-4">Your workspaces</h3>
-        {workspaces?.created_workspaces?.length > 0 &&
-          workspaces?.created_workspaces?.map((workspace, idx) => {
-            return (
-              <div key={workspace.workspace_id}>
-                <div
-                  style={{
-                    background:
-                      wsTabOpen === workspace.workspace_id ? "#5c677d" : "",
-                  }}
-                  className="flex items-center justify-start gap-[10px] w-[250px] p-[5px] rounded-md hover:cursor-pointer hover:bg-[#5c677d]"
-                  onClick={() =>
-                    wsTabHandler(workspace.workspace_id, tabColors[idx % 5])
-                  }
-                >
+      {props.sidebarVisible && (
+        <div className="no-scrollbar sticky top-10 max-h-[calc(100vh_-_93px)] min-h-[calc(100vh_-_93px)] min-w-[265px] overflow-x-hidden overflow-y-scroll scroll-smooth border-r border-r-[#33415c] max-md:absolute max-md:left-[3%] max-md:top-16 max-md:w-[297px] max-md:rounded-md max-md:bg-[#33415c] max-md:p-4 max-md:shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px]">
+          <button
+            className="mb-6 flex w-[250px] items-center justify-start gap-[10px] rounded-md border-none bg-transparent p-[5px] hover:cursor-pointer hover:bg-[#5c677d]"
+            onClick={createWorkspaceHandler}
+          >
+            <img src={add} alt="add" />
+            <span className="text-white">Create New Workspace</span>
+          </button>
+          <h3 className="my-4 text-sm text-[#97a4b2]">Your workspaces</h3>
+          {workspaces?.created_workspaces?.length > 0 &&
+            workspaces?.created_workspaces?.map((workspace, idx) => {
+              return (
+                <div key={workspace.workspace_id}>
                   <div
-                    className="w-[30px] h-[30px] text-white rounded-md flex items-center justify-center my-[5px] mx-0"
-                    style={{ backgroundColor: `${tabColors[idx % 5]}` }}
+                    style={{
+                      background:
+                        wsTabOpen === workspace.workspace_id ? "#5c677d" : "",
+                    }}
+                    className="flex w-[250px] items-center justify-start gap-[10px] rounded-md p-[5px] hover:cursor-pointer hover:bg-[#5c677d]"
+                    onClick={() =>
+                      wsTabHandler(workspace.workspace_id, tabColors[idx % 5])
+                    }
                   >
-                    {workspace.workspace_name
-                      ? workspace.workspace_name[0].toUpperCase()
-                      : ""}
+                    <div
+                      className="mx-0 my-[5px] flex h-[30px] w-[30px] items-center justify-center rounded-md text-white"
+                      style={{ backgroundColor: `${tabColors[idx % 5]}` }}
+                    >
+                      {workspace.workspace_name
+                        ? workspace.workspace_name[0].toUpperCase()
+                        : ""}
+                    </div>
+                    <div className="flex w-full items-center justify-between">
+                      <span className="text-white">
+                        {workspace.workspace_name || ""}
+                      </span>
+                      <ChevronDownIcon className="w-5 text-white" />
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between w-full">
-                    <span className="text-white">
-                      {workspace.workspace_name || ""}
-                    </span>
-                    <ChevronDownIcon className="w-5 text-white" />
-                  </div>
-                </div>
 
-                {wsTabOpen === workspace.workspace_id && (
-                  <ul className="[&_li]:flex [&_li]:items-center [&_li]:justify-start [&_li]:gap-2 [&_li]:py-[6px] [&_li]:px-2 [&_li]:cursor-pointer [&_li]:w-[200] [&_li]:rounded-lg hover:[&_li]:cursor-pointer [&_span]:text-[#97a4b2]">
-                    <li
-                      onClick={() =>
-                        boardsHandler(
-                          workspace.workspace_id,
-                          workspace.workspace_name,
-                          workspace.description
-                        )
-                      }
-                    >
-                      <img src={board} alt="board" />
-                      <span>Boards</span>
-                    </li>
-                    <li
-                      onClick={() =>
-                        membersHandler(
-                          workspace.workspace_id,
-                          workspace.workspace_name,
-                          workspace.description
-                        )
-                      }
-                    >
-                      <img src={member} alt="member" />
-                      <span>Members</span>
-                    </li>
-                    <li onClick={deleteWorkspaceHandler}>
-                      <img src={dustbin} alt="delete" />
-                      <span>Delete Workspace</span>
-                    </li>
-                  </ul>
-                )}
-              </div>
-            );
-          })}
-        <h3 className="text-[#97a4b2] text-sm my-4">
-          Workspaces shared with you
-        </h3>
-        {workspaces?.invited_workspaces?.length > 0 &&
-          workspaces?.invited_workspaces?.map((workspace, idx) => {
-            return (
-              <div key={workspace.workspace_id}>
-                <div
-                  style={{
-                    background:
-                      wsTabOpen === workspace.workspace_id ? "#5c677d" : "",
-                  }}
-                  className="flex items-center justify-start gap-[10px] w-[250px] p-[5px] rounded-md hover:cursor-pointer hover:bg-[#5c677d]"
-                  onClick={() =>
-                    wsTabHandler(workspace.workspace_id, tabColors[idx])
-                  }
-                >
+                  {wsTabOpen === workspace.workspace_id && (
+                    <ul className="[&_li]:flex [&_li]:w-[200] [&_li]:cursor-pointer [&_li]:items-center [&_li]:justify-start [&_li]:gap-2 [&_li]:rounded-lg [&_li]:px-2 [&_li]:py-[6px] hover:[&_li]:cursor-pointer [&_span]:text-[#97a4b2]">
+                      <li
+                        onClick={() =>
+                          boardsHandler(
+                            workspace.workspace_id,
+                            workspace.workspace_name,
+                            workspace.description
+                          )
+                        }
+                      >
+                        <img src={board} alt="board" />
+                        <span>Boards</span>
+                      </li>
+                      <li
+                        onClick={() =>
+                          membersHandler(
+                            workspace.workspace_id,
+                            workspace.workspace_name,
+                            workspace.description
+                          )
+                        }
+                      >
+                        <img src={member} alt="member" />
+                        <span>Members</span>
+                      </li>
+                      <li onClick={deleteWorkspaceHandler}>
+                        <img src={dustbin} alt="delete" />
+                        <span>Delete Workspace</span>
+                      </li>
+                    </ul>
+                  )}
+                </div>
+              );
+            })}
+          <h3 className="my-4 text-sm text-[#97a4b2]">
+            Workspaces shared with you
+          </h3>
+          {workspaces?.invited_workspaces?.length > 0 &&
+            workspaces?.invited_workspaces?.map((workspace, idx) => {
+              return (
+                <div key={workspace.workspace_id}>
                   <div
-                    className="w-[30px] h-[30px] text-white rounded-md flex items-center justify-center my-[5px] mx-0"
-                    style={{ backgroundColor: `${tabColors[idx % 5]}` }}
+                    style={{
+                      background:
+                        wsTabOpen === workspace.workspace_id ? "#5c677d" : "",
+                    }}
+                    className="flex w-[250px] items-center justify-start gap-[10px] rounded-md p-[5px] hover:cursor-pointer hover:bg-[#5c677d]"
+                    onClick={() =>
+                      wsTabHandler(workspace.workspace_id, tabColors[idx])
+                    }
                   >
-                    {workspace.workspace_name
-                      ? workspace.workspace_name[0].toUpperCase()
-                      : ""}
+                    <div
+                      className="mx-0 my-[5px] flex h-[30px] w-[30px] items-center justify-center rounded-md text-white"
+                      style={{ backgroundColor: `${tabColors[idx % 5]}` }}
+                    >
+                      {workspace.workspace_name
+                        ? workspace.workspace_name[0].toUpperCase()
+                        : ""}
+                    </div>
+                    <div className="flex w-full items-center justify-between">
+                      <span className="text-white">
+                        {workspace.workspace_name || ""}
+                      </span>
+                      <ChevronDownIcon className="w-5 text-white" />
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between w-full">
-                    <span className="text-white">
-                      {workspace.workspace_name || ""}
-                    </span>
-                    <ChevronDownIcon className="w-5 text-white" />
-                  </div>
-                </div>
 
-                {wsTabOpen === workspace.workspace_id && (
-                  <ul className="[&_li]:flex [&_li]:items-center [&_li]:justify-start [&_li]:gap-2 [&_li]:py-[6px] [&_li]:px-2 [&_li]:cursor-pointer [&_li]:w-[200] [&_li]:rounded-lg hover:[&_li]:cursor-pointer [&_span]:text-[#97a4b2]">
-                    <li
-                      onClick={() =>
-                        boardsHandler(
-                          workspace.workspace_id,
-                          workspace.workspace_name,
-                          workspace.description
-                        )
-                      }
-                    >
-                      <img src={board} alt="board" />
-                      <span>Boards</span>
-                    </li>
-                    <li
-                      onClick={() =>
-                        membersHandler(
-                          workspace.workspace_id,
-                          workspace.workspace_name,
-                          workspace.description
-                        )
-                      }
-                    >
-                      <img src={member} alt="member" />
-                      <span>Members</span>
-                    </li>
-                    <li onClick={deleteWorkspaceHandler}>
-                      <img src={dustbin} alt="delete" />
-                      <span>Delete Workspace</span>
-                    </li>
-                  </ul>
-                )}
-              </div>
-            );
-          })}
-      </div>
+                  {wsTabOpen === workspace.workspace_id && (
+                    <ul className="[&_li]:flex [&_li]:w-[200] [&_li]:cursor-pointer [&_li]:items-center [&_li]:justify-start [&_li]:gap-2 [&_li]:rounded-lg [&_li]:px-2 [&_li]:py-[6px] hover:[&_li]:cursor-pointer [&_span]:text-[#97a4b2]">
+                      <li
+                        onClick={() =>
+                          boardsHandler(
+                            workspace.workspace_id,
+                            workspace.workspace_name,
+                            workspace.description
+                          )
+                        }
+                      >
+                        <img src={board} alt="board" />
+                        <span>Boards</span>
+                      </li>
+                      <li
+                        onClick={() =>
+                          membersHandler(
+                            workspace.workspace_id,
+                            workspace.workspace_name,
+                            workspace.description
+                          )
+                        }
+                      >
+                        <img src={member} alt="member" />
+                        <span>Members</span>
+                      </li>
+                      <li onClick={deleteWorkspaceHandler}>
+                        <img src={dustbin} alt="delete" />
+                        <span>Delete Workspace</span>
+                      </li>
+                    </ul>
+                  )}
+                </div>
+              );
+            })}
+        </div>
+      )}
 
       {showCreateWorkspaceModal && (
         <CreateWorkspace

@@ -113,14 +113,15 @@ const Boards = () => {
   //API call for getting boards
 
   return (
-    <div className="mb-9 w-[calc(100vw_-_586px)] ">
-      <div className="flex items-start justify-start gap-3 pb-5 border-b border-b-[#33415c]">
+    <div className="mb-9 max-xl:w-full">
+      <div className="flex items-start justify-start gap-3 border-b border-b-[#33415c] pb-5 max-sm:flex-col">
         <div
-          className="w-12 h-12 flex items-center justify-center rounded-lg text-white"
+          className="flex h-12 w-12 items-center justify-center rounded-lg text-white"
           style={{ backgroundColor: color }}
         >
           <span>{name?.[0].toUpperCase()}</span>
         </div>
+
         <div className="w-full">
           <div className="flex items-center gap-2">
             <span className="text-white">{name} </span>
@@ -131,18 +132,22 @@ const Boards = () => {
               }}
             />
           </div>
-          {description ? <p className="text-sm w-[70%]">{description}</p> : ""}
+          {description ? (
+            <p className="text-justify text-sm">{description}</p>
+          ) : (
+            ""
+          )}
         </div>
       </div>
 
-      <h3 className="mt-9 mb-4">Your boards</h3>
-      <div className="flex items-center flex-wrap gap-4">
+      <h3 className="mb-4 mt-9">Your boards</h3>
+      <div className="flex flex-wrap items-center gap-4">
         <button
           onClick={() => setShowCreateBoardModal(true)}
-          className="flex cursor-pointer  hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)] hover:scale-[1.02] transition-all ease-in-out  items-center justify-center flex-col bg-[#33415c] rounded-md w-[200px] h-[100px]"
+          className="flex h-[100px] w-[200px] flex-grow cursor-pointer flex-col items-center justify-center rounded-md bg-[#33415c] transition-all ease-in-out hover:scale-[1.02] hover:shadow-[0_3px_10px_rgb(0,0,0,0.2)]"
         >
-          <PlusIcon className="text-[#97a4b2] w-7" />
-          <span className="text-[#97a4b2] text-base font-medium">
+          <PlusIcon className="w-7 text-[#97a4b2]" />
+          <span className="text-base font-medium text-[#97a4b2]">
             Create new board
           </span>
         </button>
@@ -151,9 +156,9 @@ const Boards = () => {
             <div
               key={board.id}
               onClick={() => boardDetailHandler(board)}
-              className={`cursor-pointer flex items-center justify-center ${board.color} hover:shadow-[0_3px_10px_rgb(151,164,178,0.4)] hover:scale-[1.02] transition-all ease-in-out rounded-md w-[200px] h-[100px]`}
+              className={`cursor-pointer  flex-grow flex items-center justify-center ${board.color} hover:shadow-[0_3px_10px_rgb(151,164,178,0.4)] hover:scale-[1.02] transition-all ease-in-out rounded-md w-[200px] h-[100px]`}
             >
-              <span className=" text-white text-base font-medium">
+              <span className="text-base font-medium text-white">
                 {board.name}
               </span>
             </div>
@@ -163,11 +168,11 @@ const Boards = () => {
           !showAllBoards ? (
             <button
               onClick={() => setShowAllBoards(true)}
-              className={`cursor-pointer flex items-center justify-center ${boards[2].color} hover:shadow-[0_3px_10px_rgb(151,164,178,0.4)] hover:scale-[1.02] transition-all ease-in-out rounded-md w-[200px] h-[100px]`}
+              className={`cursor-pointer  flex-grow flex items-center justify-center ${boards[2].color} hover:shadow-[0_3px_10px_rgb(151,164,178,0.4)] hover:scale-[1.02] transition-all ease-in-out rounded-md w-[200px] h-[100px]`}
             >
-              <PlusIcon className="text-white w-6" />
+              <PlusIcon className="w-6 text-white" />
 
-              <span className=" text-white text-base font-medium">
+              <span className="text-base font-medium text-white">
                 {extraBoards} more boards
               </span>
             </button>
@@ -177,9 +182,9 @@ const Boards = () => {
         ) : boards.length >= 3 ? (
           <div
             onClick={boardDetailHandler}
-            className={`cursor-pointer flex items-center justify-center ${boards[2].color} hover:shadow-[0_3px_10px_rgb(151,164,178,0.4)] hover:scale-[1.02] transition-all ease-in-out rounded-md w-[200px] h-[100px]`}
+            className={`cursor-pointer  flex-grow flex items-center justify-center ${boards[2].color} hover:shadow-[0_3px_10px_rgb(151,164,178,0.4)] hover:scale-[1.02] transition-all ease-in-out rounded-md w-[200px] h-[100px]`}
           >
-            <span className=" text-white text-base font-medium">
+            <span className="text-base font-medium text-white">
               {boards[2].name}
             </span>
           </div>

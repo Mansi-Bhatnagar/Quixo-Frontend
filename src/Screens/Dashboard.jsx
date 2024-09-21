@@ -16,14 +16,18 @@ const Dashboard = () => {
   const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] =
     useState(false);
   const [workspaces, setWorkspaces] = useState([]);
+  const [sidebarVisible, setSidebarVisible] = useState(true);
 
   //Handlers
   const createWorkspaceHandler = () => {
     setShowCreateWorkspaceModal(true);
   };
 
-  //APIs
+  const isSidebarVisible = (value) => {
+    setSidebarVisible(value);
+  };
 
+  //APIs
   const {
     data: workspaceData,
     error: workspaceError,
@@ -45,27 +49,42 @@ const Dashboard = () => {
   }, [workspaceLoading, workspaceData, workspaceError]);
 
   return (
-    <div className="bg-[#1d2125] min-h-screen">
-      <Navbar />
-      <div className="flex items-start gap-[30px] mt-10 pl-[150px]">
-        <Sidebar workspaces={workspaces} />
-        <div className="text-[#97a4b2] ">
+    <div className="min-h-screen bg-[#1d2125]">
+      <Navbar
+        isSidebarVisible={isSidebarVisible}
+        sidebarVisible={sidebarVisible}
+      />
+      <div className="mt-10 flex items-start gap-[30px] px-[150px] max-xl:px-[3%] max-sm:px-[5%]">
+        {sidebarVisible ? (
+          <div
+            onClick={() => setSidebarVisible(false)}
+            className="absolute left-0 top-0 hidden h-screen w-screen max-md:block"
+          ></div>
+        ) : (
+          ""
+        )}
+        <Sidebar
+          workspaces={workspaces}
+          isSidebarVisible={isSidebarVisible}
+          sidebarVisible={sidebarVisible}
+        />
+        <div className="text-[#97a4b2]">
           {workspaces?.created_workspaces?.length === 0 &&
           workspaces?.invited_workspaces?.length === 0 ? (
             <>
               <h4>Your workspaces</h4>
               <div>
-                <p className="text-white inline-block tracking-[1px]">
+                <p className="inline-block tracking-[1px] text-white">
                   Seems like you aren't a member of any workspaces yet.{" "}
                 </p>
                 <span
-                  className="ml-[5px] text-[#97a4b2] tracking-[1px] font-semibold text-lg cursor-pointer hover:underline"
+                  className="ml-[5px] cursor-pointer text-lg font-semibold tracking-[1px] text-[#97a4b2] hover:underline"
                   onClick={createWorkspaceHandler}
                 >
                   Click to create
                 </span>
                 <img
-                  className="w-[400px] block mb-0 mt-[100px] mx-auto"
+                  className="mx-auto mb-0 mt-[100px] block w-[400px]"
                   src={team}
                   alt="team"
                 />

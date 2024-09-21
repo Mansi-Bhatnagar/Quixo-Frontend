@@ -148,7 +148,7 @@ const Members = () => {
           ))}
         </ComboboxOptions>
       </Combobox>
-      <div className="mt-9 space-y-4">
+      <div className="mt-9 space-y-4 mb-9">
         {filteredUsers.map((user, idx) => {
           return (
             <div key={idx} className="flex items-start justify-between">
