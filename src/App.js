@@ -2,15 +2,15 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { ToastContainer, Bounce } from "react-toastify";
 import RootLayout from "./Screens/Root";
-import Home from "./Screens/Home/Home";
+import Home from "./Screens/Home";
 import Login from "./Screens/Login";
 import Signup from "./Screens/Signup";
 import Dashboard from "./Screens/Dashboard";
 import AuthProtected from "./Helpers/AuthProtected/AuthProtected";
 import Members from "./Screens/Members";
-import "react-toastify/dist/ReactToastify.css";
 import Boards from "./Screens/Boards";
 import BoardDetail from "./Screens/BoardDetail";
+import "react-toastify/dist/ReactToastify.css";
 
 const router = createBrowserRouter([
   {
