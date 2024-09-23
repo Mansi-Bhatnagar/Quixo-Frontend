@@ -1,17 +1,16 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { authenticationActions } from "../../Redux/AuthenticationSlice";
-import { createNewPassword, forgetPassword, login } from "../../Services/Auth";
-import loginPageLogo from "../../Assets/Images/QuixoLogo.png";
-import emailIcon from "../../Assets/Images/material-email.svg";
-import hide from "../../Assets/Images/material-visibility-off.svg";
-import show from "../../Assets/Images/material-remove-red-eye.svg";
-import check from "../../Assets/Images/material-check.svg";
-import loginBackground from "../../Assets/Images/loginBackground.jpg";
-import classes from "./Login.module.css";
+import { authenticationActions } from "../Redux/AuthenticationSlice";
+import { createNewPassword, forgetPassword, login } from "../Services/Auth";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import loginPageLogo from "../Assets/Images/QuixoLogo.png";
+import emailIcon from "../Assets/Images/material-email.svg";
+import hide from "../Assets/Images/material-visibility-off.svg";
+import show from "../Assets/Images/material-remove-red-eye.svg";
+import check from "../Assets/Images/material-check.svg";
+import illustration from "../Assets/Images/illustration.webp";
 
 const Login = () => {
   //Email Regex
@@ -187,37 +186,38 @@ const Login = () => {
   }, []);
 
   return (
-    <div className={classes.container}>
-      <div className={classes.section1}>
-        <img src={loginPageLogo} alt="logo" className={classes.logo} />
-        <form className={classes.loginForm}>
-          <h2>Login</h2>
+    <div className="flex h-screen items-center justify-center">
+      <img
+        src={loginPageLogo}
+        alt="logo"
+        className="absolute left-5 top-5 h-[50px] w-auto"
+      />
+      <div className="flex items-center rounded-2xl shadow-[rgba(0,_0,_0,_0.25)_0px_25px_50px_-12px]">
+        <form className="animate-Morph px-16 py-8 [&_h2]:mb-0 [&_h2]:text-3xl [&_h2]:font-bold [&_h2]:text-[#03045eff] [&_h4]:mt-2 [&_h4]:text-xl [&_h4]:text-[#bcc1caff] [&_label]:text-lg [&_label]:text-[#03045eff]">
+          <h2 className="w-[335px] text-center">Login</h2>
           {forgetPwdScreen ? (
             <>
-              <div className={classes.field}>
+              <div className="mt-5">
                 <div>
-                  <label htmlFor="otp" className={classes.label}>
-                    Enter OTP
-                  </label>
-                  <div className={classes.inputContainer}>
+                  <label htmlFor="otp">Enter OTP</label>
+                  <div className="mt-2 flex w-[335px] items-center justify-between rounded-3xl border-2 border-[#03045eff]">
                     <input
                       type="text"
                       placeholder="OTP"
                       id="otp"
                       value={otp}
                       onChange={otpHandler}
+                      className="ml-5 w-[calc(100%_-_75px)] border-none px-0 py-3 placeholder:text-sm placeholder:text-[#03045eff] focus-visible:outline-none"
                     />
                   </div>
                 </div>
-                <span className={classes.otpInfo}>
+                <span className="text-base text-[#bcc1caff]">
                   * OTP sent to entered email
                 </span>
               </div>
-              <div className={classes.field}>
-                <label htmlFor="new-password" className={classes.label}>
-                  New Password
-                </label>
-                <div className={classes.inputContainer}>
+              <div className="mt-5">
+                <label htmlFor="new-password">New Password</label>
+                <div className="mt-2 flex w-[335px] items-center justify-between rounded-3xl border-2 border-[#03045eff]">
                   <input
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter New Password"
@@ -225,22 +225,26 @@ const Login = () => {
                     autoComplete="true"
                     onChange={passwordHandler}
                     value={password}
+                    className="ml-5 w-[calc(100%_-_75px)] border-none px-0 py-3 placeholder:text-sm placeholder:text-[#03045eff] focus-visible:outline-none"
                   />
                   <img
                     src={showPassword ? show : hide}
                     alt="visibility-icon"
                     onClick={() => setShowPassword((prev) => !prev)}
                     style={{ cursor: "pointer" }}
+                    className="mr-5 h-6 w-6"
                   />
                 </div>
                 {passwordError ? (
-                  <span className={classes.error}>{"* " + passwordError}</span>
+                  <span className="block w-[338px] text-sm text-[#d00000]">
+                    {"* " + passwordError}
+                  </span>
                 ) : (
                   ""
                 )}
               </div>
               <button
-                className={classes.loginBtn}
+                className="mb-12 mt-4 w-[335px] cursor-pointer rounded-3xl border-none bg-[#03045eff] py-2 text-lg text-white transition-all duration-500 ease-in-out hover:scale-95 hover:bg-[#0508baff] hover:transition-all hover:duration-500 hover:ease-in-out hover:active:bg-[#1519f8ff] disabled:cursor-not-allowed disabled:opacity-40"
                 disabled={newPasswordBtnDisable}
                 onClick={createNewPasswordHandler}
               >
@@ -249,32 +253,35 @@ const Login = () => {
             </>
           ) : (
             <>
-              <h4>Welcome Back</h4>
-              <div className={classes.field}>
-                <label htmlFor="email" className={classes.label}>
-                  Email
-                </label>
-                <div className={classes.inputContainer}>
+              <h4 className="w-[335px] text-center">Welcome Back</h4>
+              <div className="mt-5">
+                <label htmlFor="email">Email</label>
+                <div className="mt-2 flex w-[335px] items-center justify-between rounded-3xl border-2 border-[#03045eff]">
                   <input
                     type="email"
                     placeholder="Enter Your Email"
                     id="email"
                     onChange={emailHandler}
                     value={email}
+                    className="ml-5 w-[calc(100%_-_75px)] border-none px-0 py-3 placeholder:text-sm placeholder:text-[#03045eff] focus-visible:outline-none"
                   />
-                  <img src={emailIcon} alt="email-icon" />
+                  <img
+                    src={emailIcon}
+                    alt="email-icon"
+                    className="mr-5 h-6 w-6"
+                  />
                 </div>
                 {emailError ? (
-                  <span className={classes.error}>{"* " + emailError}</span>
+                  <span className="block w-[338px] text-sm text-[#d00000]">
+                    {"* " + emailError}
+                  </span>
                 ) : (
                   ""
                 )}
               </div>
-              <div className={classes.field}>
-                <label htmlFor="password" className={classes.label}>
-                  Password
-                </label>
-                <div className={classes.inputContainer}>
+              <div className="mt-5">
+                <label htmlFor="password">Password</label>
+                <div className="mt-2 flex w-[335px] items-center justify-between rounded-3xl border-2 border-[#03045eff]">
                   <input
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter Password"
@@ -282,24 +289,28 @@ const Login = () => {
                     autoComplete="true"
                     onChange={passwordHandler}
                     value={password}
+                    className="ml-5 w-[calc(100%_-_75px)] border-none px-0 py-3 placeholder:text-sm placeholder:text-[#03045eff] focus-visible:outline-none"
                   />
                   <img
                     src={showPassword ? show : hide}
                     alt="visibility-icon"
                     onClick={() => setShowPassword((prev) => !prev)}
                     style={{ cursor: "pointer" }}
+                    className="mr-5 h-6 w-6"
                   />
                 </div>
                 {passwordError ? (
-                  <span className={classes.error}>{"* " + passwordError}</span>
+                  <span className="block w-[338px] text-sm text-[#d00000]">
+                    {"* " + passwordError}
+                  </span>
                 ) : (
                   ""
                 )}
               </div>
-              <div className={classes.options}>
-                <div className={classes.remember}>
+              <div className="[&_span]: mt-5 flex w-[335px] items-center justify-between [&_span]:text-base [&_span]:text-[#bcc1caff] [&_span]:hover:cursor-pointer [&_span]:hover:underline">
+                <div className="flex items-center justify-start gap-1 [&_div]:flex [&_div]:items-center [&_div]:justify-center">
                   <div
-                    className={classes.checkbox}
+                    className="h-[18px] w-[18px] rounded-md border-2 border-[#03045eff]"
                     onClick={rememberPasswordHandler}
                   >
                     {checked ? <img src={check} alt="check" /> : ""}
@@ -309,7 +320,7 @@ const Login = () => {
                 <span onClick={forgetPasswordHandler}>Forget Password?</span>
               </div>
               <button
-                className={classes.loginBtn}
+                className="my-4 w-[335px] cursor-pointer rounded-3xl border-none bg-[#03045eff] py-2 text-lg text-white transition-all duration-500 ease-in-out hover:scale-95 hover:bg-[#0508baff] hover:transition-all hover:duration-500 hover:ease-in-out hover:active:bg-[#1519f8ff] disabled:cursor-not-allowed disabled:opacity-40"
                 disabled={loginBtnDisable}
                 onClick={loginHandler}
               >
@@ -317,22 +328,24 @@ const Login = () => {
                   ? "Processing..."
                   : "Login"}
               </button>
-              <span className={classes.signUp}>
+              <h6 className="w-[335px] text-center text-base text-[#bcc1caff]">
                 Don't have an account?{" "}
-                <span onClick={signUpHandler}>Sign up</span>
-              </span>
+                <span
+                  onClick={signUpHandler}
+                  className="hover:cursor-pointer hover:underline"
+                >
+                  Sign up
+                </span>
+              </h6>
             </>
           )}
         </form>
-      </div>
-      <div className={classes.section2}>
-        <img src={loginBackground} alt="login-background" />
-        <div className={classes.overlay}>
-          <h1>We haven't met before, right?</h1>
-          <h2>Organize your tasks and improve yourself with the quixo app</h2>
-          <button className={classes.signUpBtn} onClick={signUpHandler}>
-            Sign Up
-          </button>
+        <div className="animate-Morph">
+          <img
+            className="w-[500px] rounded-br-2xl rounded-tr-2xl"
+            src={illustration}
+            alt="login-background"
+          />
         </div>
       </div>
     </div>

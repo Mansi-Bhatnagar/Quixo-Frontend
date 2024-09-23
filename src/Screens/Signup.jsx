@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { authenticationActions } from "../../Redux/AuthenticationSlice";
-import loginBackground from "../../Assets/Images/loginBackground.jpg";
-import userIcon from "../../Assets/Images/material-perm-identity.svg";
-import loginPageLogo from "../../Assets/Images/QuixoLogo.png";
-import emailIcon from "../../Assets/Images/material-email.svg";
-import hide from "../../Assets/Images/material-visibility-off.svg";
-import show from "../../Assets/Images/material-remove-red-eye.svg";
-import classes from "./Signup.module.css";
-import { createUser, verifyOTP } from "../../Services/Auth";
 import { useMutation } from "@tanstack/react-query";
+import { useDispatch } from "react-redux";
+import { authenticationActions } from "../Redux/AuthenticationSlice";
+import { createUser, verifyOTP } from "../Services/Auth";
 import { toast } from "react-toastify";
+import userIcon from "../Assets/Images/material-perm-identity.svg";
+import loginPageLogo from "../Assets/Images/QuixoLogo.png";
+import emailIcon from "../Assets/Images/material-email.svg";
+import hide from "../Assets/Images/material-visibility-off.svg";
+import show from "../Assets/Images/material-remove-red-eye.svg";
+import illustration from "../Assets/Images/illustration.webp";
 
 const Signup = () => {
   //Email Regex
@@ -165,26 +164,31 @@ const Signup = () => {
   }, [usernameError, emailError, passwordError, username, email, password]);
 
   return (
-    <div className={classes.container}>
-      <div className={classes.section1}>
-        <img src={loginBackground} alt="login-background" />
-        <div className={classes.overlay}>
-          <h1>We haven't met before, right?</h1>
-          <h2>Organize your tasks and improve yourself with the quixo app</h2>
+    <div className="flex h-screen items-center justify-center">
+      <img
+        src={loginPageLogo}
+        alt="logo"
+        className="absolute left-5 top-5 h-[50px] w-auto"
+      />
+      <div className="flex items-center rounded-2xl shadow-[rgba(0,_0,_0,_0.25)_0px_25px_50px_-12px]">
+        <div className="animate-MorphReverse">
+          <img
+            className="w-[500px] rounded-bl-2xl rounded-tl-2xl"
+            src={illustration}
+            alt="login-background"
+          />
         </div>
-      </div>
-      <div className={classes.section2}>
-        <img src={loginPageLogo} alt="logo" className={classes.logo} />
-        <form className={classes.signupForm}>
-          <h2>Sign Up</h2>
+        <form className="animate-MorphReverse px-16 py-[21px] [&_h2]:mb-5 [&_h2]:text-3xl [&_h2]:font-bold [&_h2]:text-[#03045eff]">
+          <h2 className="text-center">Sign Up</h2>
           {otpScreen ? (
             <>
               <div>
-                <label htmlFor="otp" className={classes.label}>
+                <label htmlFor="otp" className="text-lg text-[#03045eff]">
                   Enter OTP
                 </label>
-                <div className={classes.inputContainer}>
+                <div className="mt-2 flex w-[335px] items-center justify-between rounded-3xl border-2 border-[#03045eff]">
                   <input
+                    className="ml-5 w-[calc(100%_-_75px)] border-none px-0 py-3 placeholder:text-sm placeholder:text-[#03045eff] focus-visible:outline-none"
                     type="text"
                     placeholder="OTP"
                     id="otp"
@@ -193,15 +197,18 @@ const Signup = () => {
                   />
                 </div>
               </div>
-              <span className={classes.otpInfo}>
+              <span className="text-balance text-[#bcc1caff]">
                 * OTP sent to entered email
               </span>
-              <div className={classes.btnContainer}>
-                <button className={classes.btn} onClick={signUpVerifyHandler}>
+              <div className="mt-8 flex items-center justify-center gap-5">
+                <button
+                  className="h-[44px] w-[120px] cursor-pointer rounded-3xl border-none bg-[#030453ff] text-lg text-white opacity-100 hover:bg-[#0508baff] hover:active:bg-[#1519f8ff] hover:active:text-white disabled:cursor-not-allowed disabled:opacity-40"
+                  onClick={signUpVerifyHandler}
+                >
                   {otpMutation.isPending ? "Verifying..." : "Verify"}
                 </button>
                 <button
-                  className={classes.btn}
+                  className="h-[44px] w-[120px] cursor-pointer rounded-3xl border-none bg-[#030453ff] text-lg text-white opacity-100 hover:bg-[#0508baff] hover:active:bg-[#1519f8ff] hover:active:text-white disabled:cursor-not-allowed disabled:opacity-40"
                   onClick={cancelSignUpHandler}
                   disabled={otpMutation.isPending}
                 >
@@ -212,11 +219,12 @@ const Signup = () => {
           ) : (
             <>
               <div>
-                <label htmlFor="username" className={classes.label}>
+                <label htmlFor="username" className="text-lg text-[#03045eff]">
                   Username
                 </label>
-                <div className={classes.inputContainer}>
+                <div className="mt-2 flex w-[335px] items-center justify-between rounded-3xl border-2 border-[#03045eff]">
                   <input
+                    className="ml-5 w-[calc(100%_-_75px)] border-none px-0 py-3 placeholder:text-sm placeholder:text-[#03045eff] focus-visible:outline-none"
                     type="text"
                     placeholder="Enter Your Username"
                     id="username"
@@ -224,20 +232,27 @@ const Signup = () => {
                     onChange={usernameHandler}
                     value={username}
                   />
-                  <img src={userIcon} alt="user-icon" />
+                  <img
+                    src={userIcon}
+                    alt="user-icon"
+                    className="mr-5 h-6 w-6"
+                  />
                 </div>
                 {usernameError ? (
-                  <span className={classes.error}>{"* " + usernameError}</span>
+                  <span className="block w-[338px] text-sm text-[#d00000]">
+                    {"* " + usernameError}
+                  </span>
                 ) : (
                   ""
                 )}
               </div>
-              <div className={classes.field}>
-                <label htmlFor="email" className={classes.label}>
+              <div className="mt-5">
+                <label htmlFor="email" className="text-lg text-[#03045eff]">
                   Email
                 </label>
-                <div className={classes.inputContainer}>
+                <div className="mt-2 flex w-[335px] items-center justify-between rounded-3xl border-2 border-[#03045eff]">
                   <input
+                    className="ml-5 w-[calc(100%_-_75px)] border-none px-0 py-3 placeholder:text-sm placeholder:text-[#03045eff] focus-visible:outline-none"
                     type="email"
                     placeholder="Enter Your Email"
                     id="email"
@@ -245,20 +260,27 @@ const Signup = () => {
                     onChange={emailHandler}
                     value={email}
                   />
-                  <img src={emailIcon} alt="email-icon" />
+                  <img
+                    src={emailIcon}
+                    alt="email-icon"
+                    className="mr-5 h-6 w-6"
+                  />
                 </div>
                 {emailError ? (
-                  <span className={classes.error}>{"* " + emailError}</span>
+                  <span className="block w-[338px] text-sm text-[#d00000]">
+                    {"* " + emailError}
+                  </span>
                 ) : (
                   ""
                 )}
               </div>
-              <div className={classes.field}>
-                <label htmlFor="password" className={classes.label}>
+              <div className="mt-5">
+                <label htmlFor="password" className="text-lg text-[#03045eff]">
                   Password
                 </label>
-                <div className={classes.inputContainer}>
+                <div className="mt-2 flex w-[335px] items-center justify-between rounded-3xl border-2 border-[#03045eff]">
                   <input
+                    className="ml-5 w-[calc(100%_-_75px)] border-none px-0 py-3 placeholder:text-sm placeholder:text-[#03045eff] focus-visible:outline-none"
                     type={showPassword ? "text" : "password"}
                     placeholder="Enter Password"
                     id="password"
@@ -272,25 +294,33 @@ const Signup = () => {
                     alt="visibility-icon"
                     onClick={() => setShowPassword((prev) => !prev)}
                     style={{ cursor: "pointer" }}
+                    className="mr-5 h-6 w-6"
                   />
                 </div>
                 {passwordError ? (
-                  <span className={classes.error}>{"* " + passwordError}</span>
+                  <span className="block w-[338px] text-sm text-[#d00000]">
+                    {"* " + passwordError}
+                  </span>
                 ) : (
                   ""
                 )}
               </div>
               <button
-                className={classes.nextBtn}
+                className="my-4 w-[335px] cursor-pointer rounded-3xl border-none bg-[#03045eff] py-2 text-lg text-white transition-all duration-500 ease-in-out hover:scale-95 hover:bg-[#0508baff] hover:transition-all hover:duration-500 hover:ease-in-out hover:active:bg-[#1519f8ff] disabled:cursor-not-allowed disabled:opacity-40"
                 onClick={otpScreenHandler}
                 disabled={nextBtnDisable}
               >
                 {mutation.isPending ? "Processing..." : "Next"}
               </button>
-              <span className={classes.login}>
+              <h6 className="text-center text-base text-[#bcc1caff]">
                 Already have an account?{" "}
-                <span onClick={loginHandler}>Login</span>
-              </span>
+                <span
+                  onClick={loginHandler}
+                  className="hover:cursor-pointer hover:underline"
+                >
+                  Login
+                </span>
+              </h6>
             </>
           )}
         </form>
