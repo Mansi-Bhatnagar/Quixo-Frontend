@@ -170,15 +170,15 @@ const Signup = () => {
         alt="logo"
         className="absolute left-5 top-5 h-[50px] w-auto"
       />
-      <div className="flex items-center rounded-2xl shadow-[rgba(0,_0,_0,_0.25)_0px_25px_50px_-12px]">
-        <div className="animate-MorphReverse">
+      <div className="mt-6 flex items-center rounded-2xl shadow-[rgba(0,_0,_0,_0.25)_0px_25px_50px_-12px] max-sm:shadow-none">
+        <div className="animate-MorphReverse max-md:hidden">
           <img
-            className="w-[500px] rounded-bl-2xl rounded-tl-2xl"
+            className="h-[497.6px] w-[500px] rounded-bl-2xl rounded-tl-2xl object-cover max-lg:w-[350px]"
             src={illustration}
             alt="login-background"
           />
         </div>
-        <form className="animate-MorphReverse px-16 py-[21px] [&_h2]:mb-5 [&_h2]:text-3xl [&_h2]:font-bold [&_h2]:text-[#03045eff]">
+        <form className="animate-MorphReverse px-16 py-5 max-lg:px-5 max-sm:px-4 [&_h2]:mb-5 [&_h2]:text-3xl [&_h2]:font-bold [&_h2]:text-[#03045eff]">
           <h2 className="text-center">Sign Up</h2>
           {otpScreen ? (
             <>

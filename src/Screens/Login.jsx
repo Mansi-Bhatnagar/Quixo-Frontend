@@ -192,8 +192,8 @@ const Login = () => {
         alt="logo"
         className="absolute left-5 top-5 h-[50px] w-auto"
       />
-      <div className="flex items-center rounded-2xl shadow-[rgba(0,_0,_0,_0.25)_0px_25px_50px_-12px]">
-        <form className="animate-Morph px-16 py-8 [&_h2]:mb-0 [&_h2]:text-3xl [&_h2]:font-bold [&_h2]:text-[#03045eff] [&_h4]:mt-2 [&_h4]:text-xl [&_h4]:text-[#bcc1caff] [&_label]:text-lg [&_label]:text-[#03045eff]">
+      <div className="mt-6 flex items-center rounded-2xl shadow-[rgba(0,_0,_0,_0.25)_0px_25px_50px_-12px] max-sm:shadow-none">
+        <form className="animate-Morph px-16 py-8 max-lg:px-5 max-sm:px-4 [&_h2]:mb-0 [&_h2]:text-3xl [&_h2]:font-bold [&_h2]:text-[#03045eff] [&_h4]:mt-2 [&_h4]:text-xl [&_h4]:text-[#bcc1caff] [&_label]:text-lg [&_label]:text-[#03045eff]">
           <h2 className="w-[335px] text-center">Login</h2>
           {forgetPwdScreen ? (
             <>
@@ -307,7 +307,7 @@ const Login = () => {
                   ""
                 )}
               </div>
-              <div className="[&_span]: mt-5 flex w-[335px] items-center justify-between [&_span]:text-base [&_span]:text-[#bcc1caff] [&_span]:hover:cursor-pointer [&_span]:hover:underline">
+              <div className="mt-5 flex w-[335px] items-center justify-between [&_span]:text-base [&_span]:text-[#bcc1caff] [&_span]:hover:cursor-pointer">
                 <div className="flex items-center justify-start gap-1 [&_div]:flex [&_div]:items-center [&_div]:justify-center">
                   <div
                     className="h-[18px] w-[18px] rounded-md border-2 border-[#03045eff]"
@@ -315,9 +315,19 @@ const Login = () => {
                   >
                     {checked ? <img src={check} alt="check" /> : ""}
                   </div>
-                  <span onClick={rememberPasswordHandler}>Remember Me</span>
+                  <span
+                    className="hover:underline"
+                    onClick={rememberPasswordHandler}
+                  >
+                    Remember Me
+                  </span>
                 </div>
-                <span onClick={forgetPasswordHandler}>Forget Password?</span>
+                <span
+                  className="hover:underline"
+                  onClick={forgetPasswordHandler}
+                >
+                  Forget Password?
+                </span>
               </div>
               <button
                 className="my-4 w-[335px] cursor-pointer rounded-3xl border-none bg-[#03045eff] py-2 text-lg text-white transition-all duration-500 ease-in-out hover:scale-95 hover:bg-[#0508baff] hover:transition-all hover:duration-500 hover:ease-in-out hover:active:bg-[#1519f8ff] disabled:cursor-not-allowed disabled:opacity-40"
@@ -340,9 +350,9 @@ const Login = () => {
             </>
           )}
         </form>
-        <div className="animate-Morph">
+        <div className="animate-Morph max-md:hidden">
           <img
-            className="w-[500px] rounded-br-2xl rounded-tr-2xl"
+            className="h-[494px] w-[500px] rounded-br-2xl rounded-tr-2xl object-cover max-lg:w-[350px]"
             src={illustration}
             alt="login-background"
           />
