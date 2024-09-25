@@ -142,6 +142,7 @@ const Signup = () => {
       dispatch(authenticationActions.updateJWT(response?.data?.token || ""));
       localStorage.setItem("username", response?.data?.username);
       localStorage.setItem("email", response?.data?.email);
+      localStorage.setItem("userId", response?.data?.id);
       navigate("/dashboard");
     },
     onError: (error) => {

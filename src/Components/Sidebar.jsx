@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CreateWorkspace from "./Modal/CreateWorkspace";
 import add from "../Assets/Images/material-add.svg";
 import board from "../Assets/Images/board.svg";
@@ -7,6 +7,7 @@ import dustbin from "../Assets/Images/material-delete.svg";
 import DeleteWorkspace from "./Modal/DeleteWorkspace";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { useNavigate } from "react-router-dom";
+import Skeleton from "react-loading-skeleton";
 
 const Sidebar = (props) => {
   const { workspaces } = props;
@@ -62,6 +63,21 @@ const Sidebar = (props) => {
     }
   };
 
+  useEffect(() => {
+    if (workspaces && workspaces.created_workspaces?.length > 0) {
+      const workspaceId = workspaces.created_workspaces[0]?.workspace_id;
+      const name = workspaces.created_workspaces[0]?.workspace_name;
+      const description = workspaces.created_workspaces[0]?.description;
+
+      setActiveWsIndex(workspaceId);
+      setWsTabOpen(workspaceId);
+      setActiveWsColor(tabColors[0]);
+      navigate(`${workspaceId}/${name.split(" ").join("")}/boards`, {
+        state: { color: tabColors[0], name: name, description: description },
+      });
+    }
+  }, [workspaces]);
+
   return (
     <>
       {props.sidebarVisible && (
@@ -74,7 +90,17 @@ const Sidebar = (props) => {
             <span className="text-white">Create New Workspace</span>
           </button>
           <h3 className="my-4 text-sm text-[#97a4b2]">Your workspaces</h3>
-          {workspaces?.created_workspaces?.length > 0 &&
+          {props.workspaceLoading ? (
+            <Skeleton
+              height={40}
+              width={250}
+              count={4}
+              baseColor={"#33415c"}
+              highlightColor={"#5c677d"}
+              className="mb-[10px]"
+            />
+          ) : (
+            workspaces?.created_workspaces?.length > 0 &&
             workspaces?.created_workspaces?.map((workspace, idx) => {
               return (
                 <div key={workspace.workspace_id}>
@@ -138,7 +164,8 @@ const Sidebar = (props) => {
                   )}
                 </div>
               );
-            })}
+            })
+          )}
           <h3 className="my-4 text-sm text-[#97a4b2]">
             Workspaces shared with you
           </h3>

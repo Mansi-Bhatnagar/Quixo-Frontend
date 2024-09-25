@@ -35,7 +35,7 @@ const Dashboard = () => {
   } = useQuery({
     queryFn: () => getAllWorkspaces(jwt, userId),
     queryKey: ["all-workspaces", jwt, userId],
-    enabled: jwt !== "",
+    enabled: jwt !== "" && userId !== "",
   });
 
   //Effects
@@ -65,6 +65,7 @@ const Dashboard = () => {
         )}
         <Sidebar
           workspaces={workspaces}
+          workspaceLoading={workspaceLoading}
           isSidebarVisible={isSidebarVisible}
           sidebarVisible={sidebarVisible}
         />
