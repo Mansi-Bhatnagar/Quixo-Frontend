@@ -4,7 +4,11 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { editWorkspaceDetails } from "../../Services/Workspace";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const WorkspaceDetails = ({
   open,
@@ -12,9 +16,14 @@ const WorkspaceDetails = ({
   name,
   description,
 }) => {
+  const { id } = useParams();
+  const jwt = useSelector((state) => state.authentication.jwt);
+  const queryClient = useQueryClient();
+
   //States
   const [workspaceName, setWorkspaceName] = useState(name);
   const [workspaceDescription, setWorkspaceDescription] = useState(description);
+  const [saveDisabled, setSaveDisabled] = useState(false);
 
   //Handlers
   const wsNameHandler = (e) => {
@@ -31,10 +40,34 @@ const WorkspaceDetails = ({
     setWorkspaceDescription("");
   };
 
-  const saveChangesHandler = () => {
+  const saveChangesHandler = (e) => {
     //API call
-    setShowEditWorkspaceDetailsModal(false);
+    e.preventDefault();
+    editWorkspaceDetailsMutation.mutate();
   };
+
+  //API
+  const editWorkspaceDetailsMutation = useMutation({
+    mutationFn: () =>
+      editWorkspaceDetails(id, workspaceName, workspaceDescription, jwt),
+    onSuccess: (response) => {
+      console.log(response);
+      queryClient.invalidateQueries({ queryKey: ["all-workspaces"] });
+      setShowEditWorkspaceDetailsModal(false);
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
+  //Effects
+  useEffect(() => {
+    if (workspaceName) {
+      setSaveDisabled(false);
+    } else {
+      setSaveDisabled(true);
+    }
+  }, [workspaceName]);
 
   return (
     <Dialog open={open} onClose={() => {}} className="relative z-50">
@@ -79,9 +112,10 @@ const WorkspaceDetails = ({
             </button>
             <button
               onClick={saveChangesHandler}
+              disabled={saveDisabled}
               className="float-right m-[10px] rounded-[10px] border-2 border-transparent bg-[#001845] px-5 py-2 text-[15px] text-white outline-none transition-all duration-500 ease-in-out hover:scale-90 hover:border-[#001845] hover:bg-white hover:font-medium hover:text-[#001845] disabled:scale-100 disabled:cursor-not-allowed disabled:bg-[#001845] disabled:text-white disabled:opacity-40 disabled:transition-none max-sm:py-1 max-sm:text-sm"
             >
-              Save
+              {editWorkspaceDetailsMutation.isPending ? "Saving" : "Save"}
             </button>
           </form>
         </DialogPanel>
