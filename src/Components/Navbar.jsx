@@ -14,6 +14,7 @@ const Navbar = (props) => {
   //States
   const [username, setUsername] = useState();
   const [showDropdown, setShowDropdown] = useState(false);
+  const [userColor, setUserColor] = useState("");
 
   //APIs
   const logoutMutation = useMutation({
@@ -45,6 +46,8 @@ const Navbar = (props) => {
   //Effects
   useEffect(() => {
     setUsername(localStorage.getItem("username"));
+    setUserColor(localStorage.getItem("userColor"));
+    console.log(typeof localStorage.getItem("userColor"));
   }, []);
 
   return (
@@ -67,7 +70,7 @@ const Navbar = (props) => {
         </h3>
       </div>
       <div
-        className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-full border border-transparent bg-[#d00000] transition-all duration-200 ease-in-out hover:border-white"
+        className={`flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-full border border-transparent ${userColor} transition-all duration-200 ease-in-out hover:border-white`}
         onClick={showDropdownHandler}
       >
         <span className="text-white">

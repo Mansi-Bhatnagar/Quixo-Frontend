@@ -27,13 +27,14 @@ export async function createUser(username, email, password) {
   }
 }
 
-export async function verifyOTP(email, otp) {
+export async function verifyOTP(otp, token, workspaceId) {
   try {
     const response = await axios.post(
       "/signup_verification",
       {
-        email: email,
         otp: Number(otp),
+        token: token,
+        workspace_id: workspaceId,
       },
       config
     );
@@ -44,15 +45,15 @@ export async function verifyOTP(email, otp) {
   }
 }
 
-export async function login(email, password) {
+export async function login(email, password, token, workspaceId) {
   try {
-    console.log(process.env.REACT_APP_WORKSPACE_BASE_URL);
-
     const response = await axios.post(
       "/login",
       {
         email: email,
         password: password,
+        workspace_id: workspaceId,
+        token: token,
       },
       config
     );

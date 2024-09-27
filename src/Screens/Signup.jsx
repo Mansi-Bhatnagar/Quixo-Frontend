@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import { useDispatch } from "react-redux";
 import { authenticationActions } from "../Redux/AuthenticationSlice";
@@ -13,6 +13,18 @@ import show from "../Assets/Images/material-remove-red-eye.svg";
 import illustration from "../Assets/Images/illustration.webp";
 
 const Signup = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
+  // Extracting values
+  const token = queryParams.get("token");
+  const linkEmail = queryParams.get("email");
+  const workspaceId = queryParams.get("workspace_id");
+
+  console.log("Token:", token);
+  console.log("Email:", linkEmail);
+  console.log("Workspace ID:", workspaceId);
+
   //Email Regex
   const emailRegex =
     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -27,7 +39,7 @@ const Signup = () => {
   //States
   const [otpScreen, setOtpScreen] = useState(false);
   const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(linkEmail || "");
   const [otp, setOtp] = useState("");
   const [password, setPassword] = useState("");
   const [usernameError, setUsernameError] = useState("");
@@ -135,7 +147,7 @@ const Signup = () => {
   });
 
   const otpMutation = useMutation({
-    mutationFn: () => verifyOTP(email, otp),
+    mutationFn: () => verifyOTP(otp, token, workspaceId),
     onSuccess: (response) => {
       console.log(response);
       localStorage.setItem("jwt", response?.data?.token || "");
@@ -143,6 +155,7 @@ const Signup = () => {
       localStorage.setItem("username", response?.data?.username);
       localStorage.setItem("email", response?.data?.email);
       localStorage.setItem("userId", response?.data?.id);
+      localStorage.setItem("userColor", response?.data?.user_color);
       navigate("/dashboard");
     },
     onError: (error) => {
@@ -260,6 +273,9 @@ const Signup = () => {
                     required={true}
                     onChange={emailHandler}
                     value={email}
+                    disabled={linkEmail}
+                    title={linkEmail ? "Email can not be changed" : ""}
+                    style={{ cursor: linkEmail ? "not-allowed" : "auto" }}
                   />
                   <img
                     src={emailIcon}

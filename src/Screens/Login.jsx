@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { authenticationActions } from "../Redux/AuthenticationSlice";
 import { createNewPassword, forgetPassword, login } from "../Services/Auth";
@@ -13,6 +13,14 @@ import check from "../Assets/Images/material-check.svg";
 import illustration from "../Assets/Images/illustration.webp";
 
 const Login = () => {
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+
+  // Extracting values
+  const token = queryParams.get("token");
+  const linkEmail = queryParams.get("email");
+  const workspaceId = queryParams.get("workspace_id");
+
   //Email Regex
   const emailRegex =
     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -28,7 +36,7 @@ const Login = () => {
   const [checked, setChecked] = useState(
     JSON.parse(localStorage.getItem("Quixo"))?.checked ? true : false
   );
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(linkEmail || "");
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -106,10 +114,9 @@ const Login = () => {
 
   // APIs
   const loginMutation = useMutation({
-    mutationFn: () => login(email, password),
+    mutationFn: () => login(email, password, token, workspaceId),
     onSuccess: (response) => {
       navigate("/dashboard");
-      console.log(response);
       if (checked) {
         localStorage.setItem(
           "Quixo",
@@ -121,6 +128,7 @@ const Login = () => {
       localStorage.setItem("username", response?.data?.username);
       localStorage.setItem("email", response?.data?.email);
       localStorage.setItem("userId", response?.data?.id);
+      localStorage.setItem("userColor", response?.data?.user_color);
     },
     onError: (error) => {
       console.log(error);
@@ -179,7 +187,7 @@ const Login = () => {
   }, [passwordError, password]);
 
   useEffect(() => {
-    if (checked) {
+    if (!linkEmail && checked) {
       setEmail(JSON.parse(localStorage.getItem("Quixo")).email);
       setPassword(JSON.parse(localStorage.getItem("Quixo")).password);
     }
@@ -264,6 +272,9 @@ const Login = () => {
                     onChange={emailHandler}
                     value={email}
                     className="ml-5 w-[calc(100%_-_75px)] border-none px-0 py-3 placeholder:text-sm placeholder:text-[#03045eff] focus-visible:outline-none"
+                    disabled={linkEmail}
+                    title={linkEmail ? "Email can not be changed" : ""}
+                    style={{ cursor: linkEmail ? "not-allowed" : "auto" }}
                   />
                   <img
                     src={emailIcon}

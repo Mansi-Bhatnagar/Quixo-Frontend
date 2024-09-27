@@ -6,7 +6,6 @@ import member from "../Assets/Images/member.svg";
 import dustbin from "../Assets/Images/material-delete.svg";
 import DeleteWorkspace from "./Modal/DeleteWorkspace";
 import {
-  ArrowUturnRightIcon,
   ChevronDoubleRightIcon,
   ChevronDownIcon,
 } from "@heroicons/react/20/solid";
@@ -71,12 +70,21 @@ const Sidebar = (props) => {
   };
 
   useEffect(() => {
-    if (workspaces && workspaces.created_workspaces?.length > 0) {
-      const workspaceId = workspaces.created_workspaces[0]?.workspace_id;
-      const name = workspaces.created_workspaces[0]?.workspace_name;
-      const description = workspaces.created_workspaces[0]?.description;
+    if (
+      workspaces &&
+      (workspaces.created_workspaces?.length > 0 ||
+        workspaces.invited_workspaces?.length > 0)
+    ) {
+      const workspaceId =
+        workspaces.created_workspaces[0]?.workspace_id ||
+        workspaces.invited_workspaces[0]?.workspace_id;
+      const name =
+        workspaces.created_workspaces[0]?.workspace_name ||
+        workspaces.invited_workspaces[0]?.workspace_name;
+      const description =
+        workspaces.created_workspaces[0]?.description ||
+        workspaces.created_workspaces[0]?.description;
 
-      setActiveWsIndex(workspaceId);
       setWsTabOpen(workspaceId);
       setActiveWsColor(tabColors[0]);
       navigate(`${workspaceId}/${name.split(" ").join("")}/boards`, {
