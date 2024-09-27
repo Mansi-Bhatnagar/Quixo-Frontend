@@ -5,7 +5,11 @@ import board from "../Assets/Images/board.svg";
 import member from "../Assets/Images/member.svg";
 import dustbin from "../Assets/Images/material-delete.svg";
 import DeleteWorkspace from "./Modal/DeleteWorkspace";
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import {
+  ArrowUturnRightIcon,
+  ChevronDoubleRightIcon,
+  ChevronDownIcon,
+} from "@heroicons/react/20/solid";
 import { useNavigate } from "react-router-dom";
 import Skeleton from "react-loading-skeleton";
 
@@ -23,6 +27,7 @@ const Sidebar = (props) => {
   const [showDeleteWorkspaceModal, setShowDeleteWorkspaceModal] =
     useState(false);
   const [activeWsColor, setActiveWsColor] = useState();
+  const [selectedOption, setSelectedOption] = useState(0);
 
   //Handlers
   const createWorkspaceHandler = () => {
@@ -46,6 +51,7 @@ const Sidebar = (props) => {
   };
 
   const membersHandler = (workspaceId, name, description) => {
+    setSelectedOption(1);
     navigate(`${workspaceId}/${name.split(" ").join("")}/members`, {
       state: { color: activeWsColor, name: name, description: description },
     });
@@ -55,6 +61,7 @@ const Sidebar = (props) => {
   };
 
   const boardsHandler = (workspaceId, name, description) => {
+    setSelectedOption(0);
     navigate(`${workspaceId}/${name.split(" ").join("")}/boards`, {
       state: { color: activeWsColor, name: name, description: description },
     });
@@ -131,7 +138,7 @@ const Sidebar = (props) => {
                   </div>
 
                   {wsTabOpen === workspace.workspace_id && (
-                    <ul className="[&_li]:flex [&_li]:w-[200] [&_li]:cursor-pointer [&_li]:items-center [&_li]:justify-start [&_li]:gap-2 [&_li]:rounded-lg [&_li]:px-2 [&_li]:py-[6px] hover:[&_li]:cursor-pointer [&_span]:text-[#97a4b2]">
+                    <ul className="my-2 ml-2 [&_li]:flex [&_li]:w-max [&_li]:cursor-pointer [&_li]:items-center [&_li]:justify-start [&_li]:gap-2 [&_li]:rounded-lg [&_li]:px-2 [&_li]:py-[6px] hover:[&_li]:cursor-pointer [&_span]:text-[#97a4b2]">
                       <li
                         onClick={() =>
                           boardsHandler(
@@ -141,6 +148,9 @@ const Sidebar = (props) => {
                           )
                         }
                       >
+                        {selectedOption === 0 && (
+                          <ChevronDoubleRightIcon className="h-4 w-4 text-[#97a4b2]" />
+                        )}
                         <img src={board} alt="board" />
                         <span>Boards</span>
                       </li>
@@ -153,6 +163,9 @@ const Sidebar = (props) => {
                           )
                         }
                       >
+                        {selectedOption === 1 && (
+                          <ChevronDoubleRightIcon className="h-4 w-4 text-[#97a4b2]" />
+                        )}
                         <img src={member} alt="member" />
                         <span>Members</span>
                       </li>

@@ -138,14 +138,13 @@ const Boards = () => {
 
   return (
     <div className="mb-9 max-xl:w-full">
-      <div className="flex items-start justify-start gap-3 border-b border-b-[#33415c] pb-5 max-sm:flex-col">
+      <div className="flex items-start justify-start gap-3 pb-5 max-sm:flex-col">
         <div
-          className="flex h-12 w-12 items-center justify-center rounded-lg text-white"
+          className="flex h-12 min-w-12 items-center justify-center rounded-lg text-white"
           style={{ backgroundColor: color }}
         >
           <span>{name?.[0].toUpperCase()}</span>
         </div>
-
         <div className="w-full">
           <div className="flex items-center gap-2">
             <span className="text-white">{name} </span>
@@ -163,6 +162,7 @@ const Boards = () => {
           )}
         </div>
       </div>
+      <div className="h-[1px] w-[calc(100vw_-_600px)] bg-[#33415c] max-xl:w-[calc(100vw_-_377.5px)] max-md:w-[calc(100vw_-_46px)] max-sm:w-[calc(100vw_-_64px)]" />
 
       <h3 className="mb-4 mt-9">Your boards</h3>
       <div className="flex flex-wrap items-center gap-4">
