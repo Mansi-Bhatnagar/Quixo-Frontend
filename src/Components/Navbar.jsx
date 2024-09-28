@@ -70,8 +70,9 @@ const Navbar = (props) => {
         </h3>
       </div>
       <div
-        className={`flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-full border border-transparent ${userColor} transition-all duration-200 ease-in-out hover:border-white`}
+        className="flex h-[30px] w-[30px] cursor-pointer items-center justify-center rounded-full border border-transparent transition-all duration-200 ease-in-out hover:border-white"
         onClick={showDropdownHandler}
+        style={{ background: userColor }}
       >
         <span className="text-white">
           {username ? username[0].toUpperCase() : ""}

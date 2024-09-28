@@ -78,6 +78,22 @@ export async function addWorkspaceMember(workspaceId, emails, jwt) {
   }
 }
 
+export async function getMembers(workspaceId, jwt) {
+  try {
+    const response = await axios.get(`/get_members/${workspaceId}`, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        Authorization: `Bearer ${jwt}`,
+      },
+      baseURL: process.env.REACT_APP_WORKSPACE_BASE_URL,
+    });
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 export async function editWorkspaceDetails(
   workspaceId,
   name,
