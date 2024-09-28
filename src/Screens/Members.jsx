@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
 import { PencilSquareIcon, XMarkIcon } from "@heroicons/react/20/solid";
 import {
   Combobox,
@@ -11,37 +11,18 @@ import RemoveUser from "../Components/Modal/RemoveUser";
 import LeaveWorkspace from "../Components/Modal/LeaveWorkspace";
 import CreateWorkspace from "../Components/Modal/CreateWorkspace";
 import WorkspaceDetails from "../Components/Modal/WorkspaceDetails";
+import { useQuery } from "@tanstack/react-query";
+import { getMembers } from "../Services/Workspace";
+import { useSelector } from "react-redux";
 
 const Members = () => {
   const location = useLocation();
+  const { id } = useParams();
+  const currentUserId = +localStorage.getItem("userId");
+  const jwt = useSelector((state) => state.authentication.jwt);
   const name = location?.state?.name;
   const description = location?.state?.description;
   const color = location?.state?.color;
-  console.log("color from members=", color);
-
-  const tabColors = ["#007f5f", "#023e7d", "#d00000", "#9d4edd", "#ffba08"];
-  const users = [
-    {
-      id: 1,
-      name: "Durward Reynolds",
-      email: "bhatnagarmansi.03@gmail.com",
-      status: "owner",
-    },
-    {
-      id: 2,
-      name: "Kenton Towne",
-      email: "bhatnagarmansi.03@gmail.com",
-      status: "invitation pending",
-    },
-    { id: 3, name: "Therese Wunsch", email: "bhatnagarmansi.03@gmail.com" },
-    { id: 4, name: "Benedict Kessler", email: "bhatnagarmansi.03@gmail.com" },
-    {
-      id: 5,
-      name: "Katelyn Rohan",
-      email: "bhatnagarmansi.03@gmail.com",
-      status: "invitation pending",
-    },
-  ];
 
   //States
   const [selectedUser, setSelectedUser] = useState("");
@@ -52,13 +33,8 @@ const Members = () => {
   const [showInviteMembersModal, setShowInviteMembersModal] = useState(false);
   const [showEditWorkspaceDetailsModal, setShowEditWorkspaceDetailsModal] =
     useState(false);
-
-  const filteredUsers =
-    query === ""
-      ? users
-      : users.filter((user) => {
-          return user.name.toLowerCase().includes(query.toLowerCase());
-        });
+  const [users, setUsers] = useState([]);
+  const [filteredUsers, setFilteredUsers] = useState();
 
   //Handlers
   const removeUserHandler = () => {
@@ -73,6 +49,38 @@ const Members = () => {
   const inviteMembersHandler = () => {
     setShowInviteMembersModal(true);
   };
+
+  //APIs
+  const {
+    data: membersData,
+    error: membersError,
+    isLoading: membersLoading,
+  } = useQuery({
+    queryFn: () => getMembers(id, jwt),
+    queryKey: ["workspace-members", jwt, id],
+    enabled: jwt !== "" && id !== "",
+  });
+
+  //Effects
+  useEffect(() => {
+    if (!membersLoading && membersData) {
+      setUsers(membersData?.data);
+    } else if (membersError) {
+      console.error(membersError);
+    }
+  }, [membersData, membersError, membersLoading]);
+
+  useEffect(() => {
+    setFilteredUsers(
+      query === "" && !selectedUser
+        ? users
+        : selectedUser
+        ? [selectedUser]
+        : users.filter((user) => {
+            return user.name.toLowerCase().includes(query.toLowerCase());
+          })
+    );
+  }, [users, query, selectedUser]);
 
   return (
     <>
@@ -146,9 +154,9 @@ const Members = () => {
         />
         <ComboboxOptions
           anchor="bottom end"
-          className="w-[20%] rounded-md border border-none bg-[#33415c] shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px] transition duration-200 ease-out [--anchor-gap:8px] empty:invisible"
+          className="w-[20%] cursor-pointer rounded-md border border-none bg-[#33415c] shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px] transition duration-200 ease-out [--anchor-gap:8px] empty:invisible"
         >
-          {filteredUsers.map((user, index) => (
+          {filteredUsers?.map((user, index) => (
             <div key={user.id}>
               <ComboboxOption
                 value={user}
@@ -166,15 +174,15 @@ const Members = () => {
         </ComboboxOptions>
       </Combobox>
       <div className="mb-9 mt-9 space-y-4">
-        {filteredUsers.map((user, idx) => {
+        {filteredUsers?.map((user) => {
           return (
             <div
-              key={idx}
+              key={user.id}
               className="flex flex-wrap items-start justify-between max-sm:gap-y-2"
             >
               <div className="flex items-center justify-start gap-3">
                 <div
-                  style={{ backgroundColor: `${tabColors[idx % 5]}` }}
+                  style={{ backgroundColor: user.user_color }}
                   className="flex h-10 w-10 items-center justify-center rounded-full max-sm:h-8 max-sm:w-8"
                 >
                   <span className="text-white max-sm:text-sm">
@@ -184,13 +192,11 @@ const Members = () => {
                 <div>
                   <h6 className="my-0 text-base text-white max-sm:text-sm">
                     {user.name}
-                    {user.status ? (
+                    {user.status === "Admin" ? (
                       <p
                         style={{
-                          backgroundColor:
-                            user.status === "owner" ? "#c7f9cc" : "#ffdada",
-                          color:
-                            user.status === "owner" ? "#007f5f" : "#d00000",
+                          backgroundColor: "#c7f9cc",
+                          color: "#007f5f",
                         }}
                         className="ml-3 inline-block rounded-md px-2 py-1 text-xs capitalize max-sm:hidden"
                       >
@@ -206,27 +212,34 @@ const Members = () => {
                 </div>
               </div>
               {/* If user id matches my id then option will be leave, if my id also matches owner id then remove option will be present in all other users. */}
-              {/* If the user's status is invitation pending then no option (remove/ leave) will be shown */}
+              {currentUserId === user.user_id ? (
+                <button
+                  onClick={() => leaveWorkspaceHandler(user)}
+                  className="group flex items-center gap-1 rounded-md border-[0.5px] border-transparent bg-[#33415c] px-4 py-1 hover:border-[0.5px] hover:border-[#97a4b2] max-sm:px-2"
+                >
+                  <XMarkIcon className="w-5 text-[#97a4b2] group-hover:text-white max-sm:w-4" />
+                  <span className="text-[#97a4b2] group-hover:text-white max-sm:text-sm">
+                    Leave
+                  </span>
+                </button>
+              ) : (
+                ""
+              )}
 
-              {/* <button
-                onClick={removeUserHandler}
-                className="group flex items-center gap-1 rounded-md border-[0.5px] border-transparent bg-[#33415c] px-4 py-1 hover:border-[0.5px] hover:border-[#97a4b2] max-sm:px-2"
-              >
-                <XMarkIcon className="w-5 text-[#97a4b2] group-hover:text-white max-sm:w-4" />
-                <span className="text-[#97a4b2] group-hover:text-white max-sm:text-sm">
-                  Remove
-                </span>
-              </button> */}
-
-              <button
-                onClick={() => leaveWorkspaceHandler(user)}
-                className="group flex items-center gap-1 rounded-md border-[0.5px] border-transparent bg-[#33415c] px-4 py-1 hover:border-[0.5px] hover:border-[#97a4b2] max-sm:px-2"
-              >
-                <XMarkIcon className="w-5 text-[#97a4b2] group-hover:text-white max-sm:w-4" />
-                <span className="text-[#97a4b2] group-hover:text-white max-sm:text-sm">
-                  Leave
-                </span>
-              </button>
+              {currentUserId === user.admin_id &&
+              user.user_id !== user.admin_id ? (
+                <button
+                  onClick={removeUserHandler}
+                  className="group flex items-center gap-1 rounded-md border-[0.5px] border-transparent bg-[#33415c] px-4 py-1 hover:border-[0.5px] hover:border-[#97a4b2] max-sm:px-2"
+                >
+                  <XMarkIcon className="w-5 text-[#97a4b2] group-hover:text-white max-sm:w-4" />
+                  <span className="text-[#97a4b2] group-hover:text-white max-sm:text-sm">
+                    Remove
+                  </span>
+                </button>
+              ) : (
+                ""
+              )}
             </div>
           );
         })}
