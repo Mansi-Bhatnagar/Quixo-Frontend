@@ -58,11 +58,11 @@ export async function deleteWorkspace(id, jwt) {
   }
 }
 
-export async function addWorkspaceMember(workspaceId, emails, jwt) {
+export async function addWorkspaceMember(workspaceId, email, jwt) {
   try {
     const response = await axios.post(
       `/add_member/${workspaceId}`,
-      { email: emails },
+      { email: email },
       {
         headers: {
           "X-Requested-With": "XMLHttpRequest",

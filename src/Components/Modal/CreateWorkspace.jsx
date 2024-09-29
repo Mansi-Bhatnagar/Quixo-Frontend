@@ -6,7 +6,7 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import link from "../../Assets/Images/link.svg";
-import { createWorkspace } from "../../Services/Workspace";
+import { addWorkspaceMember, createWorkspace } from "../../Services/Workspace";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 
@@ -75,6 +75,10 @@ const CreateWorkspace = ({
       console.error(error);
     },
   });
+
+  // const addMemberMutation=useMutation({
+  //   mutationFn:()=>addWorkspaceMember(emails, jwt)
+  // })
 
   //Effects
   useEffect(() => {
