@@ -35,6 +35,7 @@ const Members = () => {
     useState(false);
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState();
+  const [adminId, setAdminId] = useState();
 
   //Handlers
   const removeUserHandler = () => {
@@ -64,7 +65,9 @@ const Members = () => {
   //Effects
   useEffect(() => {
     if (!membersLoading && membersData) {
-      setUsers(membersData?.data);
+      console.log("members data = ", membersData);
+      setUsers(membersData?.data?.members_lists);
+      setAdminId(membersData?.data?.admin_id);
     } else if (membersError) {
       console.error(membersError);
     }
@@ -125,13 +128,17 @@ const Members = () => {
           </div>
         </div>
 
-        <button
-          onClick={inviteMembersHandler}
-          style={{ backgroundColor: color }}
-          className="basis-[20%] rounded-lg px-4 py-3 text-white max-xl:basis-[25%] max-sm:hidden"
-        >
-          Invite Members
-        </button>
+        {currentUserId === adminId ? (
+          <button
+            onClick={inviteMembersHandler}
+            style={{ backgroundColor: color }}
+            className="basis-[20%] rounded-lg px-4 py-3 text-white max-xl:basis-[25%] max-sm:hidden"
+          >
+            Invite Members
+          </button>
+        ) : (
+          ""
+        )}
       </div>
       <h4 className="my-2 text-lg font-medium text-white max-sm:text-base">
         Workspace Members
@@ -226,8 +233,7 @@ const Members = () => {
                 ""
               )}
 
-              {currentUserId === user.admin_id &&
-              user.user_id !== user.admin_id ? (
+              {currentUserId === adminId && user.user_id !== adminId ? (
                 <button
                   onClick={removeUserHandler}
                   className="group flex items-center gap-1 rounded-md border-[0.5px] border-transparent bg-[#33415c] px-4 py-1 hover:border-[0.5px] hover:border-[#97a4b2] max-sm:px-2"
@@ -252,6 +258,7 @@ const Members = () => {
         open={showLeaveWorkspaceModal}
         onClose={() => setShowLeaveWorkspaceModal(false)}
         user={leavingUser}
+        allusers={users}
       />
       {showInviteMembersModal && (
         <CreateWorkspace

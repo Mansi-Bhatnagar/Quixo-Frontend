@@ -246,10 +246,6 @@ const Sidebar = (props) => {
                         <img src={member} alt="member" />
                         <span>Members</span>
                       </li>
-                      <li onClick={deleteWorkspaceHandler}>
-                        <img src={dustbin} alt="delete" />
-                        <span>Delete Workspace</span>
-                      </li>
                     </ul>
                   )}
                 </div>
