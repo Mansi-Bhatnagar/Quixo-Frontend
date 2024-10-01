@@ -58,6 +58,34 @@ export async function deleteWorkspace(id, jwt) {
   }
 }
 
+export async function editWorkspaceDetails(
+  workspaceId,
+  name,
+  description,
+  jwt
+) {
+  try {
+    const response = await axios.patch(
+      `/edit_workspace_details/${workspaceId}`,
+      {
+        name: name,
+        description: description,
+      },
+      {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          Authorization: `Bearer ${jwt}`,
+        },
+        baseURL: process.env.REACT_APP_WORKSPACE_BASE_URL,
+      }
+    );
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
 export async function addWorkspaceMember(workspaceId, email, jwt) {
   try {
     const response = await axios.post(
@@ -94,18 +122,34 @@ export async function getMembers(workspaceId, jwt) {
   }
 }
 
-export async function editWorkspaceDetails(
-  workspaceId,
-  name,
-  description,
-  jwt
-) {
+export async function leaveWorkspace(workspaceId, newAdminId, jwt) {
   try {
-    const response = await axios.patch(
-      `/edit_workspace_details/${workspaceId}`,
+    const response = await axios.post(
+      `/leave_workspace/${workspaceId}`,
       {
-        name: name,
-        description: description,
+        new_admin_id: newAdminId,
+      },
+      {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          Authorization: `Bearer ${jwt}`,
+        },
+        baseURL: process.env.REACT_APP_WORKSPACE_BASE_URL,
+      }
+    );
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function removeMember(workspaceId, userId, jwt) {
+  try {
+    const response = await axios.post(
+      `/remove_member/${workspaceId}`,
+      {
+        user_id: userId,
       },
       {
         headers: {

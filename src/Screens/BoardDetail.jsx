@@ -39,7 +39,7 @@ const BoardDetail = () => {
     <>
       <Navbar />
       <div className={`relative h-[calc(100vh_-_53px)] w-screen ${gradient}`}>
-        <div className="absolute top-0 w-full bg-[#0000003d] py-2">
+        <div className="absolute top-0 w-full bg-[#0000003d] px-[3%] py-2">
           <h4 className="text-xl font-medium text-white">{name}</h4>
         </div>
         <div className="h-[calc(100vh_-_53px)] w-screen" />

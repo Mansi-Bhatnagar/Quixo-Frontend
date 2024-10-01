@@ -51,7 +51,7 @@ const Navbar = (props) => {
   }, []);
 
   return (
-    <div className="relative left-0 top-0 flex items-center justify-between border-b border-b-[#33415c] bg-[#1d2125] px-[150px] py-[10px] max-xl:px-[3%] max-sm:px-[5%]">
+    <div className="relative left-0 top-0 flex items-center justify-between border-b border-b-[#33415c] bg-[#1d2125] px-[3%] py-[10px] max-sm:px-[5%]">
       <div className="flex w-full items-center justify-start gap-2">
         <div className="hidden h-8 w-8 items-center justify-center rounded-full hover:cursor-pointer hover:bg-[#5c677d] max-md:flex max-sm:h-6 max-sm:w-6">
           <Bars4Icon
