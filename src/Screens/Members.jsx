@@ -36,10 +36,12 @@ const Members = () => {
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState();
   const [adminId, setAdminId] = useState();
+  const [removeUser, setRemoveUser] = useState({});
 
   //Handlers
-  const removeUserHandler = () => {
+  const removeUserHandler = (user) => {
     setShowRemoveUserModal(true);
+    setRemoveUser(user);
   };
 
   const leaveWorkspaceHandler = (user) => {
@@ -235,7 +237,7 @@ const Members = () => {
 
               {currentUserId === adminId && user.user_id !== adminId ? (
                 <button
-                  onClick={removeUserHandler}
+                  onClick={() => removeUserHandler(user)}
                   className="group flex items-center gap-1 rounded-md border-[0.5px] border-transparent bg-[#33415c] px-4 py-1 hover:border-[0.5px] hover:border-[#97a4b2] max-sm:px-2"
                 >
                   <XMarkIcon className="w-5 text-[#97a4b2] group-hover:text-white max-sm:w-4" />
@@ -253,6 +255,7 @@ const Members = () => {
       <RemoveUser
         open={showRemoveUserModal}
         onClose={() => setShowRemoveUserModal(false)}
+        user={removeUser}
       />
       <LeaveWorkspace
         open={showLeaveWorkspaceModal}

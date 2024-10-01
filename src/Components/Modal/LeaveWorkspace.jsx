@@ -9,16 +9,45 @@ import {
   MenuItems,
 } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { useParams } from "react-router-dom";
+import { leaveWorkspace } from "../../Services/Workspace";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const LeaveWorkspace = (props) => {
+  const { id } = useParams();
+  const jwt = useSelector((state) => state.authentication.jwt);
+  const queryClient = useQueryClient();
+
+  //States
   const [selectedUser, setSelectedUser] = useState();
 
+  //Handlers
   const leaveWorkspaceHandler = () => {
-    //API call according to the status of the user
-
-    props.onClose();
+    leaveWorkspaceMutation.mutate();
   };
+
+  //API
+  const leaveWorkspaceMutation = useMutation({
+    mutationFn: () => leaveWorkspace(id, selectedUser?.user_id || "", jwt),
+    onSuccess: (response) => {
+      queryClient.invalidateQueries({
+        queryKey: ["workspace-members"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["all-workspaces"],
+      });
+      props.onClose();
+      toast.success(response?.data?.message);
+    },
+    onError: (error) => {
+      console.error(error);
+      props.onClose();
+      toast.error("An error occured. Try again later");
+    },
+  });
 
   return (
     <Dialog {...props} className="relative z-50">
@@ -50,45 +79,19 @@ const LeaveWorkspace = (props) => {
                     {props.allusers.map(
                       (user) =>
                         user.status !== "Admin" && (
-                          <>
-                            <MenuItem
-                              onClick={() => setSelectedUser(user)}
-                              as={"div"}
-                              className="group cursor-pointer px-3 py-1 hover:bg-[#00000039]"
-                              key={user.id}
-                            >
-                              <h6 className="m-0 text-xs font-medium leading-3 text-[#000000] group-hover:text-white">
-                                {user.name}
-                              </h6>
-                              <span className="text-xs leading-3 text-[#000000] group-hover:text-white">
-                                {user.email}
-                              </span>
-                            </MenuItem>
-                            <MenuItem
-                              as={"div"}
-                              className="group cursor-pointer px-3 py-1 hover:bg-[#00000039]"
-                              key={user.id}
-                            >
-                              <h6 className="m-0 text-xs font-medium leading-3 text-[#000000] group-hover:text-white">
-                                {user.name}
-                              </h6>
-                              <span className="text-xs leading-3 text-[#000000] group-hover:text-white">
-                                {user.email}
-                              </span>
-                            </MenuItem>
-                            <MenuItem
-                              as={"div"}
-                              className="group cursor-pointer px-3 py-1 hover:bg-[#00000039]"
-                              key={user.id}
-                            >
-                              <h6 className="m-0 text-xs font-medium leading-3 text-[#000000] group-hover:text-white">
-                                {user.name}
-                              </h6>
-                              <span className="text-xs leading-3 text-[#000000] group-hover:text-white">
-                                {user.email}
-                              </span>
-                            </MenuItem>
-                          </>
+                          <MenuItem
+                            onClick={() => setSelectedUser(user)}
+                            as={"div"}
+                            className="group cursor-pointer px-3 py-1 hover:bg-[#00000039]"
+                            key={user.id}
+                          >
+                            <h6 className="m-0 text-xs font-medium leading-3 text-[#000000] group-hover:text-white">
+                              {user.name}
+                            </h6>
+                            <span className="text-xs leading-3 text-[#000000] group-hover:text-white">
+                              {user.email}
+                            </span>
+                          </MenuItem>
                         )
                     )}
                   </MenuItems>
@@ -99,7 +102,9 @@ const LeaveWorkspace = (props) => {
                     className="rounded-[10px] border border-transparent bg-[#001845] px-5 py-2 text-white transition-all duration-500 ease-in-out hover:rounded-[10px] hover:border hover:border-[#001845] hover:bg-transparent hover:px-5 hover:py-2 hover:font-medium hover:text-[#001845] hover:transition-all hover:duration-500 hover:ease-in-out disabled:cursor-not-allowed disabled:bg-[#001845] disabled:text-white disabled:opacity-40 max-sm:py-1 max-sm:text-sm"
                     disabled={!selectedUser}
                   >
-                    Leave
+                    {leaveWorkspaceMutation.isPending
+                      ? "Leaving..."
+                      : "Leave workspace"}
                   </button>
                   <button
                     className="rounded-[10px] border border-[#001845] bg-transparent px-5 py-2 font-medium text-[#001845] transition-all duration-500 ease-in-out hover:rounded-[10px] hover:border hover:border-transparent hover:bg-[#001845] hover:px-5 hover:py-2 hover:text-white hover:transition-all hover:duration-500 hover:ease-in-out max-sm:py-1 max-sm:text-sm"
@@ -120,7 +125,9 @@ const LeaveWorkspace = (props) => {
                     onClick={leaveWorkspaceHandler}
                     className="rounded-[10px] border border-transparent bg-[#001845] px-5 py-2 text-white transition-all duration-500 ease-in-out hover:rounded-[10px] hover:border hover:border-[#001845] hover:bg-transparent hover:px-5 hover:py-2 hover:font-medium hover:text-[#001845] hover:transition-all hover:duration-500 hover:ease-in-out max-sm:py-1 max-sm:text-sm"
                   >
-                    Leave anyway
+                    {leaveWorkspaceMutation.isPending
+                      ? "Leaving..."
+                      : "Leave anyway"}
                   </button>
                   <button
                     className="rounded-[10px] border border-[#001845] bg-transparent px-5 py-2 font-medium text-[#001845] transition-all duration-500 ease-in-out hover:rounded-[10px] hover:border hover:border-transparent hover:bg-[#001845] hover:px-5 hover:py-2 hover:text-white hover:transition-all hover:duration-500 hover:ease-in-out max-sm:py-1 max-sm:text-sm"
@@ -142,7 +149,9 @@ const LeaveWorkspace = (props) => {
                   onClick={leaveWorkspaceHandler}
                   className="rounded-[10px] border border-transparent bg-[#001845] px-5 py-2 text-white transition-all duration-500 ease-in-out hover:rounded-[10px] hover:border hover:border-[#001845] hover:bg-transparent hover:px-5 hover:py-2 hover:font-medium hover:text-[#001845] hover:transition-all hover:duration-500 hover:ease-in-out max-sm:py-1 max-sm:text-sm"
                 >
-                  Leave workspace
+                  {leaveWorkspaceMutation.isPending
+                    ? "Leaving..."
+                    : "Leave workspace"}
                 </button>
                 <button
                   className="rounded-[10px] border border-[#001845] bg-transparent px-5 py-2 font-medium text-[#001845] transition-all duration-500 ease-in-out hover:rounded-[10px] hover:border hover:border-transparent hover:bg-[#001845] hover:px-5 hover:py-2 hover:text-white hover:transition-all hover:duration-500 hover:ease-in-out max-sm:py-1 max-sm:text-sm"
