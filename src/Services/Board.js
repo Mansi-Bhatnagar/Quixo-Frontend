@@ -78,3 +78,26 @@ export async function getBoardDetails(boardId, jwt) {
     throw error;
   }
 }
+
+export async function editBoardDetails(boardId, name, description, jwt) {
+  try {
+    const response = await axios.patch(
+      `/edit_board_details/${boardId}`,
+      {
+        name: name,
+        description: description,
+      },
+      {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          Authorization: `Bearer ${jwt}`,
+        },
+        baseURL: process.env.REACT_APP_BOARD_BASE_URL,
+      }
+    );
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

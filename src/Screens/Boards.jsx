@@ -130,7 +130,7 @@ const Boards = () => {
   useEffect(() => {
     if (!boardsLoading && boardsData) {
       setBoards(boardsData?.data);
-      console.log("boards = ", boardsData);
+      console.log("boards data= ", boardsData);
     } else if (boardsError) {
       console.error(boardsError);
     }
@@ -205,7 +205,7 @@ const Boards = () => {
           )
         ) : boards.length >= 3 ? (
           <div
-            onClick={boardDetailHandler}
+            onClick={() => boardDetailHandler(boards[2])}
             className={`cursor-pointer  flex-grow flex items-center justify-center ${boards[2].gradient} hover:shadow-[0_3px_10px_rgb(151,164,178,0.4)] hover:scale-[1.02] transition-all ease-in-out rounded-md w-[200px] h-[100px]`}
           >
             <span className="text-base font-medium text-white">

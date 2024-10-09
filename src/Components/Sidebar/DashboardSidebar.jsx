@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import CreateWorkspace from "./Modal/CreateWorkspace";
-import add from "../Assets/Images/material-add.svg";
-import board from "../Assets/Images/board.svg";
-import member from "../Assets/Images/member.svg";
-import dustbin from "../Assets/Images/material-delete.svg";
-import DeleteWorkspace from "./Modal/DeleteWorkspace";
+import CreateWorkspace from "../Modal/CreateWorkspace";
+import add from "../../Assets/Images/material-add.svg";
+import board from "../../Assets/Images/board.svg";
+import member from "../../Assets/Images/member.svg";
+import dustbin from "../../Assets/Images/material-delete.svg";
+import DeleteWorkspace from "../Modal/DeleteWorkspace";
 import {
   ChevronDoubleRightIcon,
   ChevronDownIcon,

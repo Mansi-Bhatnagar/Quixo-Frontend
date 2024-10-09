@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Navbar from "../Components/Navbar";
-import Sidebar from "../Components/Sidebar";
+import Sidebar from "../Components/Sidebar/DashboardSidebar";
 import CreateWorkspace from "../Components/Modal/CreateWorkspace";
 import team from "../Assets/Images/team.svg";
 import { getAllWorkspaces } from "../Services/Workspace";
