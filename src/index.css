@@ -13,6 +13,16 @@
       cursor: pointer;
     }
   }
+  .horizontal-scrollbar {
+    &::-webkit-scrollbar {
+      height: 10px;
+    }
+    &::-webkit-scrollbar-thumb {
+      border-radius: 0px;
+      background-color: #1d2125;
+      cursor: pointer;
+    }
+  }
 }
 
 body {

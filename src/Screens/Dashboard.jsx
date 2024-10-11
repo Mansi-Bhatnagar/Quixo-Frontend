@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Navbar from "../Components/Navbar";
-import Sidebar from "../Components/Sidebar";
+import Sidebar from "../Components/Sidebar/DashboardSidebar";
 import CreateWorkspace from "../Components/Modal/CreateWorkspace";
 import team from "../Assets/Images/team.svg";
 import { getAllWorkspaces } from "../Services/Workspace";
@@ -10,7 +10,6 @@ import { Outlet } from "react-router-dom";
 
 const Dashboard = () => {
   const jwt = useSelector((state) => state.authentication.jwt);
-  const userId = localStorage.getItem("userId");
 
   //States
   const [showCreateWorkspaceModal, setShowCreateWorkspaceModal] =
@@ -33,9 +32,9 @@ const Dashboard = () => {
     error: workspaceError,
     isLoading: workspaceLoading,
   } = useQuery({
-    queryFn: () => getAllWorkspaces(jwt, userId),
-    queryKey: ["all-workspaces", jwt, userId],
-    enabled: jwt !== "" && userId !== "",
+    queryFn: () => getAllWorkspaces(jwt),
+    queryKey: ["all-workspaces", jwt],
+    enabled: jwt !== "",
   });
 
   //Effects
