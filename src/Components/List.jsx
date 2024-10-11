@@ -50,14 +50,14 @@ const List = (props) => {
   }, [listsData, listsLoading, listsError]);
 
   return (
-    <div className="pt-4">
+    <div className="p-4">
       <div className="flex space-x-4">
         {listsLoading ? (
           <div className="[&>span]:flex [&>span]:gap-3">
             <Skeleton
               count={4}
               height={100}
-              width={250}
+              width={300}
               baseColor={"#1d2125"}
               highlightColor={"#5c677d"}
               className="!rounded-md"
@@ -68,7 +68,7 @@ const List = (props) => {
             {lists?.map((list) => (
               <div
                 key={list.id}
-                className="min-w-[250px] rounded-lg bg-[#1d2125] p-4 shadow-md"
+                className="min-w-[300px] rounded-lg bg-[#1d2125] p-4 shadow-md"
               >
                 <h2 className="mb-2 text-base text-[#b6c2cf]">{list.name}</h2>
               </div>
@@ -78,7 +78,7 @@ const List = (props) => {
                 <Skeleton
                   count={1}
                   height={100}
-                  width={250}
+                  width={300}
                   baseColor={"#1d2125"}
                   highlightColor={"#5c677d"}
                   className="!rounded-md"
@@ -89,7 +89,7 @@ const List = (props) => {
             )}
           </>
         )}
-        <div className="sflex w-[250px] flex-col space-y-2">
+        <div className="flex w-[250px] flex-col space-y-2 pr-4">
           <input
             type="text"
             value={name}

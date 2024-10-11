@@ -60,7 +60,7 @@ const BoardDetail = () => {
           <div
             className={`horizontal-scrollbar h-[calc(100%_-_44px)] ${
               showSidebar ? "max-w-[calc(100vw_-_320px)]" : "w-screen"
-            } overflow-x-scroll mx-4`}
+            } overflow-x-scroll`}
           >
             <List jwt={jwt} boardId={boardId} />
           </div>
