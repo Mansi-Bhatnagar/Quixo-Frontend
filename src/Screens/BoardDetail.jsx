@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getBoardDetails } from "../Services/Board";
 import { useSelector } from "react-redux";
 import Navbar from "../Components/Navbar";
 import BoardSidebar from "../Components/Sidebar/BoardSidebar";
+import List from "../Components/List";
 
 const BoardDetail = () => {
-  const { boardId } = useParams();
+  const { state } = useLocation();
+  const boardId = state?.id;
   const jwt = useSelector((state) => state.authentication.jwt);
 
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [gradient, setGradient] = useState("");
+  const [name, setName] = useState(state?.name);
+  const [description, setDescription] = useState(state?.description);
+  const [gradient, setGradient] = useState(state?.gradient);
+  const [showSidebar, setShowSidebar] = useState(true);
 
   //APIs
   const {
@@ -47,10 +50,19 @@ const BoardDetail = () => {
           name={name}
           jwt={jwt}
           boardId={boardId}
+          showSidebar={showSidebar}
+          setShowSidebar={setShowSidebar}
         />
-        <div className="flex-grow">
+        <div className="h-full flex-grow">
           <div className="bg-[#0000003d] px-[3%] py-2">
             <h4 className="text-xl font-medium text-white">{name}</h4>
+          </div>
+          <div
+            className={`horizontal-scrollbar h-[calc(100%_-_44px)] ${
+              showSidebar ? "max-w-[calc(100vw_-_320px)]" : "w-screen"
+            } overflow-x-scroll mx-4`}
+          >
+            <List jwt={jwt} boardId={boardId} />
           </div>
         </div>
       </div>

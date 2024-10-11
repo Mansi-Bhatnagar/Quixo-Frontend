@@ -101,3 +101,57 @@ export async function editBoardDetails(boardId, name, description, jwt) {
     throw error;
   }
 }
+
+export async function deleteBoard(boardId, jwt) {
+  try {
+    const response = await axios.delete(`/delete_board/${boardId}`, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        Authorization: `Bearer ${jwt}`,
+      },
+      baseURL: process.env.REACT_APP_BOARD_BASE_URL,
+    });
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function addList(boardId, name, jwt) {
+  try {
+    const response = await axios.post(
+      `/add_list/${boardId}`,
+      {
+        name: name,
+      },
+      {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          Authorization: `Bearer ${jwt}`,
+        },
+        baseURL: process.env.REACT_APP_BOARD_BASE_URL,
+      }
+    );
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function getLists(boardId, jwt) {
+  try {
+    const response = await axios.get(`/get_lists/${boardId}`, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        Authorization: `Bearer ${jwt}`,
+      },
+      baseURL: process.env.REACT_APP_BOARD_BASE_URL,
+    });
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

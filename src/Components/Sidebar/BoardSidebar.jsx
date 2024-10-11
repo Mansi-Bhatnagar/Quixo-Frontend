@@ -2,24 +2,28 @@ import {
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
   InformationCircleIcon,
+  TrashIcon,
 } from "@heroicons/react/20/solid";
 import { useEffect, useRef, useState } from "react";
 import { editBoardDetails } from "../../Services/Board";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import DeleteBoard from "../Modal/DeleteBoard";
 
 const BoardSidebar = (props) => {
   const descriptionRef = useRef(null);
   const nameInputRef = useRef(null);
+  const queryClient = useQueryClient();
 
   //States
-  const [showSidebar, setShowSidebar] = useState(true);
   const [name, setName] = useState();
   const [description, setDescription] = useState();
   const [isEditing, setIsEditing] = useState(false);
+  const [showDeleteBoardModal, setShowDeleteBoardModal] = useState(false);
 
+  //Handlers
   const sidebarHandler = () => {
-    setShowSidebar((prev) => !prev);
+    props.setShowSidebar((prev) => !prev);
   };
 
   const changeDetailsHandler = () => {
@@ -31,9 +35,12 @@ const BoardSidebar = (props) => {
   };
 
   const saveHandler = () => {
-    //API
     setIsEditing(false);
     editBoardDetailsMutation.mutate();
+  };
+
+  const deleteBoardHandler = () => {
+    setShowDeleteBoardModal(true);
   };
 
   //APIs
@@ -42,6 +49,7 @@ const BoardSidebar = (props) => {
       editBoardDetails(+props.boardId, name, description, props.jwt),
     onSuccess: () => {
       toast.success("Board details updated successfully");
+      queryClient.invalidateQueries({ queryKey: ["board-detail"] });
     },
     onError: (error) => {
       toast.error("Failed to update board details");
@@ -49,6 +57,7 @@ const BoardSidebar = (props) => {
     },
   });
 
+  //Effects
   useEffect(() => {
     setName(props.name);
     setDescription(props.description);
@@ -59,23 +68,23 @@ const BoardSidebar = (props) => {
       descriptionRef.current.style.height = "auto";
       descriptionRef.current.style.height = `${descriptionRef.current.scrollHeight}px`;
     }
-  }, [description]);
+  }, [description, props.showSidebar]);
 
   return (
     <>
       <button
         onClick={sidebarHandler}
         title="Tooge menu"
-        style={{ left: showSidebar ? "302px" : "0" }}
+        style={{ left: props.showSidebar ? "302px" : "0" }}
         className="absolute z-10 mt-1 rounded-full border border-transparent bg-[#33415c] hover:border-white"
       >
-        {showSidebar ? (
+        {props.showSidebar ? (
           <ChevronDoubleLeftIcon className="h-8 w-8 text-white" />
         ) : (
           <ChevronDoubleRightIcon className="h-8 w-8 text-white" />
         )}
       </button>
-      {showSidebar ? (
+      {props.showSidebar ? (
         <div className="relative left-0 top-0 h-full w-80 bg-[#1d2125] px-7 py-4 text-white [&_h3]:text-base">
           <div className="mb-2 flex items-center gap-1">
             <h3>About this board </h3>
@@ -118,6 +127,20 @@ const BoardSidebar = (props) => {
               Change details
             </button>
           )}
+          <div className="mt-4 h-[1px] bg-[#97a4b2]" />
+          <button
+            onClick={deleteBoardHandler}
+            className="my-2 flex items-center gap-1 text-[#d00000]"
+          >
+            Delete board
+            <TrashIcon className="w-5 text-[#d00000] hover:cursor-pointer" />
+          </button>
+          <DeleteBoard
+            open={showDeleteBoardModal}
+            onClose={() => setShowDeleteBoardModal(false)}
+            boardId={props.boardId}
+            jwt={props.jwt}
+          />
         </div>
       ) : (
         ""

@@ -112,7 +112,7 @@ const Boards = () => {
 
   //Handlers
   const boardDetailHandler = (board) => {
-    navigate(`/board/${board.id}`);
+    navigate(`/board/${board.id}`, { state: board });
   };
 
   //APIs
