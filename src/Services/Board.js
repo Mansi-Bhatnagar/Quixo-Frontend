@@ -155,3 +155,42 @@ export async function getLists(boardId, jwt) {
     throw error;
   }
 }
+
+export async function addCard(listId, title, jwt) {
+  try {
+    const response = await axios.post(
+      `/add_card/${listId}`,
+      {
+        title: title,
+      },
+      {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          Authorization: `Bearer ${jwt}`,
+        },
+        baseURL: process.env.REACT_APP_BOARD_BASE_URL,
+      }
+    );
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+//Not being used currently
+export async function getCards(listId, jwt) {
+  try {
+    const response = await axios.get(`/get_cards/${listId}`, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        Authorization: `Bearer ${jwt}`,
+      },
+      baseURL: process.env.REACT_APP_BOARD_BASE_URL,
+    });
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

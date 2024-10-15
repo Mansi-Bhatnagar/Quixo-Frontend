@@ -79,7 +79,7 @@ const Navbar = (props) => {
         </span>
       </div>
       {showDropdown ? (
-        <div className="absolute right-[82.5px] top-11 w-[150px] rounded-md bg-[#33415c] p-[5px] max-xl:right-[3%]">
+        <div className="absolute right-[3%] top-11 z-[1000] w-[150px] rounded-md bg-[#33415c] p-[5px] shadow-custom max-xl:right-[3%]">
           <button
             onClick={logoutHandler}
             className="flex w-[140px] items-center justify-start gap-[15px] rounded-md border-none bg-transparent p-[5px] text-white hover:bg-[#5c677d]"
