@@ -1,25 +1,36 @@
 import {
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
+  ChevronDownIcon,
   InformationCircleIcon,
   TrashIcon,
 } from "@heroicons/react/20/solid";
 import { useEffect, useRef, useState } from "react";
-import { editBoardDetails } from "../../Services/Board";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  changeGradient,
+  editBoardDetails,
+  getBoardGradients,
+} from "../../Services/Board";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 import DeleteBoard from "../Modal/DeleteBoard";
+import { useSelector } from "react-redux";
+import Skeleton from "react-loading-skeleton";
 
 const BoardSidebar = (props) => {
   const descriptionRef = useRef(null);
   const nameInputRef = useRef(null);
   const queryClient = useQueryClient();
+  const jwt = useSelector((state) => state.authentication.jwt);
 
   //States
   const [name, setName] = useState();
   const [description, setDescription] = useState();
   const [isEditing, setIsEditing] = useState(false);
   const [showDeleteBoardModal, setShowDeleteBoardModal] = useState(false);
+  const [showGradients, setShowGradients] = useState(false);
+  const [activeBackground, setActiveBackground] = useState();
+  const [allGradients, setAllGradients] = useState([]);
 
   //Handlers
   const sidebarHandler = () => {
@@ -43,6 +54,12 @@ const BoardSidebar = (props) => {
     setShowDeleteBoardModal(true);
   };
 
+  const backgroundHandler = (background) => {
+    console.log("background = ", background);
+    setActiveBackground(background.gradient);
+    gradientMutation.mutate();
+  };
+
   //APIs
   const editBoardDetailsMutation = useMutation({
     mutationFn: () =>
@@ -53,6 +70,27 @@ const BoardSidebar = (props) => {
     },
     onError: (error) => {
       toast.error("Failed to update board details");
+      console.error(error);
+    },
+  });
+
+  const {
+    data: gradientsData,
+    error: gradientsError,
+    isLoading: gradientsLoading,
+  } = useQuery({
+    queryFn: () => getBoardGradients(jwt),
+    queryKey: ["gradients", jwt],
+    enabled: jwt !== "",
+  });
+
+  const gradientMutation = useMutation({
+    mutationFn: () => changeGradient(props.boardId, activeBackground, jwt),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["board-detail"] });
+    },
+    onError: (error) => {
+      toast.error("Failed to update board background");
       console.error(error);
     },
   });
@@ -69,6 +107,16 @@ const BoardSidebar = (props) => {
       descriptionRef.current.style.height = `${descriptionRef.current.scrollHeight}px`;
     }
   }, [description, props.showSidebar]);
+
+  useEffect(() => {
+    if (!gradientsLoading && gradientsData) {
+      setAllGradients(gradientsData.data);
+      setActiveBackground(gradientsData.data?.[0]);
+      console.log(gradientsData.data);
+    } else if (gradientsError) {
+      console.log(gradientsError);
+    }
+  }, [gradientsLoading, gradientsData, gradientsError]);
 
   return (
     <>
@@ -127,7 +175,48 @@ const BoardSidebar = (props) => {
               Change details
             </button>
           )}
-          <div className="mt-4 h-[1px] bg-[#97a4b2]" />
+
+          <div
+            className="flex my-4 w-full items-center justify-between rounded-md p-1 hover:cursor-pointer hover:bg-[#5c677d]"
+            onClick={() => setShowGradients((prev) => !prev)}
+          >
+            <span className="text-white">Change background</span>
+            <ChevronDownIcon className="w-5 text-white" />
+          </div>
+
+          {showGradients ? (
+            <div className="mb-5 flex flex-wrap items-center gap-2 [&>span]:flex [&>span]:items-center [&>span]:gap-2">
+              {gradientsLoading ? (
+                <Skeleton
+                  count={6}
+                  height={40}
+                  width={40}
+                  className="rounded-md bg-gray-700"
+                />
+              ) : (
+                allGradients.map((background) => {
+                  return (
+                    <div
+                      key={background.id}
+                      style={{
+                        border:
+                          activeBackground === background.gradient
+                            ? "2px solid white"
+                            : "",
+                      }}
+                      onClick={() => backgroundHandler(background)}
+                      className={`${background.gradient} w-10 cursor-pointer h-10 rounded-md`}
+                    />
+                  );
+                })
+              )}
+            </div>
+          ) : (
+            ""
+          )}
+
+          <div className="my-4 h-[1px] bg-[#97a4b2]" />
+
           <button
             onClick={deleteBoardHandler}
             className="my-2 flex items-center gap-1 text-[#d00000]"

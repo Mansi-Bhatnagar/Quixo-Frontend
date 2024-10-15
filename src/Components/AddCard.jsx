@@ -37,7 +37,10 @@ const AddCard = ({ onAddCard, listId }) => {
   }
 
   return (
-    <form onSubmit={addCardHandler} className="rounded-md p-2 shadow-sm">
+    <form
+      onSubmit={addCardHandler}
+      className="rounded-md bottom-0 py-2 shadow-sm"
+    >
       <textarea
         value={title}
         onChange={(e) => setTitle(e.target.value)}

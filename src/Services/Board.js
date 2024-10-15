@@ -194,3 +194,25 @@ export async function getCards(listId, jwt) {
     throw error;
   }
 }
+
+export async function changeGradient(boardId, gradient, jwt) {
+  try {
+    const response = await axios.patch(
+      `/change_gradient/${boardId}`,
+      {
+        gradient: gradient,
+      },
+      {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          Authorization: `Bearer ${jwt}`,
+        },
+        baseURL: process.env.REACT_APP_BOARD_BASE_URL,
+      }
+    );
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

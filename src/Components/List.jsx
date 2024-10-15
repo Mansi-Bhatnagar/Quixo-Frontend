@@ -88,9 +88,9 @@ const List = (props) => {
             {lists?.map((list) => (
               <div
                 key={list.id}
-                className="max-h-fit min-w-[300px] rounded-lg bg-[#1d2125] p-4 shadow-md"
+                className="max-h-[calc(100vh_-_140px)] border-y-8 border-y-transparent h-fit overflow-y-auto no-scrollbar min-w-[300px] rounded-lg bg-[#1d2125] p-4 shadow-md"
               >
-                <h2 className="mb-2 pl-2 text-base text-[#b6c2cf]">
+                <h2 className="mb-2 pl-1 text-base text-[#b6c2cf]">
                   {list.name}
                 </h2>
                 <div className="flex flex-col space-y-2 mb-2">
@@ -109,24 +109,24 @@ const List = (props) => {
                     ""
                   )}
                 </div>
-                {addListMutation.isPending ? (
-                  <div className="[&>span]:flex [&>span]:gap-3">
-                    <Skeleton
-                      count={1}
-                      height={100}
-                      width={300}
-                      baseColor={"#1d2125"}
-                      highlightColor={"#5c677d"}
-                      className="!rounded-md"
-                    />
-                  </div>
-                ) : (
-                  ""
-                )}
                 <AddCard onAddCard={addCardHandler} listId={list.id} />
               </div>
             ))}
           </>
+        )}
+        {addListMutation.isPending ? (
+          <div className="[&>span]:flex [&>span]:gap-3">
+            <Skeleton
+              count={1}
+              height={100}
+              width={300}
+              baseColor={"#1d2125"}
+              highlightColor={"#5c677d"}
+              className="!rounded-md"
+            />
+          </div>
+        ) : (
+          ""
         )}
         <div className="flex w-[250px] flex-col space-y-2 pr-4">
           <input
