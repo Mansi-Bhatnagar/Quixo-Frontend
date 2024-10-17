@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { PlusIcon } from "@heroicons/react/24/solid";
+import { PlusIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { addCard, addList, getLists } from "../Services/Board";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import Skeleton from "react-loading-skeleton";
 import AddCard from "./AddCard";
 import Card from "./Card";
+import DeleteList from "./Modal/DeleteList";
 
 const List = (props) => {
   const queryClient = useQueryClient();
@@ -12,6 +13,7 @@ const List = (props) => {
   const [lists, setLists] = useState([]);
   const [name, setName] = useState("");
   const [activeList, setActiveList] = useState(null);
+  const [showDeleteListModal, setShowDeleteListModal] = useState(false);
 
   //Handlers
   const addListHandler = () => {
@@ -27,10 +29,14 @@ const List = (props) => {
     addCardMutation.mutate({ listId, title });
   };
 
+  const deleteListHandler = (listId) => {
+    setActiveList(listId);
+    setShowDeleteListModal(true);
+  };
   //APIs
   const addListMutation = useMutation({
     mutationFn: () => addList(+props.boardId, name, props.jwt),
-    onSuccess: (response) => {
+    onSuccess: () => {
       setName("");
       queryClient.invalidateQueries({ queryKey: ["lists"] });
     },
@@ -51,8 +57,8 @@ const List = (props) => {
 
   const addCardMutation = useMutation({
     mutationFn: ({ listId, title }) => addCard(listId, title, props.jwt),
-    onSettled: async () => {
-      return await queryClient.invalidateQueries({
+    onSuccess: () => {
+      queryClient.invalidateQueries({
         queryKey: ["lists", props.boardId, props.jwt],
       });
     },
@@ -88,12 +94,21 @@ const List = (props) => {
             {lists?.map((list) => (
               <div
                 key={list.id}
-                className="max-h-[calc(100vh_-_140px)] border-y-8 border-y-transparent h-fit overflow-y-auto no-scrollbar min-w-[300px] rounded-lg bg-[#1d2125] p-4 shadow-md"
+                className="no-scrollbar h-fit max-h-[calc(100vh_-_140px)] min-w-[300px] overflow-y-auto rounded-lg border-y-8 border-y-transparent bg-[#1d2125] p-4 shadow-md"
               >
-                <h2 className="mb-2 pl-1 text-base text-[#b6c2cf]">
-                  {list.name}
-                </h2>
-                <div className="flex flex-col space-y-2 mb-2">
+                <div className="flex items-start justify-between">
+                  <h2 className="mb-2 pl-1 text-base text-[#b6c2cf]">
+                    {list.name}
+                  </h2>
+                  <button
+                    onClick={() => deleteListHandler(list.id)}
+                    title="Delete list"
+                    className="flex h-6 w-6 cursor-pointer items-center justify-center rounded-full hover:bg-white/20"
+                  >
+                    <XMarkIcon className="h-5 w-5 text-white" />
+                  </button>
+                </div>
+                <div className="mb-2 flex flex-col space-y-2">
                   {list?.cards?.map((card) => (
                     <Card key={card.id} card={card} />
                   ))}
@@ -145,6 +160,13 @@ const List = (props) => {
           </button>
         </div>
       </div>
+      <DeleteList
+        open={showDeleteListModal}
+        onClose={() => setShowDeleteListModal(false)}
+        listId={activeList}
+        jwt={props.jwt}
+        boardId={props.boardId}
+      />
     </div>
   );
 };

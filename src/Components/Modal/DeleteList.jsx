@@ -5,30 +5,28 @@ import {
   DialogTitle,
 } from "@headlessui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { deleteBoard } from "../../Services/Board";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { deleteList } from "../../Services/Board";
 
-const DeleteBoard = (props) => {
+const DeleteList = (props) => {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
 
   //Handlers
-  const deleteWorkspaceHandler = () => {
-    deleteBoardMutaion.mutate();
+  const deleteListHandler = () => {
+    deleteListMutation.mutate();
     props.onClose();
   };
 
   // APIs
-  const deleteBoardMutaion = useMutation({
-    mutationFn: () => deleteBoard(+props.boardId, props.jwt),
+  const deleteListMutation = useMutation({
+    mutationFn: () => deleteList(props.listId, props.jwt),
     onSuccess: () => {
-      toast.success("Deleted board successfully");
-      queryClient.invalidateQueries({ queryKey: ["boards"] });
-      navigate(-1);
+      queryClient.invalidateQueries({
+        queryKey: ["lists", props.boardId, props.jwt],
+      });
     },
     onError: (error) => {
-      toast.error("Failed to delete board");
+      toast.error("Failed to delete list");
       console.error(error);
     },
   });
@@ -39,16 +37,17 @@ const DeleteBoard = (props) => {
       <div className="fixed inset-0 flex w-screen items-center justify-center p-4 max-sm:p-2">
         <DialogPanel className="max-w-lg space-y-4 rounded-2xl bg-white p-7 max-sm:w-[calc(100vw_-_40px)]">
           <DialogTitle className="text-xl font-semibold max-sm:text-base">
-            Delete Board
+            Delete List
           </DialogTitle>
 
           <p className="text-[15px] tracking-[0.8px] max-sm:text-sm">
-            Are you sure you want to delete this board?
+            Are you sure you want to delete this list? All cards in this list
+            will be deleted.
           </p>
           <div className="flex items-center justify-end gap-[10px]">
             <button
               className="rounded-[10px] border border-transparent bg-[#001845] px-5 py-2 text-white transition-all duration-500 ease-in-out hover:rounded-[10px] hover:border hover:border-[#001845] hover:bg-transparent hover:px-5 hover:py-2 hover:font-medium hover:text-[#001845] hover:transition-all hover:duration-500 hover:ease-in-out max-sm:py-1 max-sm:text-sm"
-              onClick={deleteWorkspaceHandler}
+              onClick={deleteListHandler}
             >
               Delete
             </button>
@@ -65,4 +64,4 @@ const DeleteBoard = (props) => {
   );
 };
 
-export default DeleteBoard;
+export default DeleteList;

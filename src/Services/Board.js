@@ -216,3 +216,19 @@ export async function changeGradient(boardId, gradient, jwt) {
     throw error;
   }
 }
+
+export async function deleteList(listId, jwt) {
+  try {
+    const response = await axios.delete(`/delete_list/${listId}`, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        Authorization: `Bearer ${jwt}`,
+      },
+      baseURL: process.env.REACT_APP_BOARD_BASE_URL,
+    });
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
