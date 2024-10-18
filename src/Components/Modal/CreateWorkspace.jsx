@@ -76,10 +76,6 @@ const CreateWorkspace = ({
     },
   });
 
-  // const addMemberMutation=useMutation({
-  //   mutationFn:()=>addWorkspaceMember(emails, jwt)
-  // })
-
   //Effects
   useEffect(() => {
     if (workspaceName) {

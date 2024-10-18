@@ -59,7 +59,7 @@ const List = (props) => {
     mutationFn: ({ listId, title }) => addCard(listId, title, props.jwt),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["lists", props.boardId, props.jwt],
+        queryKey: ["cards", activeList],
       });
     },
     onError: (error) => {
@@ -109,9 +109,7 @@ const List = (props) => {
                   </button>
                 </div>
                 <div className="mb-2 flex flex-col space-y-2">
-                  {list?.cards?.map((card) => (
-                    <Card key={card.id} card={card} />
-                  ))}
+                  <Card listId={list.id} jwt={props.jwt} />
                   {addCardMutation.isPending && activeList === list.id ? (
                     <Skeleton
                       count={1}
@@ -149,7 +147,7 @@ const List = (props) => {
             value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="New list name"
-            className="rounded-md border border-[#97a4b2] px-3 py-2 focus:outline-none"
+            className="rounded-md border border-white bg-transparent px-3 py-2 text-white placeholder:text-white focus:outline-none"
           />
           <button
             onClick={addListHandler}

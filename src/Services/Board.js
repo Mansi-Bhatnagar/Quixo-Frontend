@@ -178,7 +178,6 @@ export async function addCard(listId, title, jwt) {
   }
 }
 
-//Not being used currently
 export async function getCards(listId, jwt) {
   try {
     const response = await axios.get(`/get_cards/${listId}`, {
@@ -226,6 +225,50 @@ export async function deleteList(listId, jwt) {
       },
       baseURL: process.env.REACT_APP_BOARD_BASE_URL,
     });
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function editCardTitle(cardId, title, jwt) {
+  try {
+    const response = await axios.patch(
+      `/edit_card_title/${cardId}`,
+      {
+        title: title,
+      },
+      {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          Authorization: `Bearer ${jwt}`,
+        },
+        baseURL: process.env.REACT_APP_BOARD_BASE_URL,
+      }
+    );
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function editCardDescription(cardId, description, jwt) {
+  try {
+    const response = await axios.post(
+      `/edit_card_description/${cardId}`,
+      {
+        description: description,
+      },
+      {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          Authorization: `Bearer ${jwt}`,
+        },
+        baseURL: process.env.REACT_APP_BOARD_BASE_URL,
+      }
+    );
     return response;
   } catch (error) {
     console.error(error);
