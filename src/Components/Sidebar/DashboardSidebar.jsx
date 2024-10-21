@@ -14,7 +14,6 @@ import Skeleton from "react-loading-skeleton";
 
 const Sidebar = (props) => {
   const { workspaces } = props;
-  const tabColors = ["#007f5f", "#023e7d", "#d00000", "#9d4edd", "#ffba08"];
   const isSmallScreen = window.innerWidth < 768;
   const navigate = useNavigate();
 
@@ -25,7 +24,6 @@ const Sidebar = (props) => {
   const [activeWsIndex, setActiveWsIndex] = useState();
   const [showDeleteWorkspaceModal, setShowDeleteWorkspaceModal] =
     useState(false);
-  const [activeWsColor, setActiveWsColor] = useState();
   const [selectedOption, setSelectedOption] = useState(0);
 
   //Handlers
@@ -36,10 +34,10 @@ const Sidebar = (props) => {
     }
   };
 
-  const wsTabHandler = (workspaceId, color) => {
+  const wsTabHandler = (workspaceId, name, description, workspaceColor) => {
     setWsTabOpen((prev) => (prev === workspaceId ? false : workspaceId));
-    setActiveWsIndex(workspaceId);
-    setActiveWsColor(color);
+    setActiveWsIndex(workspaceId, name, description, workspaceColor);
+    boardsHandler(workspaceId, name, description, workspaceColor);
   };
 
   const deleteWorkspaceHandler = () => {
@@ -49,20 +47,20 @@ const Sidebar = (props) => {
     }
   };
 
-  const membersHandler = (workspaceId, name, description) => {
+  const membersHandler = (workspaceId, name, description, workspaceColor) => {
     setSelectedOption(1);
     navigate(`${workspaceId}/${name.split(" ").join("")}/members`, {
-      state: { color: activeWsColor, name: name, description: description },
+      state: { color: workspaceColor, name: name, description: description },
     });
     if (isSmallScreen) {
       props.isSidebarVisible(false);
     }
   };
 
-  const boardsHandler = (workspaceId, name, description) => {
+  const boardsHandler = (workspaceId, name, description, workspaceColor) => {
     setSelectedOption(0);
     navigate(`${workspaceId}/${name.split(" ").join("")}/boards`, {
-      state: { color: activeWsColor, name: name, description: description },
+      state: { color: workspaceColor, name: name, description: description },
     });
     if (isSmallScreen) {
       props.isSidebarVisible(false);
@@ -70,26 +68,28 @@ const Sidebar = (props) => {
   };
 
   useEffect(() => {
-    if (
-      workspaces &&
-      (workspaces.created_workspaces?.length > 0 ||
-        workspaces.invited_workspaces?.length > 0)
-    ) {
-      const workspaceId =
-        workspaces.created_workspaces[0]?.workspace_id ||
-        workspaces.invited_workspaces[0]?.workspace_id;
-      const name =
-        workspaces.created_workspaces[0]?.workspace_name ||
-        workspaces.invited_workspaces[0]?.workspace_name;
-      const description =
-        workspaces.created_workspaces[0]?.description ||
-        workspaces.created_workspaces[0]?.description;
-
-      setWsTabOpen(workspaceId);
-      setActiveWsColor(tabColors[0]);
-      navigate(`${workspaceId}/${name.split(" ").join("")}/boards`, {
-        state: { color: tabColors[0], name: name, description: description },
-      });
+    if (workspaces) {
+      const created = workspaces.created_workspaces;
+      const invited = workspaces.invited_workspaces;
+      if (created?.length > 0) {
+        const wsId = created[0].workspace_id;
+        const name = created[0].workspace_name;
+        const description = created[0].description;
+        const wsColor = created[0].workspace_color;
+        setWsTabOpen(wsId);
+        navigate(`${wsId}/${name.split(" ").join("")}/boards`, {
+          state: { color: wsColor, name: name, description: description },
+        });
+      } else if (invited) {
+        const wsId = invited[0].workspace_id;
+        const name = invited[0].workspace_name;
+        const description = invited[0].description;
+        const wsColor = invited[0].workspace_color;
+        setWsTabOpen(wsId);
+        navigate(`${wsId}/${name.split(" ").join("")}/boards`, {
+          state: { color: wsColor, name: name, description: description },
+        });
+      }
     }
   }, [workspaces]);
 
@@ -126,12 +126,19 @@ const Sidebar = (props) => {
                     }}
                     className="flex w-[250px] items-center justify-start gap-[10px] rounded-md p-[5px] hover:cursor-pointer hover:bg-[#5c677d]"
                     onClick={() =>
-                      wsTabHandler(workspace.workspace_id, tabColors[idx % 5])
+                      wsTabHandler(
+                        workspace.workspace_id,
+                        workspace.workspace_name,
+                        workspace.description,
+                        workspace.workspace_color
+                      )
                     }
                   >
                     <div
                       className="mx-0 my-[5px] flex h-[30px] w-[30px] items-center justify-center rounded-md text-white"
-                      style={{ backgroundColor: `${tabColors[idx % 5]}` }}
+                      style={{
+                        backgroundColor: `${workspace.workspace_color}`,
+                      }}
                     >
                       {workspace.workspace_name
                         ? workspace.workspace_name[0].toUpperCase()
@@ -152,7 +159,8 @@ const Sidebar = (props) => {
                           boardsHandler(
                             workspace.workspace_id,
                             workspace.workspace_name,
-                            workspace.description
+                            workspace.description,
+                            workspace.workspace_color
                           )
                         }
                       >
@@ -167,7 +175,8 @@ const Sidebar = (props) => {
                           membersHandler(
                             workspace.workspace_id,
                             workspace.workspace_name,
-                            workspace.description
+                            workspace.description,
+                            workspace.workspace_color
                           )
                         }
                       >
@@ -201,12 +210,19 @@ const Sidebar = (props) => {
                     }}
                     className="flex w-[250px] items-center justify-start gap-[10px] rounded-md p-[5px] hover:cursor-pointer hover:bg-[#5c677d]"
                     onClick={() =>
-                      wsTabHandler(workspace.workspace_id, tabColors[idx])
+                      wsTabHandler(
+                        workspace.workspace_id,
+                        workspace.workspace_name,
+                        workspace.description,
+                        workspace.workspace_color
+                      )
                     }
                   >
                     <div
                       className="mx-0 my-[5px] flex h-[30px] w-[30px] items-center justify-center rounded-md text-white"
-                      style={{ backgroundColor: `${tabColors[idx % 5]}` }}
+                      style={{
+                        backgroundColor: `${workspace.workspace_color}`,
+                      }}
                     >
                       {workspace.workspace_name
                         ? workspace.workspace_name[0].toUpperCase()
@@ -227,10 +243,14 @@ const Sidebar = (props) => {
                           boardsHandler(
                             workspace.workspace_id,
                             workspace.workspace_name,
-                            workspace.description
+                            workspace.description,
+                            workspace.workspace_color
                           )
                         }
                       >
+                        {selectedOption === 0 && (
+                          <ChevronDoubleRightIcon className="h-4 w-4 text-[#97a4b2]" />
+                        )}
                         <img src={board} alt="board" />
                         <span>Boards</span>
                       </li>
@@ -239,10 +259,14 @@ const Sidebar = (props) => {
                           membersHandler(
                             workspace.workspace_id,
                             workspace.workspace_name,
-                            workspace.description
+                            workspace.description,
+                            workspace.workspace_color
                           )
                         }
                       >
+                        {selectedOption === 1 && (
+                          <ChevronDoubleRightIcon className="h-4 w-4 text-[#97a4b2]" />
+                        )}
                         <img src={member} alt="member" />
                         <span>Members</span>
                       </li>

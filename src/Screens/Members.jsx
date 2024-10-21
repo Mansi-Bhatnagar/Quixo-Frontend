@@ -24,6 +24,8 @@ const Members = () => {
   const description = location?.state?.description;
   const color = location?.state?.color;
 
+  console.log("location = ", location);
+
   //States
   const [selectedUser, setSelectedUser] = useState("");
   const [query, setQuery] = useState("");
