@@ -275,3 +275,19 @@ export async function editCardDescription(cardId, description, jwt) {
     throw error;
   }
 }
+
+export async function deleteCard(cardId, jwt) {
+  try {
+    const response = await axios.delete(`/delete_card/${cardId}`, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        Authorization: `Bearer ${jwt}`,
+      },
+      baseURL: process.env.REACT_APP_BOARD_BASE_URL,
+    });
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

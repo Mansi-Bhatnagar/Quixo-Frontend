@@ -18,9 +18,14 @@ import {
   PlusIcon,
 } from "@heroicons/react/24/outline";
 import { useState, useRef, useEffect } from "react";
-import { editCardDescription, editCardTitle } from "../../Services/Board";
+import {
+  deleteCard,
+  editCardDescription,
+  editCardTitle,
+} from "../../Services/Board";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
+import Checklist from "../Checklist";
 
 const CardDetail = (props) => {
   const titleInputRef = useRef(null);
@@ -97,6 +102,11 @@ const CardDetail = (props) => {
     setIsEditingDescription(false);
   };
 
+  const deleteCardHandler = () => {
+    deleteCardMutation.mutate();
+    props.onClose();
+  };
+
   //APIs
   const editCardTitleMutation = useMutation({
     mutationFn: () => editCardTitle(props.card.id, title, props.jwt),
@@ -125,25 +135,31 @@ const CardDetail = (props) => {
     },
   });
 
+  const deleteCardMutation = useMutation({
+    mutationFn: () => deleteCard(props.card.id, props.jwt),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["cards", props.card.list_id],
+      });
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error("Failed to delete card");
+    },
+  });
+
   useEffect(() => {
     setTitle(props.card.title);
     setDescription(props.card.description);
   }, [props.card]);
 
-  // useEffect(() => {
-  //   if (descriptionInputRef.current) {
-  //     descriptionInputRef.current.style.height = "auto";
-  //     descriptionInputRef.current.style.height = `${descriptionInputRef.current.scrollHeight}px`;
-  //   }
-  // }, [description, props.card.description]);
-
   return (
     <Dialog open={props.open} onClose={props.onClose} className="relative z-50">
       <DialogBackdrop className="fixed inset-0 bg-black/30" />
       <div className="fixed inset-0 flex w-screen items-center justify-center p-4 max-sm:p-2">
-        <DialogPanel className="max-w-fit space-y-4 rounded-2xl bg-white p-7 transition-all duration-300 ease-in-out max-sm:w-[calc(100vw_-_40px)]">
+        <DialogPanel className="max-w-[750px] space-y-4 rounded-2xl bg-white p-7 transition-all duration-300 ease-in-out max-sm:w-[calc(100vw_-_40px)]">
           <TabGroup>
-            <TabList className="flex items-center justify-start gap-3">
+            <TabList className="flex items-center justify-center gap-3">
               {tabs.map((tab, index) => (
                 <Tab
                   className={({ selected }) =>
@@ -260,9 +276,30 @@ const CardDetail = (props) => {
                 </div>
               </TabPanel>
               <TabPanel>Content 2</TabPanel>
-              <TabPanel>Content 3</TabPanel>
+              <TabPanel>
+                <Checklist onClose={props.onClose} />
+              </TabPanel>
               <TabPanel>Content 4</TabPanel>
-              <TabPanel>Content 5</TabPanel>
+              <TabPanel>
+                <p className="text-[15px] tracking-[0.8px] max-sm:text-sm">
+                  Are you sure you want to delete this card? All content will be
+                  deleted and members of this card will be removed.
+                </p>
+                <div className="flex items-center justify-end gap-[10px]">
+                  <button
+                    className="rounded-[10px] border border-transparent bg-[#001845] px-5 py-2 text-white transition-all duration-500 ease-in-out hover:rounded-[10px] hover:border hover:border-[#001845] hover:bg-transparent hover:px-5 hover:py-2 hover:font-medium hover:text-[#001845] hover:transition-all hover:duration-500 hover:ease-in-out max-sm:py-1 max-sm:text-sm"
+                    onClick={deleteCardHandler}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    className="rounded-[10px] border border-[#001845] bg-transparent px-5 py-2 font-medium text-[#001845] transition-all duration-500 ease-in-out hover:rounded-[10px] hover:border hover:border-transparent hover:bg-[#001845] hover:px-5 hover:py-2 hover:text-white hover:transition-all hover:duration-500 hover:ease-in-out max-sm:py-1 max-sm:text-sm"
+                    onClick={props.onClose}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </TabPanel>
             </TabPanels>
           </TabGroup>
         </DialogPanel>
