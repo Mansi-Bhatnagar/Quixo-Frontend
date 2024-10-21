@@ -86,11 +86,11 @@ export async function editWorkspaceDetails(
   }
 }
 
-export async function addWorkspaceMember(workspaceId, email, jwt) {
+export async function addWorkspaceMember(workspaceId, email, mode, jwt) {
   try {
     const response = await axios.post(
       `/add_member/${workspaceId}`,
-      { email: email },
+      { email: email, mode: mode },
       {
         headers: {
           "X-Requested-With": "XMLHttpRequest",

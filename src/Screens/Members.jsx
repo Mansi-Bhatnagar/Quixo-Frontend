@@ -268,6 +268,7 @@ const Members = () => {
           showInitialScreen={false}
           open={showInviteMembersModal}
           setShowCreateWorkspaceModal={setShowInviteMembersModal}
+          wsId={id}
         />
       )}
       {showEditWorkspaceDetailsModal && (

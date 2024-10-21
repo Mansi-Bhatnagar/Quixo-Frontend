@@ -5,15 +5,38 @@ import {
   DialogPanel,
   DialogTitle,
 } from "@headlessui/react";
-import link from "../../Assets/Images/link.svg";
+// import link from "../../Assets/Images/link.svg";
 import { addWorkspaceMember, createWorkspace } from "../../Services/Workspace";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+
+const useDebounce = (value, delay) => {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+};
+
+const validateEmail = (email) => {
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return regex.test(email);
+};
 
 const CreateWorkspace = ({
   open,
   setShowCreateWorkspaceModal,
   showInitialScreen,
+  wsId,
 }) => {
   const queryClient = useQueryClient();
   const jwt = useSelector((state) => state.authentication.jwt);
@@ -23,8 +46,13 @@ const CreateWorkspace = ({
   const [workspaceName, setWorkspaceName] = useState("");
   const [workspaceDescription, setWorkspaceDescription] = useState("");
   const [continueDisabled, setContinueDisabled] = useState(true);
-  const [emails, setEmails] = useState("");
   const [inviteDisabled, setInviteDisabled] = useState(true);
+  const [workspaceId, setWorkspaceId] = useState(wsId);
+  const [email, setEmail] = useState("");
+  const [isValidEmail, setIsValidEmail] = useState(true);
+  const [emailStatus, setEmailStatus] = useState("");
+
+  const debouncedEmail = useDebounce(email, 300);
 
   //Handlers
 
@@ -41,38 +69,74 @@ const CreateWorkspace = ({
     createWorkspaceMutation.mutate();
   };
 
-  const wsEmailsHandler = (e) => {
-    setEmails(e.target.value);
+  const wsEmailHandler = (e) => {
+    if (e.target.value.trim() === "") {
+      setIsValidEmail(true);
+      setEmailStatus("");
+    }
+    setEmail(e.target.value);
   };
 
   const inviteHandler = () => {
-    //API call for add workspace members
-    console.log("Emails=", emails.split(", "));
+    addWorkspaceMemberMutation.mutate(debouncedEmail);
     closeModalHandler();
   };
 
-  const inviteWithLinkHandler = () => {
-    //API for invite link
-    closeModalHandler();
-  };
+  // const inviteWithLinkHandler = () => {
+  //   //API for invite link
+  //   closeModalHandler();
+  // };
 
   const closeModalHandler = () => {
     setShowCreateWorkspaceModal(false);
     setInitialScreen(true);
     setWorkspaceName("");
     setWorkspaceDescription("");
-    setEmails("");
+    setEmail("");
+    setIsValidEmail(true);
+    setEmailStatus("");
   };
 
   // APIs
   const createWorkspaceMutation = useMutation({
     mutationFn: () => createWorkspace(workspaceName, workspaceDescription, jwt),
     onSuccess: (response) => {
-      console.log(response);
+      console.log("workspace create response = ", response);
+      setWorkspaceId(response?.data?.id);
       queryClient.invalidateQueries({ queryKey: ["all-workspaces"] });
     },
     onError: (error) => {
       console.error(error);
+    },
+  });
+
+  const checkEmailStatusMutation = useMutation({
+    mutationFn: (debouncedEmail) =>
+      addWorkspaceMember(workspaceId, debouncedEmail, "verify", jwt),
+    onSuccess: (response) => {
+      console.log("current = ", response);
+      setEmailStatus(response?.data?.status);
+      setInviteDisabled(response?.data?.disable);
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
+  const addWorkspaceMemberMutation = useMutation({
+    mutationFn: (debouncedEmail) =>
+      addWorkspaceMember(workspaceId, debouncedEmail, "invite", jwt),
+    onSuccess: (response) => {
+      console.log(response);
+      queryClient.invalidateQueries({
+        queryKey: ["workspace-members", jwt, workspaceId],
+      });
+    },
+    onError: (error) => {
+      console.log(error);
+      toast.error(
+        "Request cannot be processed at the moment. Please try again later."
+      );
     },
   });
 
@@ -86,16 +150,20 @@ const CreateWorkspace = ({
   }, [workspaceName]);
 
   useEffect(() => {
-    if (emails) {
+    if (debouncedEmail && validateEmail(debouncedEmail)) {
+      setIsValidEmail(true);
       setInviteDisabled(false);
-    } else {
+      checkEmailStatusMutation.mutate(debouncedEmail);
+    } else if (debouncedEmail) {
+      setIsValidEmail(false);
+      setEmailStatus("Invalid email format");
       setInviteDisabled(true);
     }
-  }, [emails]);
+  }, [debouncedEmail]);
 
   useEffect(() => {
-    console.log(showInitialScreen);
-  }, [showInitialScreen]);
+    setWorkspaceId(wsId);
+  }, [wsId]);
 
   return (
     <Dialog open={open} onClose={() => {}} className="relative z-50">
@@ -157,13 +225,11 @@ const CreateWorkspace = ({
               </>
             ) : (
               <>
-                <h5>
-                  Invite workspace members using a link or by entering email.
-                </h5>
+                <h5>Invite workspace members by entering email.</h5>
                 <div className="my-5 flex flex-col items-start justify-evenly [&_label]:text-[15px] [&_label]:font-medium [&_label]:text-[#001233] max-sm:[&_label]:text-sm">
                   <div className="mb-[5px] flex w-[450px] items-center justify-between max-sm:w-full">
                     <label>Workspace Members</label>
-                    <div
+                    {/* <div
                       className="flex items-center justify-between"
                       onClick={inviteWithLinkHandler}
                     >
@@ -175,15 +241,25 @@ const CreateWorkspace = ({
                       <span className="cursor-pointer text-[15px] text-[#0466c8] hover:underline max-sm:text-sm">
                         Invite with link
                       </span>
-                    </div>
+                    </div> */}
                   </div>
                   <input
                     type="text"
-                    placeholder="Separate emails with , eg. a@gmail.com, b@gmail.com"
-                    onChange={wsEmailsHandler}
-                    value={emails}
+                    placeholder="Enter emails to invite"
+                    onChange={wsEmailHandler}
+                    value={email}
                     className="w-[450px] rounded-lg border border-[#001233] p-[10px] placeholder:text-[15px] focus:outline focus:outline-1 focus:outline-[#001233] max-sm:w-full max-sm:text-xs max-sm:placeholder:text-xs"
                   />
+                  {!isValidEmail && (
+                    <p className="mt-2 text-sm font-medium text-[#d00000]">
+                      {emailStatus}
+                    </p>
+                  )}
+                  {isValidEmail && emailStatus && (
+                    <p className="mt-2 text-sm font-medium text-[#97a4b2]">
+                      {emailStatus}
+                    </p>
+                  )}
                 </div>
                 <div className="flex items-center justify-between max-sm:flex-col-reverse max-sm:items-start max-sm:gap-y-2">
                   <h6
