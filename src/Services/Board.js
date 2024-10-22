@@ -291,3 +291,25 @@ export async function deleteCard(cardId, jwt) {
     throw error;
   }
 }
+
+export async function moveCard(sourceCardId, targetListId, jwt) {
+  try {
+    const response = await axios.patch(
+      `/move_card/${sourceCardId}`,
+      {
+        target_list_id: targetListId,
+      },
+      {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          Authorization: `Bearer ${jwt}`,
+        },
+        baseURL: process.env.REACT_APP_BOARD_BASE_URL,
+      }
+    );
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

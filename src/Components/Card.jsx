@@ -1,13 +1,40 @@
 import { useEffect, useState } from "react";
 import CardDetail from "./Modal/CardDetail";
-import { useQuery } from "@tanstack/react-query";
-import { getCards } from "../Services/Board";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getCards, moveCard } from "../Services/Board";
 import Skeleton from "react-loading-skeleton";
+import { toast } from "react-toastify";
 
 const Card = (props) => {
+  const queryClient = useQueryClient();
+
   //States
   const [selectedCard, setSelectedCard] = useState(null);
   const [cards, setCards] = useState([]);
+
+  //Handlers
+  const handleDragStart = (e, card) => {
+    e.dataTransfer.setData("text/plain", JSON.stringify(card));
+  };
+
+  const handleDragEnd = () => {};
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = (e, targetCard) => {
+    e.preventDefault();
+    const sourceCard = JSON.parse(e.dataTransfer.getData("text/plain"));
+
+    if (targetCard?.list_id === sourceCard.list_id) {
+      return;
+    }
+    moveCardMutation.mutate({
+      sourceCardId: sourceCard.id,
+      targetListId: targetCard.list_id,
+    });
+  };
 
   //APIs
   const {
@@ -18,6 +45,21 @@ const Card = (props) => {
     queryKey: ["cards", props.listId],
     queryFn: () => getCards(props.listId, props.jwt),
     enabled: !!props.listId && !!props.jwt,
+  });
+
+  const moveCardMutation = useMutation({
+    mutationFn: ({ sourceCardId, targetListId }) =>
+      moveCard(sourceCardId, targetListId, props.jwt),
+    onSuccess: (response) => {
+      console.log(response);
+      queryClient.invalidateQueries({
+        queryKey: ["cards"],
+      });
+    },
+    onError: (error) => {
+      console.error(error);
+      toast.error("An error occured. Card drop cannot be processed");
+    },
   });
 
   //Effects
@@ -47,6 +89,11 @@ const Card = (props) => {
         return (
           <div
             key={card.id}
+            draggable={true}
+            onDragStart={(e) => handleDragStart(e, card)}
+            onDragEnd={handleDragEnd}
+            onDragOver={handleDragOver}
+            onDrop={(e) => handleDrop(e, card)}
             title="Click to open"
             onClick={() => setSelectedCard(card)}
             className="min-h-14 cursor-pointer rounded-md bg-[#5c677d] p-2 text-white transition-all duration-300 ease-in-out hover:scale-105"
