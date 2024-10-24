@@ -96,7 +96,7 @@ const Card = (props) => {
             onDrop={(e) => handleDrop(e, card)}
             title="Click to open"
             onClick={() => setSelectedCard(card)}
-            className="min-h-14 cursor-pointer rounded-md bg-[#5c677d] p-2 text-white transition-all duration-300 ease-in-out hover:scale-105"
+            className="min-h-14 max-w-[268px] cursor-pointer rounded-md bg-[#5c677d] p-2 text-white transition-all duration-300 ease-in-out hover:scale-105"
           >
             <span>{card.title}</span>
             <p className="mt-1 text-justify text-sm text-white/80">
