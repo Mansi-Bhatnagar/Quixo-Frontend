@@ -10,9 +10,7 @@ import {
 } from "@headlessui/react";
 import {
   InformationCircleIcon,
-  TagIcon,
   CheckBadgeIcon,
-  UserGroupIcon,
   TrashIcon,
   PencilSquareIcon,
   PlusIcon,
@@ -34,9 +32,7 @@ const CardDetail = (props) => {
 
   const tabs = [
     { name: "Details", icon: InformationCircleIcon },
-    { name: "Labels", icon: TagIcon },
     { name: "Checklist", icon: CheckBadgeIcon },
-    { name: "Members", icon: UserGroupIcon },
     { name: "Delete", icon: TrashIcon },
   ];
 
@@ -148,6 +144,7 @@ const CardDetail = (props) => {
     },
   });
 
+  //Effects
   useEffect(() => {
     setTitle(props.card.title);
     setDescription(props.card.description);
@@ -157,13 +154,13 @@ const CardDetail = (props) => {
     <Dialog open={props.open} onClose={props.onClose} className="relative z-50">
       <DialogBackdrop className="fixed inset-0 bg-black/30" />
       <div className="fixed inset-0 flex w-screen items-center justify-center p-4 max-sm:p-2">
-        <DialogPanel className="max-w-[750px] space-y-4 rounded-2xl bg-white p-7 transition-all duration-300 ease-in-out max-sm:w-[calc(100vw_-_40px)]">
+        <DialogPanel className="w-[600px] space-y-4 rounded-2xl bg-white p-7 transition-all duration-300 ease-in-out max-md:w-[500px] max-sm:w-[calc(100vw_-_40px)] max-sm:p-4">
           <TabGroup>
-            <TabList className="flex items-center justify-center gap-3">
+            <TabList className="flex items-center justify-center gap-3 max-md:gap-0">
               {tabs.map((tab, index) => (
                 <Tab
                   className={({ selected }) =>
-                    `rounded-full px-5 py-2 text-base flex items-center ${
+                    `rounded-full px-5 max-md:px-3 py-2 max-sm:text-sm text-base flex items-center ${
                       selected
                         ? "bg-[#001845] text-white"
                         : "data-[hover]:bg-[#001845] data-[hover]:text-white data-[hover]:opacity-50"
@@ -171,7 +168,7 @@ const CardDetail = (props) => {
                   }
                   key={index}
                 >
-                  <tab.icon className="mr-1 h-5 w-5" />
+                  <tab.icon className="mr-1 h-5 w-5 max-sm:hidden" />
                   {tab.name}
                 </Tab>
               ))}
@@ -250,7 +247,7 @@ const CardDetail = (props) => {
                       rows={3}
                       disabled={!isEditingDescription && !isAddingDescription}
                       placeholder="Add a more detailed description..."
-                      className={`resize-none rounded-lg bg-transparent text-base text-[#001233] ${
+                      className={`resize-none rounded-lg bg-transparent text-base max-sm:text-sm max-sm:placeholder:text-sm text-[#001233] ${
                         isEditingDescription || isAddingDescription
                           ? "border border-[#001233] p-2"
                           : ""
@@ -275,17 +272,16 @@ const CardDetail = (props) => {
                   )}
                 </div>
               </TabPanel>
-              <TabPanel>Content 2</TabPanel>
               <TabPanel>
                 <Checklist onClose={props.onClose} />
               </TabPanel>
-              <TabPanel>Content 4</TabPanel>
+              <TabPanel></TabPanel>
               <TabPanel>
                 <p className="text-[15px] tracking-[0.8px] max-sm:text-sm">
                   Are you sure you want to delete this card? All content will be
                   deleted and members of this card will be removed.
                 </p>
-                <div className="flex items-center justify-end gap-[10px]">
+                <div className="mt-5 flex items-center justify-end gap-[10px]">
                   <button
                     className="rounded-[10px] border border-transparent bg-[#001845] px-5 py-2 text-white transition-all duration-500 ease-in-out hover:rounded-[10px] hover:border hover:border-[#001845] hover:bg-transparent hover:px-5 hover:py-2 hover:font-medium hover:text-[#001845] hover:transition-all hover:duration-500 hover:ease-in-out max-sm:py-1 max-sm:text-sm"
                     onClick={deleteCardHandler}

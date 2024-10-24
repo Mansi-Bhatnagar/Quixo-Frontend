@@ -74,7 +74,7 @@ export default function Checklist(props) {
               className={({ checked }) =>
                 `${
                   checked ? "bg-[#001845]" : "bg-white"
-                } cursor-pointer relative inline-flex h-5 w-5 items-center justify-center border border-[#97a4b2] rounded focus:outline-none`
+                } cursor-pointer relative inline-flex h-5 w-5  max-sm:h-4 max-sm:w-4 items-center justify-center border border-[#97a4b2] rounded focus:outline-none`
               }
             >
               <span className="sr-only">Complete item</span>
@@ -96,7 +96,7 @@ export default function Checklist(props) {
               type="text"
               value={item.text}
               onChange={(e) => updateItem(item.id, e.target.value)}
-              className={`flex-grow px-3 focus:border-black py-2 border rounded-md focus:outline-none ${
+              className={`flex-grow max-sm:placeholder:text-sm max-sm:text-sm px-3 focus:border-black py-2 border rounded-md focus:outline-none ${
                 item.completed ? "line-through text-[#97a4b2]" : ""
               }`}
               onKeyDown={(e) => handleKeyDown(e, item.id)}

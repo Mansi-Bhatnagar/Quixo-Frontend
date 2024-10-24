@@ -177,7 +177,7 @@ const BoardSidebar = (props) => {
           )}
 
           <div
-            className="flex my-4 w-full items-center justify-between rounded-md p-1 hover:cursor-pointer hover:bg-[#5c677d]"
+            className="my-4 flex w-full items-center justify-between rounded-md p-1 hover:cursor-pointer hover:bg-[#5c677d]"
             onClick={() => setShowGradients((prev) => !prev)}
           >
             <span className="text-white">Change background</span>
@@ -205,7 +205,7 @@ const BoardSidebar = (props) => {
                             : "",
                       }}
                       onClick={() => backgroundHandler(background)}
-                      className={`${background.gradient} w-10 cursor-pointer h-10 rounded-md`}
+                      className={`${background.gradient} w-10 max-sm:w-6 max-sm:h-6 cursor-pointer h-10 rounded-md`}
                     />
                   );
                 })

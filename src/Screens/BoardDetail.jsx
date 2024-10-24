@@ -11,11 +11,12 @@ const BoardDetail = () => {
   const { state } = useLocation();
   const boardId = state?.id;
   const jwt = useSelector((state) => state.authentication.jwt);
+  const isSmallScreen = window.innerWidth < 768;
 
   const [name, setName] = useState(state?.name);
   const [description, setDescription] = useState(state?.description);
   const [gradient, setGradient] = useState(state?.gradient);
-  const [showSidebar, setShowSidebar] = useState(true);
+  const [showSidebar, setShowSidebar] = useState(isSmallScreen ? false : true);
 
   //APIs
   const {
@@ -41,9 +42,9 @@ const BoardDetail = () => {
 
   return (
     <>
-      <Navbar />
+      {isSmallScreen ? "" : <Navbar />}
       <div
-        className={`relative h-[calc(100vh_-_53px)] w-screen flex items-start ${gradient}`}
+        className={`relative h-[calc(100vh_-_53px)] max-md:h-screen w-screen flex items-start ${gradient}`}
       >
         <BoardSidebar
           description={description}
@@ -54,7 +55,7 @@ const BoardDetail = () => {
           setShowSidebar={setShowSidebar}
         />
         <div className="h-full flex-grow">
-          <div className="bg-[#0000003d] px-[3%] py-2">
+          <div className="bg-[#0000003d] px-[3%] py-2 max-md:px-[5%] max-sm:pl-10">
             <h4 className="text-xl font-medium text-white">{name}</h4>
           </div>
           <div

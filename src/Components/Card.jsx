@@ -58,7 +58,7 @@ const Card = (props) => {
     },
     onError: (error) => {
       console.error(error);
-      toast.error("An error occured. Card drop cannot be processed");
+      toast.error("An error occured. Please try again later.");
     },
   });
 
