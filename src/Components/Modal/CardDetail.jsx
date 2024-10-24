@@ -156,7 +156,7 @@ const CardDetail = (props) => {
       <div className="fixed inset-0 flex w-screen items-center justify-center p-4 max-sm:p-2">
         <DialogPanel className="w-[600px] space-y-4 rounded-2xl bg-white p-7 transition-all duration-300 ease-in-out max-md:w-[500px] max-sm:w-[calc(100vw_-_40px)] max-sm:p-4">
           <TabGroup>
-            <TabList className="flex items-center justify-center gap-3 max-md:gap-0">
+            <TabList className="flex items-center justify-between gap-3 max-md:justify-center">
               {tabs.map((tab, index) => (
                 <Tab
                   className={({ selected }) =>
@@ -168,7 +168,7 @@ const CardDetail = (props) => {
                   }
                   key={index}
                 >
-                  <tab.icon className="mr-1 h-5 w-5 max-sm:hidden" />
+                  <tab.icon className="mr-1 h-5 w-5" />
                   {tab.name}
                 </Tab>
               ))}
@@ -273,9 +273,12 @@ const CardDetail = (props) => {
                 </div>
               </TabPanel>
               <TabPanel>
-                <Checklist onClose={props.onClose} />
+                <Checklist
+                  onClose={props.onClose}
+                  cardId={props.card.id}
+                  jwt={props.jwt}
+                />
               </TabPanel>
-              <TabPanel></TabPanel>
               <TabPanel>
                 <p className="text-[15px] tracking-[0.8px] max-sm:text-sm">
                   Are you sure you want to delete this card? All content will be

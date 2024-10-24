@@ -313,3 +313,41 @@ export async function moveCard(sourceCardId, targetListId, jwt) {
     throw error;
   }
 }
+
+export async function saveChecklist(cardId, checklistItems, jwt) {
+  try {
+    const response = await axios.post(
+      `/save_checklist/${cardId}`,
+      {
+        checklist_items: checklistItems,
+      },
+      {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          Authorization: `Bearer ${jwt}`,
+        },
+        baseURL: process.env.REACT_APP_BOARD_BASE_URL,
+      }
+    );
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
+
+export async function getChecklist(cardId, jwt) {
+  try {
+    const response = await axios.get(`/get_checklist/${cardId}`, {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        Authorization: `Bearer ${jwt}`,
+      },
+      baseURL: process.env.REACT_APP_BOARD_BASE_URL,
+    });
+    return response;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}

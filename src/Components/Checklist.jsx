@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Checkbox } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { getChecklist, saveChecklist } from "../Services/Board";
 
 export default function Checklist(props) {
-  //States
+  const queryClient = useQueryClient();
 
+  //States
   const [items, setItems] = useState([{ id: 1, text: "", completed: false }]);
   const [nextId, setNextId] = useState(2);
+  const [showOptions, setShowOptions] = useState(false);
 
   //Handlers
-
   const addItemHandler = () => {
+    setShowOptions(true);
     const newId = nextId;
     setItems([...items, { id: newId, text: "", completed: false }]);
     setNextId(newId + 1);
@@ -34,10 +38,12 @@ export default function Checklist(props) {
   };
 
   const updateItem = (id, text) => {
+    setShowOptions(true);
     setItems(items.map((item) => (item.id === id ? { ...item, text } : item)));
   };
 
   const toggleItem = (id) => {
+    setShowOptions(true);
     setItems(
       items.map((item) =>
         item.id === id ? { ...item, completed: !item.completed } : item
@@ -46,27 +52,63 @@ export default function Checklist(props) {
   };
 
   const removeItem = (id) => {
-    if (items.length === 1) {
-      //API call for deleting checklist
-      props.onClose();
-      return;
-    }
+    setShowOptions(true);
     setItems(items.filter((item) => item.id !== id));
   };
 
   const saveChecklistHandler = () => {
-    console.log("Saving checklist:", items);
+    saveChecklistMutation.mutate();
+    setShowOptions(false);
   };
 
   const cancelChangesHandler = () => {
-    setItems([{ id: 1, text: "", completed: false }]);
+    setShowOptions(false);
     props.onClose();
   };
+
+  //APIs
+  const saveChecklistMutation = useMutation({
+    mutationFn: () => saveChecklist(props.cardId, items, props.jwt),
+    onSuccess: (response) => {
+      console.log("checklist response = ", response);
+      queryClient.invalidateQueries({
+        queryKey: ["checklist", props.cardId, props.jwt],
+      });
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
+  const {
+    data: checklistData,
+    isLoading: checklistLoading,
+    error: checklistError,
+  } = useQuery({
+    queryFn: () => getChecklist(props.cardId, props.jwt),
+    queryKey: ["checklist", props.cardId, props.jwt],
+    enabled: props.jwt !== "" && props.cardId !== "",
+  });
+
+  //Effects
+
+  useEffect(() => {
+    if (!checklistLoading && checklistData) {
+      console.log("Checklist data = ", checklistData);
+      if (checklistData?.data?.checklist_items?.length === 0) {
+        setItems([{ id: 1, text: "", completed: false }]);
+        return;
+      }
+      setItems(checklistData?.data?.checklist_items);
+    } else if (checklistError) {
+      //
+    }
+  }, [checklistData, checklistError, checklistLoading]);
 
   return (
     <div className="mt-12">
       <ul className="my-4 space-y-2">
-        {items.map((item) => (
+        {items?.map((item) => (
           <li key={item.id} className="flex items-center space-x-2">
             <Checkbox
               checked={item.completed}
@@ -119,20 +161,24 @@ export default function Checklist(props) {
       >
         Add Item
       </button>
-      <div className="flex items-center justify-end gap-[10px]">
-        <button
-          className="rounded-[10px] border border-transparent bg-[#001845] px-5 py-2 text-white transition-all duration-500 ease-in-out hover:rounded-[10px] hover:border hover:border-[#001845] hover:bg-transparent hover:px-5 hover:py-2 hover:font-medium hover:text-[#001845] hover:transition-all hover:duration-500 hover:ease-in-out max-sm:py-1 max-sm:text-sm"
-          onClick={saveChecklistHandler}
-        >
-          Save
-        </button>
-        <button
-          className="rounded-[10px] border border-[#001845] bg-transparent px-5 py-2 font-medium text-[#001845] transition-all duration-500 ease-in-out hover:rounded-[10px] hover:border hover:border-transparent hover:bg-[#001845] hover:px-5 hover:py-2 hover:text-white hover:transition-all hover:duration-500 hover:ease-in-out max-sm:py-1 max-sm:text-sm"
-          onClick={cancelChangesHandler}
-        >
-          Cancel
-        </button>
-      </div>
+      {showOptions ? (
+        <div className="flex items-center justify-end gap-[10px]">
+          <button
+            className="rounded-[10px] border border-transparent bg-[#001845] px-5 py-2 text-white transition-all duration-500 ease-in-out hover:rounded-[10px] hover:border hover:border-[#001845] hover:bg-transparent hover:px-5 hover:py-2 hover:font-medium hover:text-[#001845] hover:transition-all hover:duration-500 hover:ease-in-out max-sm:py-1 max-sm:text-sm"
+            onClick={saveChecklistHandler}
+          >
+            Save
+          </button>
+          <button
+            className="rounded-[10px] border border-[#001845] bg-transparent px-5 py-2 font-medium text-[#001845] transition-all duration-500 ease-in-out hover:rounded-[10px] hover:border hover:border-transparent hover:bg-[#001845] hover:px-5 hover:py-2 hover:text-white hover:transition-all hover:duration-500 hover:ease-in-out max-sm:py-1 max-sm:text-sm"
+            onClick={cancelChangesHandler}
+          >
+            Cancel
+          </button>
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 }
