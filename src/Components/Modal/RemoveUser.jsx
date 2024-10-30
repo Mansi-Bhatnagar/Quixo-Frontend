@@ -24,7 +24,6 @@ const RemoveUser = (props) => {
   const removeMemberMutation = useMutation({
     mutationFn: () => removeMember(id, props?.user?.user_id, jwt),
     onSuccess: (response) => {
-      console.log("remove =", response);
       queryClient.invalidateQueries({
         queryKey: ["workspace-members"],
       });

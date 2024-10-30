@@ -51,7 +51,6 @@ const WorkspaceDetails = ({
     mutationFn: () =>
       editWorkspaceDetails(id, workspaceName, workspaceDescription, jwt),
     onSuccess: (response) => {
-      console.log(response);
       queryClient.invalidateQueries({ queryKey: ["all-workspaces"] });
       setShowEditWorkspaceDetailsModal(false);
     },

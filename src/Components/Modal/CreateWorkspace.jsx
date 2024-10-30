@@ -101,7 +101,6 @@ const CreateWorkspace = ({
   const createWorkspaceMutation = useMutation({
     mutationFn: () => createWorkspace(workspaceName, workspaceDescription, jwt),
     onSuccess: (response) => {
-      console.log("workspace create response = ", response);
       setWorkspaceId(response?.data?.id);
       queryClient.invalidateQueries({ queryKey: ["all-workspaces"] });
     },
@@ -114,7 +113,6 @@ const CreateWorkspace = ({
     mutationFn: (debouncedEmail) =>
       addWorkspaceMember(workspaceId, debouncedEmail, "verify", jwt),
     onSuccess: (response) => {
-      console.log("current = ", response);
       setEmailStatus(response?.data?.status);
       setInviteDisabled(response?.data?.disable);
     },
@@ -127,13 +125,12 @@ const CreateWorkspace = ({
     mutationFn: (debouncedEmail) =>
       addWorkspaceMember(workspaceId, debouncedEmail, "invite", jwt),
     onSuccess: (response) => {
-      console.log(response);
       queryClient.invalidateQueries({
         queryKey: ["workspace-members", jwt, workspaceId],
       });
     },
     onError: (error) => {
-      console.log(error);
+      console.error(error);
       toast.error(
         "Request cannot be processed at the moment. Please try again later."
       );

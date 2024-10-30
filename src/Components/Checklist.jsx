@@ -70,10 +70,10 @@ export default function Checklist(props) {
   const saveChecklistMutation = useMutation({
     mutationFn: () => saveChecklist(props.cardId, items, props.jwt),
     onSuccess: (response) => {
-      console.log("checklist response = ", response);
       queryClient.invalidateQueries({
         queryKey: ["checklist", props.cardId, props.jwt],
       });
+      queryClient.invalidateQueries({ queryKey: ["cards", props.listId] });
     },
     onError: (error) => {
       console.error(error);
@@ -94,7 +94,6 @@ export default function Checklist(props) {
 
   useEffect(() => {
     if (!checklistLoading && checklistData) {
-      console.log("Checklist data = ", checklistData);
       if (checklistData?.data?.checklist_items?.length === 0) {
         setItems([{ id: 1, text: "", completed: false }]);
         return;

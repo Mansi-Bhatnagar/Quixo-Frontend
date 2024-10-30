@@ -41,7 +41,6 @@ const Dashboard = () => {
   useEffect(() => {
     if (!workspaceLoading && workspaceData) {
       setWorkspaces({ ...workspaceData?.data });
-      console.log(workspaceData);
     } else if (workspaceError) {
       console.error(workspaceError);
     }

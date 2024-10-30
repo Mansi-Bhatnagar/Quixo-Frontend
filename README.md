@@ -1,70 +1,72 @@
-# Getting Started with Create React App
+# Quixo - Task Management & Collaboration App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Quixo is a flexible and powerful task management app designed to help teams organize, plan, and collaborate seamlessly. With Quixo, you can track your progress, and keep everyone in sync, whether you're an individual or managing a small team or coordinating a large organization.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- ### Customizable Workspaces:
 
-### `npm start`
+Set up dedicated workspaces for different teams or projects to keep tasks organized and streamlined.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- ### Intuitive Board & Card System:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Organize your tasks with boards and cards to create a clear visual of your workflow.
 
-### `npm test`
+- ### Drag & Drop:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Move cards between lists with an easy drag-and-drop interface.
 
-### `npm run build`
+- ### Admin-Only Invitation System:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Protect your workspace access by allowing only admins to invite new users, ensuring that only authorized team members join.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+- ### Checklists:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Break down tasks with checklists and track progress on each item to stay on top of deadlines.
 
-### `npm run eject`
+- ### Custom Board Backgrounds with Gradients:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Personalize your boards by choosing from a variety of gradient backgrounds to match your team’s style or project theme.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## ![ss1](src/Assets/Screenshots/login.png)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## ![ss2](src/Assets/Screenshots/empty-dashboard.png)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## ![ss3](src/Assets/Screenshots/dashboard1.png)
 
-## Learn More
+## ![ss4](src/Assets/Screenshots/board-page.png)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## ![ss5](src/Assets/Screenshots/members-page.png)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## ![ss6](src/Assets/Screenshots/board-detail.png)
 
-### Code Splitting
+## ![ss7](src/Assets/Screenshots/checklist.png)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Technologies/Libraries used
 
-### Analyzing the Bundle Size
+### &nbsp; &nbsp; Client Side
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+- **[react](https://react.dev/)**
+- **[react-redux](https://redux.js.org/)**
+- **[tailwindcss](https://tailwindcss.com/)**
+- **[react-router-dom](https://reactrouter.com/en/main)**
+- **[axios](https://axios-http.com/docs/intro)**
+- **[tanstack/react-query](https://tanstack.com/query/latest)**
+- **[headlessui/react](https://headlessui.com/)**
+- **[heroicons/react](https://heroicons.com/)**
+- **[react-toastify](https://fkhadra.github.io/react-toastify/installation/)**
 
-### Making a Progressive Web App
+### &nbsp; &nbsp; Server Side
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+- **[Flask](https://flask.palletsprojects.com/en/stable/)**
+- **[SQLAlchemy](https://www.sqlalchemy.org/)**
+- **[Flask-JWT-Extended](https://flask-jwt-extended.readthedocs.io/en/stable/)**
+- **[Flask-Admin](https://flask-admin.readthedocs.io/en/latest/)**
+- **[Flask-Mail](https://flask-mail.readthedocs.io/en/latest/)**
+- **[Flask-Migrate](https://flask-migrate.readthedocs.io/en/latest/)**
+- **[Flask-CORS](https://flask-cors.readthedocs.io/en/latest/api.html)**
+- **[Flask-Session](https://flask-session.readthedocs.io/en/latest/)**
 
-### Advanced Configuration
+## Developed by
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**[Mansi Bhatnagar](https://github.com/Mansi-Bhatnagar)** and **[Umesh Kumar](https://github.com/umesh70)**.

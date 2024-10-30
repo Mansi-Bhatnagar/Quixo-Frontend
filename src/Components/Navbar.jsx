@@ -20,7 +20,6 @@ const Navbar = (props) => {
   const logoutMutation = useMutation({
     mutationFn: () => logout(localStorage.getItem("email")),
     onSuccess: (response) => {
-      console.log(response);
       localStorage.removeItem("jwt");
       dispatch(authenticationActions.updateJWT(""));
       navigate("/");
@@ -47,7 +46,6 @@ const Navbar = (props) => {
   useEffect(() => {
     setUsername(localStorage.getItem("username"));
     setUserColor(localStorage.getItem("userColor"));
-    console.log(typeof localStorage.getItem("userColor"));
   }, []);
 
   return (

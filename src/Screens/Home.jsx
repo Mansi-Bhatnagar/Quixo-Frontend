@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../Assets/Images/QuixoLogo.png";
 import illustration from "../Assets/Images/illustration.png";
-import boardImg from "../Assets/Images/board1.png";
-import cardImg from "../Assets/Images/card.png";
-import listImg from "../Assets/Images/list.png";
+import boardImg from "../Assets/Images/b4.png";
+import cardImg from "../Assets/Images/c2.png";
+import listImg from "../Assets/Images/l1.png";
 import arrowUp from "../Assets/Images/material-arrow-upward.svg";
 import arrowDown from "../Assets/Images/material-arrow-downward.svg";
 import email from "../Assets/Images/email.svg";
@@ -51,7 +51,6 @@ const Home = () => {
 
   const changeSlideHandler = (direction) => {
     const slidesLength = 3;
-    console.log(slideContainerRef);
     let temp = activeSlideIndex;
     if (direction === "up") {
       setActiveSlideIndex((prev) => {

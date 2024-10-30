@@ -130,7 +130,6 @@ const Boards = () => {
   useEffect(() => {
     if (!boardsLoading && boardsData) {
       setBoards(boardsData?.data);
-      console.log("boards data= ", boardsData);
     } else if (boardsError) {
       console.error(boardsError);
     }

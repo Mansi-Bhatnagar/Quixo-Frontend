@@ -122,7 +122,6 @@ const CreateBoard = ({ open, setShowCreateBoardModal }) => {
         jwt
       ),
     onSuccess: (response) => {
-      console.log(response);
       queryClient.invalidateQueries({ queryKey: ["boards"] });
       setShowCreateBoardModal(false);
     },
@@ -144,9 +143,8 @@ const CreateBoard = ({ open, setShowCreateBoardModal }) => {
     if (!gradientsLoading && gradientsData) {
       setAllGradients(gradientsData.data);
       setActiveBackground(gradientsData.data?.[0]);
-      console.log(gradientsData.data);
     } else if (gradientsError) {
-      console.log(gradientsError);
+      console.error(gradientsError);
     }
   }, [gradientsLoading, gradientsData, gradientsError]);
 

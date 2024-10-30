@@ -26,7 +26,6 @@ export async function createWorkspace(name, description, jwt) {
 
 export async function getAllWorkspaces(jwt) {
   try {
-    console.log(process.env.REACT_APP_WORKSPACE_BASE_URL);
     const response = await axios.get(`/get_user_workspaces`, {
       headers: {
         "X-Requested-With": "XMLHttpRequest",
@@ -34,7 +33,6 @@ export async function getAllWorkspaces(jwt) {
       },
       baseURL: process.env.REACT_APP_WORKSPACE_BASE_URL,
     });
-    console.log(response);
     return response;
   } catch (error) {
     console.error(error);

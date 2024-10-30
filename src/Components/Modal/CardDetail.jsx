@@ -277,6 +277,7 @@ const CardDetail = (props) => {
                   onClose={props.onClose}
                   cardId={props.card.id}
                   jwt={props.jwt}
+                  listId={props.card.list_id}
                 />
               </TabPanel>
               <TabPanel>

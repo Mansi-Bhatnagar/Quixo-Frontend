@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getCards, moveCard } from "../Services/Board";
 import Skeleton from "react-loading-skeleton";
 import { toast } from "react-toastify";
+import checklistIcon from "../Assets/Images/checklist.svg";
 
 const Card = (props) => {
   const queryClient = useQueryClient();
@@ -51,7 +52,6 @@ const Card = (props) => {
     mutationFn: ({ sourceCardId, targetListId }) =>
       moveCard(sourceCardId, targetListId, props.jwt),
     onSuccess: (response) => {
-      console.log(response);
       queryClient.invalidateQueries({
         queryKey: ["cards"],
       });
@@ -65,7 +65,6 @@ const Card = (props) => {
   //Effects
   useEffect(() => {
     if (!cardsLoading && cardsData) {
-      console.log(cardsData);
       setCards(cardsData?.data);
     } else if (cardsError) {
       console.error(cardsError);
@@ -99,9 +98,34 @@ const Card = (props) => {
             className="min-h-14 max-w-[268px] cursor-pointer rounded-md bg-[#5c677d] p-2 text-white transition-all duration-300 ease-in-out hover:scale-105"
           >
             <span>{card.title}</span>
-            <p className="mt-1 text-justify text-sm text-white/80">
+            <p className="mt-1 text-wrap text-sm text-white/80">
               {card.description}
             </p>
+            {card.total_checklist_items > 0 ? (
+              <div className="flex items-center justify-start gap-2">
+                <img
+                  src={checklistIcon}
+                  alt="checklist-icon"
+                  className="h-5 w-5"
+                />
+                <span className="font-semibold">
+                  {card.completed_items + "/" + card.total_checklist_items}
+                </span>
+                <div className="h-2 w-full rounded-md bg-white/80">
+                  <div
+                    style={{
+                      width: `${
+                        (card.completed_items * 100) /
+                        card.total_checklist_items
+                      }%`,
+                    }}
+                    className="h-2 rounded-md bg-green-500"
+                  />
+                </div>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         );
       })}

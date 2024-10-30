@@ -131,7 +131,7 @@ const Login = () => {
       localStorage.setItem("userColor", response?.data?.user_color);
     },
     onError: (error) => {
-      console.log(error);
+      console.error(error);
       toast.error(error?.response?.data?.error || "Error. Try Again");
       if (
         error?.response?.data?.error ===
@@ -150,7 +150,7 @@ const Login = () => {
       setOtp("");
     },
     onError: (error) => {
-      console.log(error);
+      console.error(error);
       toast.error(error?.response?.data?.error || "Error. Try Again");
       if (
         error?.response?.data?.error ===
@@ -168,7 +168,7 @@ const Login = () => {
       toast.success("Password reset successfully");
     },
     onError: (error) => {
-      console.log(error);
+      console.error(error);
       toast.error(error?.response?.data?.error || "Error. Try Again");
     },
   });

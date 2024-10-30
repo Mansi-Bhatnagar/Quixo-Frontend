@@ -24,8 +24,6 @@ const Members = () => {
   const description = location?.state?.description;
   const color = location?.state?.color;
 
-  console.log("location = ", location);
-
   //States
   const [selectedUser, setSelectedUser] = useState("");
   const [query, setQuery] = useState("");
@@ -69,7 +67,6 @@ const Members = () => {
   //Effects
   useEffect(() => {
     if (!membersLoading && membersData) {
-      console.log("members data = ", membersData);
       setUsers(membersData?.data?.members_lists);
       setAdminId(membersData?.data?.admin_id);
     } else if (membersError) {

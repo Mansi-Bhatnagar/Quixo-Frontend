@@ -25,7 +25,7 @@ const List = (props) => {
 
   const addCardHandler = (listId, title) => {
     setActiveList(listId);
-    console.log(title, listId);
+
     addCardMutation.mutate({ listId, title });
   };
 
@@ -41,7 +41,7 @@ const List = (props) => {
       queryClient.invalidateQueries({ queryKey: ["lists"] });
     },
     onError: (error) => {
-      console.log(error);
+      console.error(error);
     },
   });
 
@@ -63,7 +63,7 @@ const List = (props) => {
       });
     },
     onError: (error) => {
-      console.log(error);
+      console.error(error);
     },
   });
 
@@ -71,7 +71,7 @@ const List = (props) => {
     if (!listsLoading && listsData) {
       setLists(listsData?.data);
     } else if (listsError) {
-      console.log(listsError);
+      console.error(listsError);
     }
   }, [listsData, listsLoading, listsError]);
 

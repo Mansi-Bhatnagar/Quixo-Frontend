@@ -22,7 +22,7 @@ export async function createUser(username, email, password) {
     );
     return response;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     throw error;
   }
 }

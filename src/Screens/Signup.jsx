@@ -21,10 +21,6 @@ const Signup = () => {
   const linkEmail = queryParams.get("email");
   const workspaceId = queryParams.get("workspace_id");
 
-  console.log("Token:", token);
-  console.log("Email:", linkEmail);
-  console.log("Workspace ID:", workspaceId);
-
   //Email Regex
   const emailRegex =
     /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -137,11 +133,10 @@ const Signup = () => {
   const mutation = useMutation({
     mutationFn: () => createUser(username, email, password),
     onSuccess: (response) => {
-      console.log(response);
       setOtpScreen(true);
     },
     onError: (error) => {
-      console.log(error);
+      console.error(error);
       toast.error(error?.response?.data?.error || "Error. Try Again");
     },
   });
@@ -149,7 +144,6 @@ const Signup = () => {
   const otpMutation = useMutation({
     mutationFn: () => verifyOTP(otp, token, workspaceId),
     onSuccess: (response) => {
-      console.log(response);
       localStorage.setItem("jwt", response?.data?.token || "");
       dispatch(authenticationActions.updateJWT(response?.data?.token || ""));
       localStorage.setItem("username", response?.data?.username);
@@ -159,7 +153,6 @@ const Signup = () => {
       navigate("/dashboard");
     },
     onError: (error) => {
-      console.log(error);
       toast.error(error?.response?.data?.error || "Error. Try Again");
     },
   });

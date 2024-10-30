@@ -77,15 +77,17 @@ const Sidebar = (props) => {
         const description = created[0].description;
         const wsColor = created[0].workspace_color;
         setWsTabOpen(wsId);
+        setActiveWsIndex(wsId, name, description, wsColor);
         navigate(`${wsId}/${name.split(" ").join("")}/boards`, {
           state: { color: wsColor, name: name, description: description },
         });
-      } else if (invited) {
+      } else if (invited?.length > 0) {
         const wsId = invited[0].workspace_id;
         const name = invited[0].workspace_name;
         const description = invited[0].description;
         const wsColor = invited[0].workspace_color;
         setWsTabOpen(wsId);
+        setActiveWsIndex(wsId, name, description, wsColor);
         navigate(`${wsId}/${name.split(" ").join("")}/boards`, {
           state: { color: wsColor, name: name, description: description },
         });
